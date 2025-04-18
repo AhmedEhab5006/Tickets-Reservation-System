@@ -63,8 +63,32 @@ namespace TicketsReservationSystem.BLL.Managers.AuthManagers
             applicationUser.UserName = user.firstname + user.lastname;
             applicationUser.Role = user.role;
 
+            
+            if (await _userManager.FindByEmailAsync(user.email) != null || await _userManager.FindByNameAsync(user.firstname + user.lastname) != null)
+            {
+                throw new InvalidOperationException("Email or Username is already taken");
+            }
+
+            var validRoles = new[] { "Admin", "Client", "Vendor" };
+
+            if (!validRoles.Contains(user.role))
+            {
+                throw new ArgumentException("Invalid role");
+            }
+
+            if (!user.email.Contains("@gmail.com"))
+            {
+                throw new InvalidOperationException("Invalid Domain email must ends with @gmail.com");
+            }
+            
+            
+            if (user.password.Length < 5)
+            {
+                throw new Exception("Password must be greater than or equal 5 chars");
+            }
+
+
             var result = await _userManager.CreateAsync(applicationUser, user.password);
-            Console.WriteLine(result);
 
             if (result.Succeeded)
             {
