@@ -21,7 +21,7 @@ namespace TicketsReservationSystem.API.Controllers
             var logged = await _authManager.Login(loginDto);
             if (logged == null)
             {
-                return Unauthorized();
+                return Unauthorized("Wrong Email Or Password");
             }
             return Ok(logged);
         }
@@ -29,17 +29,26 @@ namespace TicketsReservationSystem.API.Controllers
         [HttpPost("Register")]
         public async Task<ActionResult> Register(RegisterDto registerDto)
         {
-            var registered = await _authManager.Register(registerDto);
-            if (registered == null)
+            try
             {
-                return Unauthorized();
+                var token = await _authManager.Register(registerDto);
+                return Ok(new { token });
             }
-            else
+            catch (ArgumentException ex)
             {
-                return Ok(registered);
+                return BadRequest(new { message = ex.Message });
             }
-
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = ex.Message });
+            }
 
         }
+
     }
-}
+    }
+
