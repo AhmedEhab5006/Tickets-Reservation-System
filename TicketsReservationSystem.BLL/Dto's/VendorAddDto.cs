@@ -1,0 +1,14 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace TicketsReservationSystem.BLL.Dto_s
+{
+    public class VendorAddDto
+    {
+        public int id { get; set; }
+        public string acceptanceStatus = "Pending";
+    }
+}
