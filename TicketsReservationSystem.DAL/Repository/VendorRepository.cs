@@ -18,48 +18,94 @@ namespace TicketsReservationSystem.DAL.Repository
 
         public void Add(Vendor vendor)
         {
-            _context.Add(vendor);
+            _context.vendors.Add(vendor);
             _context.SaveChanges();
+        }
+
+
+        public int AddEvent(Event Event)
+        {
+            var added = new Event{
+                numberOfSeats = Event.numberOfSeats,
+                vendorId = Event.vendorId,
+                location = Event.location,
+                date = Event.date,
+                category = Event.category,
+                avillableSeats = Event.avillableSeats,
+                bookedSeats = Event.bookedSeats,
+                status = Event.status,
+            };
+            
+            _context.Events.Add(added);
+            _context.SaveChanges();
+
+            return added.id;
         }
 
         public void AddEntertainmentEvent(EntertainmentEvent Event)
         {
-            throw new NotImplementedException();
-        }
-
-        public void AddEvent(Event Event)
-        {
-            throw new NotImplementedException();
+           _context.EntertainmentEvents.Add(Event);
+            _context.SaveChanges();
         }
 
         public void AddSportsEvent(SportEvent SportsEvent)
         {
-            throw new NotImplementedException();
+            _context.SportEvents.Add(SportsEvent);
+            _context.SaveChanges();
         }
 
-        public void DeleteEvent(int id)
+        public void DeleteEvent(Event Event)
         {
-            throw new NotImplementedException();
+            _context.Events.Remove(Event);
+            _context.SaveChanges();
         }
 
         public void EditEntertainmentEvent(EntertainmentEvent EntertainmentEvent)
         {
-            throw new NotImplementedException();
+            _context.Update(EntertainmentEvent);
+            _context.SaveChanges();
         }
 
         public void EditEvent(Event Event)
         {
-            throw new NotImplementedException();
+            _context.Update(Event);
+            _context.SaveChanges();
         }
 
         public void EditSportsEvent(SportEvent sportEvent)
         {
-            throw new NotImplementedException();
+            _context.Update(sportEvent);
+            _context.SaveChanges();
         }
 
         public int ShowBookings(int eventId)
         {
             throw new NotImplementedException();
+        }
+
+        public Event GetEventById(int id)
+        {
+            var found = _context.Events.Find(id);
+            return found;
+
+        }
+
+        public EntertainmentEvent GetEntertainmentEventById(int id)
+        {
+            var found = _context.EntertainmentEvents.Find(id);
+            return found;
+        }
+
+        public SportEvent GetSportEventById(int id)
+        {
+            var found = _context.SportEvents.Find(id);
+            return found;
+        }
+
+        public Vendor GetByUserId(int id)
+        {
+            var found = _context.vendors.Where(a=> a.userId == id).FirstOrDefault();
+            return found;
         }
     }
 }

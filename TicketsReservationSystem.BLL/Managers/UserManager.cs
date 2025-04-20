@@ -33,6 +33,21 @@ namespace TicketsReservationSystem.BLL.Managers
             return Added.id;
         }
 
+        public UserReadDto GetByEmail(string email)
+        {
+            var foundModel = _userRepository.GetByEmail(email);
+
+            var found = new UserReadDto{
+                Id = foundModel.id,
+                email = foundModel.email,
+                firstname = foundModel.firstName,
+                lastname = foundModel.lastName,
+                password = foundModel.password,
+            };
+            
+            return found;
+        }
+
         public void Update(UserUpdateDto user)
         {
             var found = _userRepository.GetById(user.Id);

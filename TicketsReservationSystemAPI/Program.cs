@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
 using System.Text;
+using TicketsReservationSystem.API.Helpers;
 using TicketsReservationSystem.BLL.Managers;
 using TicketsReservationSystem.BLL.Managers.AuthManagers;
 using TicketsReservationSystem.DAL.Database;
@@ -28,6 +30,10 @@ internal class Program
         builder.Services.AddScoped<IUserManager, UserManager>();
         builder.Services.AddScoped<IUserRepository, UserRepository>();
         builder.Services.AddScoped<IAuthManager, AuthManager>();
+        builder.Services.AddScoped<IGetLoggedData, GetLoggedData>();
+        builder.Services.AddHttpContextAccessor();
+
+
         builder.Services.AddDbContext<ProgramContext>(option =>
             
         option.UseSqlServer(builder.Configuration.GetConnectionString("cs")));
@@ -63,14 +69,16 @@ internal class Program
                 //ValidAudience = "url" ,
                 //ValidIssuer = "url",
                 ValidateIssuer = false,
-                ValidateAudience = false
+                ValidateAudience = false ,
+
+                RoleClaimType = ClaimTypes.Role
             };
         });
 
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen(options =>
         {
-            options.SwaggerDoc("v1", new() { Title = "My API", Version = "v1" });
+            options.SwaggerDoc("v1", new() { Title = "Tickets Reservation System API", Version = "v1" });
 
             // 🔐 Add JWT Bearer token support
             options.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme

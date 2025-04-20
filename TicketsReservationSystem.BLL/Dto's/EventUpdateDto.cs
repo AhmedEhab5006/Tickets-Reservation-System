@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace TicketsReservationSystem.BLL.Dto_s
 {
-    public class VendorReadDto
+    public class EventUpdateDto
     {
-        
         public int id {  get; set; }
-        public int userId { get; set; }
-        public string acceptanceStatus { get; set; }
+        public DateTime date { get; set; }
+        public string? location { get; set; }
+        public int numberOfSeats { get; set; }
     }
 }
