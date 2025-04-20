@@ -10,14 +10,18 @@ namespace TicketsReservationSystem.DAL.Repository
     public interface IVendorRepository
     {
         public void Add(Vendor vendor);
-        public void AddEvent(Event Event);
+        public int AddEvent(Event Event);
         public void EditEvent(Event Event);
         public void AddEntertainmentEvent (EntertainmentEvent Event);
         public void EditEntertainmentEvent (EntertainmentEvent EntertainmentEvent);
         public void AddSportsEvent(SportEvent SportsEvent);
         public void EditSportsEvent(SportEvent sportEvent);
-        public void DeleteEvent(int id);
+        public void DeleteEvent(Event Event);
+        public Event GetEventById (int id);
+        public EntertainmentEvent GetEntertainmentEventById(int id);
+        public SportEvent GetSportEventById(int id);
         public int ShowBookings(int eventId);
+        public Vendor GetByUserId(int id);
         
     }
 }

@@ -12,6 +12,7 @@ namespace TicketsReservationSystem.BLL.Managers
     {
         public int Add(UserAddDto user);
         public void Update(UserUpdateDto user);
-    
+        public UserReadDto GetByEmail(string email);
+
     }
 }

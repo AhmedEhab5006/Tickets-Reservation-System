@@ -21,6 +21,12 @@ namespace TicketsReservationSystem.DAL.Repository
             _context.SaveChanges();
         }
 
+        public User GetByEmail(string email)
+        {
+            var found = _context.Users.Where(a=> a.email == email).FirstOrDefault();
+            return found;
+        }
+
         public User GetById(int id)
         {
             var found = _context.Users.Find(id);

@@ -11,7 +11,8 @@ namespace TicketsReservationSystem.API.Controllers
     {
         private IAuthManager _authManager;
 
-        public AuthController(IAuthManager authManager) { 
+        public AuthController(IAuthManager authManager)
+        {
             _authManager = authManager;
         }
 
@@ -50,5 +51,4 @@ namespace TicketsReservationSystem.API.Controllers
         }
 
     }
-    }
-
+}

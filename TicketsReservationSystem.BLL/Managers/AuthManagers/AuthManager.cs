@@ -23,8 +23,8 @@ namespace TicketsReservationSystem.BLL.Managers.AuthManagers
         private IClientManager _clientManager;
         private IVendorManager _vendorManager;
 
-        public AuthManager(UserManager<ApplicationUser> userManager, IConfiguration configuration 
-                                , IUserManager manager , IClientManager clientManager , IVendorManager vendorManager)
+        public AuthManager(UserManager<ApplicationUser> userManager, IConfiguration configuration
+                                , IUserManager manager, IClientManager clientManager, IVendorManager vendorManager)
         {
             _userManager = userManager;
             _configuration = configuration;
@@ -49,6 +49,11 @@ namespace TicketsReservationSystem.BLL.Managers.AuthManagers
             }
 
             var claims = await _userManager.GetClaimsAsync(logged);
+            claims.Add(new Claim(ClaimTypes.Role, logged.Role)); 
+            claims.Add(new Claim(ClaimTypes.NameIdentifier, logged.Id));
+            claims.Add(new Claim(ClaimTypes.Name, logged.UserName));
+            claims.Add(new Claim(ClaimTypes.Email, logged.Email));
+
             var token = GenerateToken(claims);
 
             return token;
@@ -63,7 +68,7 @@ namespace TicketsReservationSystem.BLL.Managers.AuthManagers
             applicationUser.UserName = user.firstname + user.lastname;
             applicationUser.Role = user.role;
 
-            
+
             if (await _userManager.FindByEmailAsync(user.email) != null || await _userManager.FindByNameAsync(user.firstname + user.lastname) != null)
             {
                 throw new InvalidOperationException("Email or Username is already taken");
@@ -80,8 +85,8 @@ namespace TicketsReservationSystem.BLL.Managers.AuthManagers
             {
                 throw new InvalidOperationException("Invalid Domain email must ends with @gmail.com");
             }
-            
-            
+
+
             if (user.password.Length < 5)
             {
                 throw new Exception("Password must be greater than or equal 5 chars");
@@ -93,7 +98,7 @@ namespace TicketsReservationSystem.BLL.Managers.AuthManagers
             if (result.Succeeded)
             {
 
-             var id = _Manager.Add(new UserAddDto
+                var id = _Manager.Add(new UserAddDto
                 {
                     email = user.email,
                     password = user.password,
@@ -101,7 +106,7 @@ namespace TicketsReservationSystem.BLL.Managers.AuthManagers
                     lastname = user.lastname,
                     role = user.role,
                 });
-                
+
                 switch (user.role)
                 {
                     case "Client":
@@ -117,7 +122,7 @@ namespace TicketsReservationSystem.BLL.Managers.AuthManagers
                         {
                             id = id,
                         };
-                        _vendorManager.Add(vendorDto , id);
+                        _vendorManager.Add(vendorDto, id);
                         break;
                 }
 
