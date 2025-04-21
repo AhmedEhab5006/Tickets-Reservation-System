@@ -15,5 +15,7 @@ namespace TicketsReservationSystem.DAL.Repository
         public void EditAddress (Address address);
         public void Book(int ticketId);
         public void CancelBooking(int ticketId);
+        public IQueryable<Event> GetSportEvent();
+        public IQueryable<Event> GetEntertainmentEvents();
     }
 }

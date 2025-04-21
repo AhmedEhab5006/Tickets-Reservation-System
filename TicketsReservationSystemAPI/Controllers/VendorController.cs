@@ -33,21 +33,32 @@ namespace TicketsReservationSystem.API.Controllers
         {
             
             vendorId = _getLoggedData.GetId();
-            Event.Event.vendorId = vendorId;
-            _vendorManager.AddEvent(Event.Event, Event.EntertainmentEvent, Event.SportsEvent);
-            return Created(nameof(Event.Event.vendorId), new
+            string acceptance = _getLoggedData.GetVendorStatus(vendorId); 
+            
+            if (acceptance != "Pending")
             {
-                Event.Event.location,
-                Event.Event.numberOfSeats,
-                Event.Event.category,
-                Event.Event.date
-            });
+                Event.Event.vendorId = vendorId;
+                _vendorManager.AddEvent(Event.Event, Event.EntertainmentEvent, Event.SportsEvent);
+                return Created(nameof(Event.Event.vendorId), new
+                {
+                    Event.Event.location,
+                    Event.Event.numberOfSeats,
+                    Event.Event.category,
+                    Event.Event.date
+                });
+
+            }
+
+            return Unauthorized("You don't have the permission to add an event");
+
 
         }
         [HttpPut("Event")]
         public IActionResult EditEvent(int id , EventUpdateDto Event)
         {
-            var found = _vendorManager.GetEventById(id);
+            
+            Event.id = id;
+            var found = _vendorManager.GetEventById(Event.id);
             if (found == null)
             {
                 return NotFound("Desired Event isn't found");
@@ -66,7 +77,8 @@ namespace TicketsReservationSystem.API.Controllers
         [HttpPut("Entertainment")]
         public IActionResult EditEntertainmentEvent(int id , EntertainmentEventUpdateDto entertainmentEventUpdateDto){
 
-            var found = _vendorManager.GetEntertainmentEventById(id);
+            entertainmentEventUpdateDto.id = id;
+            var found = _vendorManager.GetEntertainmentEventById(entertainmentEventUpdateDto.id);
 
 
             if (found == null)
@@ -86,7 +98,9 @@ namespace TicketsReservationSystem.API.Controllers
         [HttpPut("Sport")]
         public IActionResult EditSportsEvent(int id , SportEventUpdateDto SportsEvent){
             
-            var found = _vendorManager.GetSportEventById(id);
+            
+            SportsEvent.id = id;
+            var found = _vendorManager.GetSportEventById(SportsEvent.id);
 
 
             if (found == null)
@@ -124,7 +138,33 @@ namespace TicketsReservationSystem.API.Controllers
             _vendorManager.DeleteEvent(id);
             return Ok("Updated");
         }
-        
 
+        [HttpGet("MyEntertainmentEvents")]
+        public IActionResult GetMyEntertainmentEvent()
+        {
+            vendorId = _getLoggedData.GetId();
+            var found = _vendorManager.GetMyEntertainmentEvent(vendorId);
+           
+            if (found != null)
+            {
+                return Ok(found);
+            }
+
+            return NotFound("You Haven't Posted any events yet");
+        }
+
+        [HttpGet("MySportEvents")]
+        public IActionResult GetMySportEvent()
+        {
+            vendorId = _getLoggedData.GetId();
+            var found = _vendorManager.GetMySportEvent(vendorId);
+            
+            if(found != null)
+            {
+                return Ok(found);
+            }
+
+            return NotFound("You Haven't posted any events yet");
+        }
     }
 }

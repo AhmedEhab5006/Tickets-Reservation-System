@@ -10,10 +10,12 @@ namespace TicketsReservationSystem.BLL.Managers
 {
     public interface IClientManager
     {
-        public void Add(int userId);
+        public void Add(ClientAddDto clientAddDto , int userId);
         public void AddAddress(Address address);
         public void EditAddress(Address address);
         public void Book(int ticketId);
         public void CancelBooking(int ticketId);
+        public IEnumerable<FullDetailSportEventReadDto> GetSportEvents();
+        public IEnumerable<FullDetailEntertainmentEventReadDto> GetEntertainmentEvents();
     }
 }

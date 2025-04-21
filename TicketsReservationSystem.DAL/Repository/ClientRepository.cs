@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -42,6 +43,22 @@ namespace TicketsReservationSystem.DAL.Repository
         {
             var updated = _context.Address.Update(address);
             _context.SaveChanges();
+        }
+
+        public IQueryable<Event> GetSportEvent()
+        {
+            var returned = _context.Events.Where(a=>a.status == "Aceepted")
+                            .Include(a => a.sportEvent);
+
+            return returned;
+        }
+
+        public IQueryable<Event> GetEntertainmentEvents()
+        {
+            var returned = _context.Events.Where(a => a.status == "Aceepted")
+                            .Include(a => a.entertainment);
+
+            return returned;
         }
     }
 }

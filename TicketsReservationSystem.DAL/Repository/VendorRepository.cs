@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -78,10 +79,6 @@ namespace TicketsReservationSystem.DAL.Repository
             _context.SaveChanges();
         }
 
-        public int ShowBookings(int eventId)
-        {
-            throw new NotImplementedException();
-        }
 
         public Event GetEventById(int id)
         {
@@ -106,6 +103,35 @@ namespace TicketsReservationSystem.DAL.Repository
         {
             var found = _context.vendors.Where(a=> a.userId == id).FirstOrDefault();
             return found;
+        }
+
+        public Vendor GetById (int id)
+        {
+            var found = _context.vendors.Where(a=> a.Id == id).FirstOrDefault();
+            return found;
+        }
+
+        public IQueryable<Event> GetMySportEvents(int id)
+        {
+            var returned = _context.Events.Where(a=>a.vendorId == id)
+                                .Include(a => a.sportEvent);
+
+            return returned;
+
+        }
+
+        public IQueryable<Event> GetMyEntertainmentEvents(int id)
+        {
+            var returned = _context.Events.Where(a => a.vendorId == id)
+                                            .Include(a => a.entertainment);
+
+            return returned;
+
+        }
+
+        public int ShowBookings(int eventId)
+        {
+            throw new NotImplementedException();
         }
     }
 }
