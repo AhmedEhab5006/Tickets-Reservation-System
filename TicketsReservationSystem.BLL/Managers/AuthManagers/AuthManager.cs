@@ -89,7 +89,7 @@ namespace TicketsReservationSystem.BLL.Managers.AuthManagers
 
             if (user.password.Length < 5)
             {
-                throw new Exception("Password must be greater than or equal 5 chars");
+                throw new ArgumentException("Password must be greater than or equal 5 chars");
             }
 
 
@@ -110,11 +110,10 @@ namespace TicketsReservationSystem.BLL.Managers.AuthManagers
                 switch (user.role)
                 {
                     case "Client":
-                        var clientDto = new Client
+                        var clientDto = new ClientAddDto
                         {
-                            userId = id
                         };
-                        _clientManager.Add(id);
+                        //_clientManager.Add(clientDto  , id);
                         break;
 
                     case "Vendor":

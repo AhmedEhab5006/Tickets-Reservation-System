@@ -21,6 +21,9 @@ namespace TicketsReservationSystem.BLL.Managers
         public void DeleteEvent(int id);
         public int ShowBookings(int eventId);
         public VendorReadDto GetByUserId(int id);
+        public VendorReadDto GetById(int id);
+        public IEnumerable<FullDetailEntertainmentEventReadDto> GetMyEntertainmentEvent(int id);
+        public IEnumerable<FullDetailSportEventReadDto> GetMySportEvent(int id);
 
     }
 }

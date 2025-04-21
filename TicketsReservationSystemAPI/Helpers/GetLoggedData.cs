@@ -32,5 +32,12 @@ namespace TicketsReservationSystem.API.Helpers
             return vendorId;
 
         }
+
+        public string GetVendorStatus(int id)
+        {
+            var found = _vendorManager.GetById(id);
+            return found.acceptanceStatus.ToString();
+
+        }
     }
 }
