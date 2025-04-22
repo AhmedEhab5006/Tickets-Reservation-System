@@ -17,5 +17,11 @@ namespace TicketsReservationSystem.DAL.Repository
         public void CancelBooking(int ticketId);
         public IQueryable<Event> GetSportEvent();
         public IQueryable<Event> GetEntertainmentEvents();
+        Client? GetClientById(int clientId);
+        IQueryable<Client> GetAllClients();
+
+
+
+
     }
 }

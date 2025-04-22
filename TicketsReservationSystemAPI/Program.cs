@@ -6,6 +6,7 @@ using System.Text;
 using TicketsReservationSystem.API.Helpers;
 using TicketsReservationSystem.BLL.Managers;
 using TicketsReservationSystem.BLL.Managers.AuthManagers;
+using TicketsReservationSystem.BLL.Profiles;
 using TicketsReservationSystem.DAL.Database;
 using TicketsReservationSystem.DAL.Models;
 using TicketsReservationSystem.DAL.Repository;
@@ -32,11 +33,14 @@ internal class Program
         builder.Services.AddScoped<IAuthManager, AuthManager>();
         builder.Services.AddScoped<IGetLoggedData, GetLoggedData>();
         builder.Services.AddHttpContextAccessor();
+        builder.Services.AddAutoMapper(typeof(ClientProfile).Assembly);
+
+
 
 
         builder.Services.AddDbContext<ProgramContext>(option =>
             
-        option.UseSqlServer(builder.Configuration.GetConnectionString("cs")));
+        option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
         
 
 

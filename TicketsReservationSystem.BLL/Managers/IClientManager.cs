@@ -17,5 +17,8 @@ namespace TicketsReservationSystem.BLL.Managers
         public void CancelBooking(int ticketId);
         public IEnumerable<FullDetailSportEventReadDto> GetSportEvents();
         public IEnumerable<FullDetailEntertainmentEventReadDto> GetEntertainmentEvents();
+
+        Task<IEnumerable<ClientReadDto>> GetAllClientsAsync();
+
     }
 }

@@ -13,7 +13,8 @@ namespace TicketsReservationSystem.DAL.Repository
     {
         private ProgramContext _context;
 
-        public ClientRepository(ProgramContext context) {
+        public ClientRepository(ProgramContext context)
+        {
             _context = context;
         }
 
@@ -31,12 +32,46 @@ namespace TicketsReservationSystem.DAL.Repository
 
         public void Book(int ticketId)
         {
-            throw new NotImplementedException();
+            var ticket = _context.Tickets.Include(t => t.Event).FirstOrDefault(t => t.id == ticketId);
+
+            if (ticket == null)
+            {
+                throw new InvalidOperationException("Ticket not found.");
+            }
+
+            if (ticket.status != "Available")
+            {
+                throw new InvalidOperationException("Ticket is not available for booking.");
+            }
+
+            // Update ticket status and event's booked/available seats
+            ticket.status = "Booked";
+            ticket.Event.bookedSeats += 1;
+            ticket.Event.avillableSeats -= 1;
+
+            _context.SaveChanges();
         }
 
         public void CancelBooking(int ticketId)
         {
-            throw new NotImplementedException();
+            var ticket = _context.Tickets.Include(t => t.Event).FirstOrDefault(t => t.id == ticketId);
+
+            if (ticket == null)
+            {
+                throw new InvalidOperationException("Ticket not found.");
+            }
+
+            if (ticket.status != "Booked")
+            {
+                throw new InvalidOperationException("Ticket is not currently booked.");
+            }
+
+            // Update ticket status and event's booked/available seats
+            ticket.status = "Available";
+            ticket.Event.bookedSeats -= 1;
+            ticket.Event.avillableSeats += 1;
+
+            _context.SaveChanges();
         }
 
         public void EditAddress(Address address)
@@ -47,7 +82,7 @@ namespace TicketsReservationSystem.DAL.Repository
 
         public IQueryable<Event> GetSportEvent()
         {
-            var returned = _context.Events.Where(a=>a.status == "Aceepted")
+            var returned = _context.Events.Where(a => a.status == "Accepted")
                             .Include(a => a.sportEvent);
 
             return returned;
@@ -55,10 +90,27 @@ namespace TicketsReservationSystem.DAL.Repository
 
         public IQueryable<Event> GetEntertainmentEvents()
         {
-            var returned = _context.Events.Where(a => a.status == "Aceepted")
+            var returned = _context.Events.Where(a => a.status == "Accepted")
                             .Include(a => a.entertainment);
 
             return returned;
+        }
+
+        public Client? GetClientById(int clientId)
+        {
+            return _context.Clients
+                .Include(c => c.user) 
+                .Include(c => c.address)
+                .Include(c => c.tickets) 
+                .FirstOrDefault(c => c.id == clientId); 
+        }
+
+        public IQueryable<Client> GetAllClients()
+        {
+            return _context.Clients
+                .Include(c => c.user) 
+                .Include(c => c.address) 
+                .Include(c => c.tickets); 
         }
     }
 }
