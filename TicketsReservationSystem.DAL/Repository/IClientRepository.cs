@@ -1,27 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TicketsReservationSystem.DAL.Models;
+﻿using TicketsReservationSystem.DAL.Models;
 
-namespace TicketsReservationSystem.DAL.Repository
+public interface IClientRepository
 {
-    public interface IClientRepository
-    {
-        
-        public void Add(Client client);
-        public void AddAddress (Address address);
-        public void EditAddress (Address address);
-        public void Book(int ticketId);
-        public void CancelBooking(int ticketId);
-        public IQueryable<Event> GetSportEvent();
-        public IQueryable<Event> GetEntertainmentEvents();
-        Client? GetClientById(int clientId);
-        IQueryable<Client> GetAllClients();
+    void Add(Client client);
+    void AddAddress(Address address);
+    void EditAddress(Address address);
+    void Book(int ticketId);
+    void CancelBooking(int ticketId);
+    IQueryable<Event> GetSportEvent();
+    IQueryable<Event> GetEntertainmentEvents();
+    Client? GetClientById(int clientId);
+    IQueryable<Client> GetAllClients();
 
+    // New method to get an address by ID
+    Address? GetAddressById(int addressId);
+    bool AddressExists(int addressId);
 
-
-
-    }
 }
+

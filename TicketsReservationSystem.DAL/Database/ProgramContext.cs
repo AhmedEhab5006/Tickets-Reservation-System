@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,7 +40,7 @@ namespace TicketsReservationSystem.DAL.Database
             builder.Entity<Client>()
                 .HasOne(c => c.user)
                 .WithOne(u => u.client)
-                .HasForeignKey<Client>(c => c.userId)
+                .HasForeignKey<Client>(c => c.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder.Entity<Client>()
@@ -92,7 +93,7 @@ namespace TicketsReservationSystem.DAL.Database
             builder.Entity<User>()
                 .HasOne(u => u.client)
                 .WithOne(c => c.user)
-                .HasForeignKey<Client>(c => c.userId)
+                .HasForeignKey<Client>(c => c.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder.Entity<User>()
@@ -107,6 +108,13 @@ namespace TicketsReservationSystem.DAL.Database
                 .WithOne(e => e.vendor)
                 .HasForeignKey(e => e.vendorId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+    builder.Entity<Address>()
+        .HasOne(a => a.client)
+        .WithMany(c => c.addresses)
+        .HasForeignKey(a => a.clientId)
+        .OnDelete(DeleteBehavior.SetNull);
+        
         }
 
             

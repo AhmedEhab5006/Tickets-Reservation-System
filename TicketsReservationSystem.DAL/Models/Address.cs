@@ -9,8 +9,8 @@ namespace TicketsReservationSystem.DAL.Models
     public class Address
     {
         public int id { get; set; }
-        public int clientId { get; set; }
-        public Client? client { get; set; }
+        public int? clientId { get; set; }
+        public Client client { get; set; }
         public string street { get; set; }
         public string city { get; set; }
         public string state { get; set; }

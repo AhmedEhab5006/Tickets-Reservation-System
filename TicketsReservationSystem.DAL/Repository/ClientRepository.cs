@@ -9,6 +9,7 @@ using TicketsReservationSystem.DAL.Models;
 
 namespace TicketsReservationSystem.DAL.Repository
 {
+
     public class ClientRepository : IClientRepository
     {
         private ProgramContext _context;
@@ -102,7 +103,7 @@ namespace TicketsReservationSystem.DAL.Repository
                 .Include(c => c.user) 
                 .Include(c => c.address)
                 .Include(c => c.tickets) 
-                .FirstOrDefault(c => c.id == clientId); 
+                .FirstOrDefault(c => c.UserId == clientId); 
         }
 
         public IQueryable<Client> GetAllClients()
@@ -112,5 +113,16 @@ namespace TicketsReservationSystem.DAL.Repository
                 .Include(c => c.address) 
                 .Include(c => c.tickets); 
         }
+
+        public Address? GetAddressById(int addressId)
+        {
+            return _context.Address.FirstOrDefault(a => a.id == addressId);
+        }
+
+        public bool AddressExists(int addressId)
+        {
+            return _context.Address.Any(a => a.id == addressId);
+        }
+
     }
 }

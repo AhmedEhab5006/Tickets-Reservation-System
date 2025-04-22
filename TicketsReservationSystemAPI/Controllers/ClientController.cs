@@ -56,20 +56,22 @@ namespace TicketsReservationSystem.API.Controllers
             return Ok("Client added successfully.");
         }
 
-        
         [HttpPost("Address")]
-        public IActionResult AddAddress([FromBody] Address address)
+        public async Task<IActionResult> AddAddress([FromBody] AddressReadDto addressDto)
         {
-            _clientManager.AddAddress(address);
+            await _clientManager.AddAddressAsync(addressDto);
             return Ok("Address added successfully.");
         }
 
-        [HttpPut("Address")]
-        public IActionResult EditAddress([FromBody] Address address)
-        {
-            _clientManager.EditAddress(address);
-            return Ok("Address updated successfully.");
-        }
+
+
+
+        //[HttpPut("Address")]
+        //public IActionResult EditAddress([FromBody] Address address)
+        //{
+        //    _clientManager.EditAddress(address);
+        //    return Ok("Address updated successfully.");
+        //}
 
         // Book a ticket
         [HttpPost("Book/{ticketId}")]

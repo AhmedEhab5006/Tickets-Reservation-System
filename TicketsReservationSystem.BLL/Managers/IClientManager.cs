@@ -11,8 +11,8 @@ namespace TicketsReservationSystem.BLL.Managers
     public interface IClientManager
     {
         public void Add(ClientAddDto clientAddDto , int userId);
-        public void AddAddress(Address address);
-        public void EditAddress(Address address);
+        Task AddAddressAsync(AddressReadDto addressDto);
+        Task EditAddressAsync(AddressReadDto addressDto);
         public void Book(int ticketId);
         public void CancelBooking(int ticketId);
         public IEnumerable<FullDetailSportEventReadDto> GetSportEvents();

@@ -13,8 +13,9 @@ namespace TicketsReservationSystem.BLL.Profiles
             CreateMap<Client, ClientReadDto>();
 
             // Address
-            CreateMap<AddressReadDto, Address>();
             CreateMap<Address, AddressReadDto>();
+            CreateMap<AddressReadDto, Address>();
+
 
             // Ticket
             CreateMap<Ticket, TicketReadDto>();

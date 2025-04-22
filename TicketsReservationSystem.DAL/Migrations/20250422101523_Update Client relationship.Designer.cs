@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TicketsReservationSystem.DAL.Database;
 
@@ -11,9 +12,11 @@ using TicketsReservationSystem.DAL.Database;
 namespace TicketsReservationSystem.DAL.Migrations
 {
     [DbContext(typeof(ProgramContext))]
-    partial class ProgramContextModelSnapshot : ModelSnapshot
+    [Migration("20250422101523_Update Client relationship")]
+    partial class UpdateClientrelationship
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -264,24 +267,24 @@ namespace TicketsReservationSystem.DAL.Migrations
 
             modelBuilder.Entity("TicketsReservationSystem.DAL.Models.Client", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
 
                     b.Property<int>("addressId")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.Property<int>("userId")
+                        .HasColumnType("int");
 
-                    b.HasIndex("UserId")
-                        .IsUnique();
+                    b.HasKey("id");
 
                     b.HasIndex("addressId");
+
+                    b.HasIndex("userId")
+                        .IsUnique();
 
                     b.ToTable("Clients");
                 });
@@ -572,16 +575,16 @@ namespace TicketsReservationSystem.DAL.Migrations
 
             modelBuilder.Entity("TicketsReservationSystem.DAL.Models.Client", b =>
                 {
-                    b.HasOne("TicketsReservationSystem.DAL.Models.User", "user")
-                        .WithOne("client")
-                        .HasForeignKey("TicketsReservationSystem.DAL.Models.Client", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("TicketsReservationSystem.DAL.Models.Address", "address")
                         .WithMany()
                         .HasForeignKey("addressId")
                         .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("TicketsReservationSystem.DAL.Models.User", "user")
+                        .WithOne("client")
+                        .HasForeignKey("TicketsReservationSystem.DAL.Models.Client", "userId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("address");

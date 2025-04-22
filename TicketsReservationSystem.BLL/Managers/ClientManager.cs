@@ -23,12 +23,22 @@ namespace TicketsReservationSystem.BLL.Managers
         // Add client manually
         public void Add(ClientAddDto clientAddDto, int userId)
         {
-            _clientRepository.Add(new Client
+            // Check if the address exists
+            var addressExists = _clientRepository.AddressExists(clientAddDto.AddressId);
+            if (!addressExists)
             {
-                userId = userId,
-                addressId = clientAddDto.AddressId,
-            });
+                throw new InvalidOperationException($"Address with ID {clientAddDto.AddressId} does not exist.");
+            }
+
+            // Add the client
+            var client = new Client
+            {
+                UserId = userId,
+                addressId = clientAddDto.AddressId
+            };
+            _clientRepository.Add(client);
         }
+
 
         // Async version using AutoMapper
         public async Task AddClientAsync(ClientAddDto clientDto)
@@ -39,17 +49,7 @@ namespace TicketsReservationSystem.BLL.Managers
         }
 
         // Add address
-        public void AddAddress(Address address)
-        {
-            _clientRepository.AddAddress(address);
-        }
-
-        public async Task AddClientAddressAsync(AddressReadDto addressDto)
-        {
-            var address = _mapper.Map<Address>(addressDto);
-            _clientRepository.AddAddress(address);
-            await Task.CompletedTask;
-        }
+ 
 
         // Edit address
         public void EditAddress(Address address)
@@ -159,8 +159,8 @@ namespace TicketsReservationSystem.BLL.Managers
 
             var clientDtos = clients.Select(client => new ClientReadDto
             {
-                Id = client.id,
-                UserId = client.userId,
+                Id = client.Id,
+                UserId = client.UserId,
                 UserName = client.user != null ? client.user.firstName + " " + client.user.lastName : null,
                 AddressId = client.addressId,
                 Address = client.address != null ? new AddressReadDto
@@ -190,6 +190,27 @@ namespace TicketsReservationSystem.BLL.Managers
         {
             var client = _clientRepository.GetClientById(clientId);
             return await Task.FromResult(_mapper.Map<ClientReadDto>(client));
+        }
+
+        // Removed the duplicate method definition for AddClientAddressAsync.  
+        // The duplicate method was already defined earlier in the file.  
+        // Keeping only one definition of AddClientAddressAsync.  
+
+
+        public async Task AddAddressAsync(AddressReadDto addressDto)
+        {
+            // Map AddressReadDto to Address entity
+            var address = _mapper.Map<Address>(addressDto);
+
+            // Save the address using the repository
+            _clientRepository.AddAddress(address);
+
+            await Task.CompletedTask;
+        }
+
+        public Task EditAddressAsync(AddressReadDto addressDto)
+        {
+            throw new NotImplementedException();
         }
     }
 }
