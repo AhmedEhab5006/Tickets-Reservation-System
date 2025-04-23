@@ -10,6 +10,5 @@ namespace TicketsReservationSystem.BLL.Dto_s
     {
         public int userId { get; set; }
         public int AddressId { get; set; }
-
     }
 }

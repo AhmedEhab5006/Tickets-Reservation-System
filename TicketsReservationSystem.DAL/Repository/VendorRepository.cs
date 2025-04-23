@@ -133,5 +133,35 @@ namespace TicketsReservationSystem.DAL.Repository
         {
             throw new NotImplementedException();
         }
+
+        public void AddTicket(Ticket ticket)
+        {
+            _context.Tickets.Add(ticket);
+            _context.SaveChanges();
+        }
+
+        public void EditTicket(Ticket ticket)
+        {
+            _context.Tickets.Update(ticket);
+            _context.SaveChanges();
+        }
+
+        public void DeleteTicket(Ticket ticket)
+        {
+            _context.Tickets.Remove(ticket);
+            _context.SaveChanges();
+        }
+
+        public Ticket GetTicketById(int id)
+        {
+            var found = _context.Tickets.Find(id);
+            return found;
+        }
+
+        public IQueryable <Ticket> GetMyEventTickets(int eventId)
+        {
+            var found = _context.Tickets.Where(a=>a.EventId == eventId);
+            return found;
+        }
     }
 }

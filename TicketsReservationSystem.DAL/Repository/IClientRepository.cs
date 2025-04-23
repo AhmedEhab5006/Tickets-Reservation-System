@@ -3,7 +3,7 @@
 public interface IClientRepository
 {
     void Add(Client client);
-    void AddAddress(Address address);
+    int AddAddress(Address address);
     void EditAddress(Address address);
     void Book(int ticketId);
     void CancelBooking(int ticketId);

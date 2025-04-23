@@ -110,10 +110,20 @@ namespace TicketsReservationSystem.BLL.Managers.AuthManagers
                 switch (user.role)
                 {
                     case "Client":
+
+                        var addressAddDto = new AddressAddDto();
+                        
+                        int addressId = _clientManager.AddAddressAsync(addressAddDto);
+
                         var clientDto = new ClientAddDto
                         {
+                            userId = id,
+                            AddressId = addressId
                         };
-                        //_clientManager.Add(clientDto  , id);
+
+                        
+                        _clientManager.Add(clientDto, id);
+
                         break;
 
                     case "Vendor":

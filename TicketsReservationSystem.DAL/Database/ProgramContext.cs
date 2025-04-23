@@ -24,18 +24,6 @@ namespace TicketsReservationSystem.DAL.Database
 
             base.OnModelCreating(builder);
 
-            builder.Entity<Address>()
-                 .HasOne(a => a.client)
-                 .WithMany()
-                 .HasForeignKey(a => a.clientId)
-                 .OnDelete(DeleteBehavior.Restrict);
-
-            builder.Entity<Address>()
-                .HasOne(a => a.ticket)
-                .WithOne(t => t.shippingAddress)
-                .HasForeignKey<Ticket>(t => t.shippingAddressId)
-                .OnDelete(DeleteBehavior.Restrict);
-
             // Client Configuration
             builder.Entity<Client>()
                 .HasOne(c => c.user)
@@ -49,12 +37,7 @@ namespace TicketsReservationSystem.DAL.Database
                 .HasForeignKey(c => c.addressId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            builder.Entity<Client>()
-                .HasMany(c => c.tickets)
-                .WithOne(t => t.client)
-                .HasForeignKey(t => t.clientId)
-                .OnDelete(DeleteBehavior.Restrict);
-
+            
             // EntertainmentEvent Configuration
             builder.Entity<EntertainmentEvent>()
                 .HasOne(ee => ee.Event)
@@ -82,13 +65,7 @@ namespace TicketsReservationSystem.DAL.Database
                 .HasForeignKey<SportEvent>(se => se.EventId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // Ticket Configuration
-            builder.Entity<Ticket>()
-                .HasOne(t => t.shippingAddress)
-                .WithOne()
-                .HasForeignKey<Ticket>(t => t.shippingAddressId)
-                .OnDelete(DeleteBehavior.Restrict);
-
+            
             // User Configuration
             builder.Entity<User>()
                 .HasOne(u => u.client)
@@ -109,14 +86,7 @@ namespace TicketsReservationSystem.DAL.Database
                 .HasForeignKey(e => e.vendorId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-    builder.Entity<Address>()
-        .HasOne(a => a.client)
-        .WithMany(c => c.addresses)
-        .HasForeignKey(a => a.clientId)
-        .OnDelete(DeleteBehavior.SetNull);
-        
         }
-
             
         
 
@@ -128,6 +98,7 @@ namespace TicketsReservationSystem.DAL.Database
         public DbSet<Ticket> Tickets { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet <Vendor> vendors { get; set; }
+        public DbSet<Reservation> Reservations { get; set; }
 
     }
 }

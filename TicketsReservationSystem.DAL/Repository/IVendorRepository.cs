@@ -25,6 +25,11 @@ namespace TicketsReservationSystem.DAL.Repository
         public Vendor GetById(int id);
         public IQueryable<Event> GetMySportEvents(int id);
         public IQueryable<Event> GetMyEntertainmentEvents(int id);
+        public void AddTicket(Ticket ticket);
+        public void EditTicket (Ticket ticket);
+        public void DeleteTicket(Ticket ticket);
+        public Ticket GetTicketById(int id);
+        public IQueryable<Ticket> GetMyEventTickets(int eventId);
 
         
     }

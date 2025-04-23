@@ -59,12 +59,21 @@ namespace TicketsReservationSystem.API.Controllers
             
             Event.id = id;
             var found = _vendorManager.GetEventById(Event.id);
+            vendorId = _getLoggedData.GetId();
+            string acceptance = _getLoggedData.GetVendorStatus(vendorId);
+            
+            if (acceptance == "Pending")
+            {
+                return Unauthorized("You Don't have the permission to edit an event");
+            }
+            
+            
             if (found == null)
             {
                 return NotFound("Desired Event isn't found");
             }
 
-            vendorId = _getLoggedData.GetId();
+            
             if (found.vendorId != vendorId)
             {
                 return Unauthorized("You cannot update this event");
@@ -80,13 +89,19 @@ namespace TicketsReservationSystem.API.Controllers
             entertainmentEventUpdateDto.id = id;
             var found = _vendorManager.GetEntertainmentEventById(entertainmentEventUpdateDto.id);
 
+            vendorId = _getLoggedData.GetId();
+            string acceptance = _getLoggedData.GetVendorStatus(vendorId);
+
+            if (acceptance == "Pending")
+            {
+                return Unauthorized("You Don't have the permission to edit an event");
+            }
 
             if (found == null)
             {
                 return NotFound("Desired Event isn't found");
             }
 
-            vendorId = _getLoggedData.GetId();
             if (_vendorManager.GetEventById(found.EventId).vendorId != vendorId)
             {
                 return Unauthorized("You cannot update this event");
@@ -103,12 +118,20 @@ namespace TicketsReservationSystem.API.Controllers
             var found = _vendorManager.GetSportEventById(SportsEvent.id);
 
 
+            vendorId = _getLoggedData.GetId();
+            string acceptance = _getLoggedData.GetVendorStatus(vendorId);
+
+            if (acceptance == "Pending")
+            {
+                return Unauthorized("You Don't have the permission to edit an event");
+
+            }
+            
             if (found == null)
             {
                 return NotFound("Desired Event isn't found");
             }
 
-            vendorId = _getLoggedData.GetId();
             if (_vendorManager.GetEventById(found.EventId).vendorId != vendorId)
             {
                 return Unauthorized("You cannot update this event");
@@ -124,12 +147,20 @@ namespace TicketsReservationSystem.API.Controllers
             var found = _vendorManager.GetEventById(id);
 
 
+            vendorId = _getLoggedData.GetId();
+            string acceptance = _getLoggedData.GetVendorStatus(vendorId);
+
+            if (acceptance == "Pending")
+            {
+                return Unauthorized("You Don't have the permission to delete an event");
+
+            }
+
             if (found == null)
             {
                 return NotFound("Desired Event isn't found");
             }
 
-            vendorId = _getLoggedData.GetId();
             if (_vendorManager.GetEventById(found.vendorId).vendorId != vendorId)
             {
                 return Unauthorized("You cannot delete this event");
@@ -165,6 +196,56 @@ namespace TicketsReservationSystem.API.Controllers
             }
 
             return NotFound("You Haven't posted any events yet");
+        }
+        [HttpPost("AddTicket")]
+        public IActionResult AddTicket(TicketAddDto ticketAddDto)
+        {
+            var sucssed = _vendorManager.AddTicket(ticketAddDto);
+
+            vendorId = _getLoggedData.GetId();
+            string acceptance = _getLoggedData.GetVendorStatus(vendorId);
+
+            if (acceptance == "Pending")
+            {
+                return Unauthorized("You Don't have the permission to add a ticket");
+            }
+
+
+            if (_vendorManager.GetEventById(ticketAddDto.EventId).vendorId != vendorId)
+            {
+                return Unauthorized("You don't have a permission to add tickets to this event");
+            }
+            
+            if (sucssed)
+            {
+                return Created(nameof(ticketAddDto), new
+                {
+                    ticketAddDto.EventId,
+                    ticketAddDto.category,
+                    ticketAddDto.avillableNumber,
+                });
+            }
+
+            return BadRequest("desired avillable seats number is greater than event avillable seats");
+        }
+
+        [HttpPut("EditTicket")]
+        public IActionResult EditTicket(int id , TicketUpdateDto ticketUpdateDto)
+        {
+            ticketUpdateDto.Id = id;
+            var sucssed = _vendorManager.UpdateTicket(ticketUpdateDto);
+            if (sucssed)
+            {
+                return Created();
+            }
+
+            return BadRequest("desired avillable seats number is greater than event avillable seats");
+        }
+        [HttpDelete("DeleteTicket")]
+        public IActionResult DeleteTicket (int id)
+        {
+            _vendorManager.DeleteTicket(id);
+            return Ok();
         }
     }
 }

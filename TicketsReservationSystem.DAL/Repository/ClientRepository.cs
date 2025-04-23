@@ -25,10 +25,21 @@ namespace TicketsReservationSystem.DAL.Repository
             _context.SaveChanges();
         }
 
-        public void AddAddress(Address address)
+        public int AddAddress(Address address)
         {
-            var added = _context.Address.Add(address);
+            var added = new Address
+            {
+                id = address.id,
+                city = address.city,
+                postalCode = address.postalCode,
+                state = address.state,
+                street = address.street,
+            };
+            
+            _context.Address.Add(added);
             _context.SaveChanges();
+
+            return added.id;
         }
 
         public void Book(int ticketId)
@@ -77,7 +88,7 @@ namespace TicketsReservationSystem.DAL.Repository
 
         public void EditAddress(Address address)
         {
-            var updated = _context.Address.Update(address);
+            _context.Address.Update(address);
             _context.SaveChanges();
         }
 

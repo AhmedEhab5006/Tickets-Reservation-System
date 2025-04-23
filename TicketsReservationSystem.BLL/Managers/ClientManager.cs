@@ -48,16 +48,9 @@ namespace TicketsReservationSystem.BLL.Managers
             await Task.CompletedTask;
         }
 
-        // Add address
- 
+        
 
-        // Edit address
-        public void EditAddress(Address address)
-        {
-            _clientRepository.EditAddress(address);
-        }
-
-        public async Task EditClientAddressAsync(AddressReadDto addressDto)
+        public async Task EditAddressAsync(AddressUpdateDto addressDto)
         {
             var address = _mapper.Map<Address>(addressDto);
             _clientRepository.EditAddress(address);
@@ -159,7 +152,6 @@ namespace TicketsReservationSystem.BLL.Managers
 
             var clientDtos = clients.Select(client => new ClientReadDto
             {
-                Id = client.Id,
                 UserId = client.UserId,
                 UserName = client.user != null ? client.user.firstName + " " + client.user.lastName : null,
                 AddressId = client.addressId,
@@ -174,11 +166,8 @@ namespace TicketsReservationSystem.BLL.Managers
                 Tickets = client.tickets != null ? client.tickets.Select(ticket => new TicketReadDto
                 {
                     Id = ticket.id,
-                    EventId = ticket.EventId,
-                    EventName = ticket.Event != null ? ticket.Event.category : null,
-                    Price = ticket.price,
-                    SeatNumber = ticket.seatNumber,
-                    Status = ticket.status
+                    price = ticket.price,
+                    status = ticket.status
                 }).ToList() : new List<TicketReadDto>()
             }).ToList();
 
@@ -197,20 +186,23 @@ namespace TicketsReservationSystem.BLL.Managers
         // Keeping only one definition of AddClientAddressAsync.  
 
 
-        public async Task AddAddressAsync(AddressReadDto addressDto)
+        public int AddAddressAsync(AddressAddDto addressDto)
         {
             // Map AddressReadDto to Address entity
-            var address = _mapper.Map<Address>(addressDto);
+            var address = new Address
+            {
+                city = addressDto.City,
+                postalCode = addressDto.PostalCode,
+                state = addressDto.State,
+                street = addressDto.Street,
+                
+            };
 
-            // Save the address using the repository
-            _clientRepository.AddAddress(address);
+           
+           var added = _clientRepository.AddAddress(address);
+           return added;
 
-            await Task.CompletedTask;
-        }
-
-        public Task EditAddressAsync(AddressReadDto addressDto)
-        {
-            throw new NotImplementedException();
+           
         }
     }
 }

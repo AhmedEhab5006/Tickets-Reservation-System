@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 using TicketsReservationSystem.BLL.Dto_s;
@@ -233,7 +234,7 @@ namespace TicketsReservationSystem.BLL.Managers
         {
             var foundModel = _vendorRepository.GetMyEntertainmentEvents(id);
 
-            
+
             if (foundModel != null)
             {
                 var found = foundModel.Select(a => new FullDetailEntertainmentEventReadDto
@@ -253,15 +254,15 @@ namespace TicketsReservationSystem.BLL.Managers
                 return found;
             }
 
-            return null; 
-            
+            return null;
+
         }
 
         public IEnumerable<FullDetailSportEventReadDto> GetMySportEvent(int id)
         {
             var foundModel = _vendorRepository.GetMySportEvents(id);
 
-            
+
             if (foundModel != null)
             {
                 var found = foundModel.Select(a => new FullDetailSportEventReadDto
@@ -282,8 +283,65 @@ namespace TicketsReservationSystem.BLL.Managers
             }
 
             return null;
-            
+
+        }
+
+        public bool AddTicket(TicketAddDto ticketAddDto)
+        {
+            var eventTickets = _vendorRepository.GetMyEventTickets(ticketAddDto.EventId).ToList();
+            var targetEvent = _vendorRepository.GetEventById(ticketAddDto.EventId);
+
+            var avillableSeatsCount = eventTickets.Sum(a => a.avillableCount);
+
+            if (ticketAddDto.avillableNumber + avillableSeatsCount <= targetEvent.avillableSeats)
+            {
+                _vendorRepository.AddTicket(new Ticket
+                {
+                    avillableCount = ticketAddDto.avillableNumber,
+                    category = ticketAddDto.category,
+                    status = ticketAddDto.status,
+                    EventId = ticketAddDto.EventId,
+                    price = ticketAddDto.price,
+                });
+                return true;
+            }
+            return false;
+        }
+
+
+
+        public bool UpdateTicket(TicketUpdateDto ticketUpdateDto)
+        {
+            var foundModel = _vendorRepository.GetTicketById(ticketUpdateDto.Id);
+            if (foundModel != null)
+            {
+                var eventTickets = _vendorRepository.GetMyEventTickets(foundModel.EventId).ToList();
+                var targetEvent = _vendorRepository.GetEventById(foundModel.EventId);
+
+                var avillableSeatsCount = eventTickets.Sum(a => a.avillableCount);
+                if (ticketUpdateDto.avillableNumber + avillableSeatsCount <= targetEvent.avillableSeats)
+                {
+                    foundModel.price = ticketUpdateDto.price > 0 ? ticketUpdateDto.price : foundModel.price;
+                    foundModel.avillableCount = ticketUpdateDto.avillableNumber > 0 ? ticketUpdateDto.avillableNumber : foundModel.avillableCount;
+                    foundModel.category = !string.IsNullOrWhiteSpace(ticketUpdateDto.category) ? ticketUpdateDto.category : foundModel.category;
+
+                    return true;
+                }
+
+            }
+
+            return false;
+        }
+
+        public void DeleteTicket(int id)
+        {
+            var found = _vendorRepository.GetTicketById(id);
+            if (found != null)
+            {
+                _vendorRepository.DeleteTicket(found);
+            }
         }
     }
-    }
+}
+    
 

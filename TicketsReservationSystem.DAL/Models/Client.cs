@@ -10,17 +10,14 @@ namespace TicketsReservationSystem.DAL.Models
 {
     public class Client
     {
-        [Key]
-        public int Id { get; set; }
-
         [ForeignKey("User")]
+        [Key]
         public int UserId { get; set; }
-        
         public User? user { get; set; }
         public int addressId { get; set; }
         public Address? address { get; set; }
         public ICollection<Ticket>? tickets { get; set; }
-        public ICollection<Address> addresses { get; set; } // navigation
+        public ICollection<Address>? addresses { get; set; }
 
     }
 }
