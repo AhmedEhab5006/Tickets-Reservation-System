@@ -27,6 +27,7 @@ namespace TicketsReservationSystem.BLL.Managers
         public bool AddTicket(TicketAddDto ticketAddDto);
         public bool UpdateTicket (TicketUpdateDto ticketUpdateDto);
         public void DeleteTicket(int id);
+        public TicketReadDto GetTicketById(int id);
 
     }
 }

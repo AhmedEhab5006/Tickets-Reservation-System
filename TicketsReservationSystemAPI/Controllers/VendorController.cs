@@ -198,6 +198,7 @@ namespace TicketsReservationSystem.API.Controllers
             return NotFound("You Haven't posted any events yet");
         }
         [HttpPost("AddTicket")]
+        [TicketsAddFilter]
         public IActionResult AddTicket(TicketAddDto ticketAddDto)
         {
             var sucssed = _vendorManager.AddTicket(ticketAddDto);
@@ -233,10 +234,19 @@ namespace TicketsReservationSystem.API.Controllers
         public IActionResult EditTicket(int id , TicketUpdateDto ticketUpdateDto)
         {
             ticketUpdateDto.Id = id;
+
+            vendorId = _getLoggedData.GetId();
+            string acceptance = _getLoggedData.GetVendorStatus(vendorId);
+
+            if (acceptance == "Pending")
+            {
+                return Unauthorized("You Don't have the permission to update a ticket");
+            }
+
             var sucssed = _vendorManager.UpdateTicket(ticketUpdateDto);
             if (sucssed)
             {
-                return Created();
+                return Ok("Updated");
             }
 
             return BadRequest("desired avillable seats number is greater than event avillable seats");
@@ -244,8 +254,24 @@ namespace TicketsReservationSystem.API.Controllers
         [HttpDelete("DeleteTicket")]
         public IActionResult DeleteTicket (int id)
         {
-            _vendorManager.DeleteTicket(id);
-            return Ok();
+
+            vendorId = _getLoggedData.GetId();
+            string acceptance = _getLoggedData.GetVendorStatus(vendorId);
+
+            if (acceptance == "Pending")
+            {
+                return Unauthorized("You Don't have the permission to delete a ticket");
+            }
+
+            var found = _vendorManager.GetTicketById(id);
+            if (found != null)
+            {
+                _vendorManager.DeleteTicket(id);
+                return Ok();
+            }
+
+            return NotFound("Desired Ticket not found");
+
         }
     }
 }

@@ -341,6 +341,26 @@ namespace TicketsReservationSystem.BLL.Managers
                 _vendorRepository.DeleteTicket(found);
             }
         }
+
+        public TicketReadDto GetTicketById(int id)
+        {
+            var foundModel = _vendorRepository.GetTicketById(id);
+
+            if(foundModel != null)
+            {
+                var returned = new TicketReadDto
+                {
+                    avillableNumber = foundModel.avillableCount,
+                    category = foundModel.category,
+                    status = foundModel.status,
+                    price = foundModel.price,
+                };
+
+                return returned;
+            }
+
+            return null;
+        }
     }
 }
     
