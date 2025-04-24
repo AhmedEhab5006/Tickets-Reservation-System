@@ -16,16 +16,15 @@ namespace TicketsReservationSystem.API.Controllers
     {
         private IAuthManager _authManager;
         private IEmailSender _emailSender;
-        private IMemoryCache _cache;
 
-        public AuthController(IAuthManager authManager , IEmailSender emailSender , IMemoryCache cache)
+        public AuthController(IAuthManager authManager , IEmailSender emailSender)
         {
             _authManager = authManager;
             _emailSender = emailSender;
-            _cache = cache;
         }
 
         [HttpPost("Login")]
+        [LoginFilter]
         public async Task<ActionResult> Login(LoginDto loginDto)
         {
             var logged = await _authManager.Login(loginDto);
@@ -42,6 +41,11 @@ namespace TicketsReservationSystem.API.Controllers
         {
             int otp = 456789;
 
+            if (await _authManager.GetEmailAndUsernameFromDB(registerDto.email , registerDto.firstname + registerDto.lastname))
+            {
+                return BadRequest("Email or username already taken");
+            }
+              
             if (otpVerfiy == 0)
             {
                 await _emailSender.SendEmailAsync(registerDto.email, "Verfying your email", $"Your OTP is {otp}");
@@ -50,17 +54,9 @@ namespace TicketsReservationSystem.API.Controllers
 
             if (otpVerfiy == otp)
             {
-                try
-                {
-                    var token = await _authManager.Register(registerDto);
-                    return Ok(new { token });
-                }
+                var token = await _authManager.Register(registerDto);
+                return Ok(new { token });
 
-                catch (InvalidOperationException ex)
-                {
-                    return BadRequest(ex.Message);
-                }
-                
             }
 
             return BadRequest("Wrong OTP make sure that you entered a valid email");

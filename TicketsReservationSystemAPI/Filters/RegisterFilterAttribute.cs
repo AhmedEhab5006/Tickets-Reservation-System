@@ -15,7 +15,7 @@ namespace TicketsReservationSystem.API.Filters
         {
             var registerDto = context.ActionArguments["registerDto"] as RegisterDto;
            
-            var validRoles = new[] { "Admin", "Client", "Vendor" };
+            var validRoles = new[] {"Client", "Vendor" };
 
             if (!validRoles.Contains(registerDto.role))
             {
@@ -26,6 +26,14 @@ namespace TicketsReservationSystem.API.Filters
             if (registerDto.password.Length < 5)
             {
                 context.ModelState.AddModelError("" , "Password must be greater than or equal 5 chars");
+                context.Result = new BadRequestObjectResult(context.ModelState);
+            }
+
+            if (string.IsNullOrWhiteSpace(registerDto.password) || string.IsNullOrWhiteSpace(registerDto.lastname)
+                || string.IsNullOrWhiteSpace(registerDto.phoneNumber) || string.IsNullOrWhiteSpace(registerDto.firstname)
+                || string.IsNullOrWhiteSpace(registerDto.email) || string.IsNullOrWhiteSpace(registerDto.role))
+            {
+                context.ModelState.AddModelError("", "Missing info");
                 context.Result = new BadRequestObjectResult(context.ModelState);
             }
 

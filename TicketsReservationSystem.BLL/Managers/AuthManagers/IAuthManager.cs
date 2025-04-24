@@ -11,5 +11,6 @@ namespace TicketsReservationSystem.BLL.Managers.AuthManagers
     {
         public Task<string> Login(LoginDto login);
         public Task<string> Register(RegisterDto register);
+        public Task<bool> GetEmailAndUsernameFromDB (string email , string username);
     }
 }

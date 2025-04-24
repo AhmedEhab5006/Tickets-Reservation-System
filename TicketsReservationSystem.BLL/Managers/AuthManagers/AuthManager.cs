@@ -67,12 +67,7 @@ namespace TicketsReservationSystem.BLL.Managers.AuthManagers
             applicationUser.Email = user.email;
             applicationUser.UserName = user.firstname + user.lastname;
             applicationUser.Role = user.role;
-
-
-            if (await _userManager.FindByEmailAsync(user.email) != null || await _userManager.FindByNameAsync(user.firstname + user.lastname) != null)
-            {
-                throw new InvalidOperationException("Email or Username is already taken");
-            }
+            applicationUser.PhoneNumber = user.phoneNumber;
 
             var result = await _userManager.CreateAsync(applicationUser, user.password);
 
@@ -86,6 +81,7 @@ namespace TicketsReservationSystem.BLL.Managers.AuthManagers
                     firstname = user.firstname,
                     lastname = user.lastname,
                     role = user.role,
+                    phoneNumber = user.phoneNumber,
                 });
 
                 switch (user.role)
@@ -124,6 +120,7 @@ namespace TicketsReservationSystem.BLL.Managers.AuthManagers
                 claims.Add(new Claim("Email", user.email));
                 claims.Add(new Claim("Password", user.password));
                 claims.Add(new Claim("Role", user.role));
+                claims.Add(new Claim("PhoneNumber" , user.phoneNumber));
 
                 var token = GenerateToken(claims);
                 return token;
@@ -147,6 +144,18 @@ namespace TicketsReservationSystem.BLL.Managers.AuthManagers
             var token = handler.WriteToken(jwtSecurityToken);
             Console.WriteLine(token);
             return token;
+        }
+
+        public async Task<bool> GetEmailAndUsernameFromDB(string email, string username)
+        {
+
+            if (await _userManager.FindByEmailAsync(email) != null || await _userManager.FindByNameAsync(username) != null)
+            {
+                return true;
+            }
+
+            return false;
+
         }
     }
 }

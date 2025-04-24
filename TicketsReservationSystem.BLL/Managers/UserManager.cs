@@ -26,7 +26,8 @@ namespace TicketsReservationSystem.BLL.Managers
                 lastName = user.lastname,
                 password = user.password,
                 email = user.email,
-                role = user.role
+                role = user.role,
+                phoneNumber = user.phoneNumber,
             };
             _userRepository.Add(Added);
 
@@ -43,6 +44,7 @@ namespace TicketsReservationSystem.BLL.Managers
                 firstname = foundModel.firstName,
                 lastname = foundModel.lastName,
                 password = foundModel.password,
+                phoneNumber= foundModel.phoneNumber,
             };
             
             return found;
@@ -56,6 +58,7 @@ namespace TicketsReservationSystem.BLL.Managers
             found.firstName = user.firstname;
             found.lastName = user.lastname;
             found.password = user.password;
+            found.phoneNumber = user.phoneNumber;
             
             _userRepository.Update(found);
         }

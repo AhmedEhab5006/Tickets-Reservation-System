@@ -14,6 +14,7 @@ namespace TicketsReservationSystem.DAL.Models
         public string email { get; set; }
         public string password { get; set; }
         public string role { get; set; }
+        public string phoneNumber { get; set; }
         public Vendor? vendor { get; set; }
         public Client? client {  get; set; } 
     }

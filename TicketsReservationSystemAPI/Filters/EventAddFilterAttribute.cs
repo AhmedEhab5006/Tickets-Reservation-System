@@ -69,14 +69,6 @@ namespace TicketsReservationSystem.API.Filters
                 context.Result = new BadRequestObjectResult(context.ModelState);
             }
 
-
-            if (eventAddDto.Event.category != "Sport" && eventAddDto.Event.category != "Entertainment")
-            {
-                context.ModelState.AddModelError("", "Invalid Category (Category must be Sport or Entertainment)");
-                context.Result = new BadRequestObjectResult(context.ModelState);
-            }
-
-           
         }
 
         }
