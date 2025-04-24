@@ -20,11 +20,13 @@ namespace TicketsReservationSystem.API.Controllers
     {
         private IVendorManager _vendorManager;
         private IGetLoggedData _getLoggedData;
+        private IEmailSender _emailSender;
         private int vendorId;
 
-        public VendorController(IVendorManager vendorManager , IGetLoggedData getLoggedData) {
+        public VendorController(IVendorManager vendorManager , IGetLoggedData getLoggedData , IEmailSender EmailSender) {
             _vendorManager = vendorManager;
             _getLoggedData = getLoggedData;
+            _emailSender = EmailSender;
         }
 
         [HttpPost("Event")]
@@ -272,6 +274,14 @@ namespace TicketsReservationSystem.API.Controllers
 
             return NotFound("Desired Ticket not found");
 
+        }
+
+        [HttpPost("SendEmail")]
+        [AllowAnonymous]
+        public async Task<IActionResult> SendEmail()
+        {
+            await _emailSender.SendEmailAsync("abuehab1510@gmail.com", "Hello", "Test");
+            return Ok();
         }
     }
 }

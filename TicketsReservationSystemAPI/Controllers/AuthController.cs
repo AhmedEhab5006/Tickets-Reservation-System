@@ -2,6 +2,11 @@
 using Microsoft.AspNetCore.Mvc;
 using TicketsReservationSystem.BLL.Dto_s.AuthDto_s;
 using TicketsReservationSystem.BLL.Managers.AuthManagers;
+using TicketsReservationSystem.API.Helpers;
+using Microsoft.Extensions.Caching.Memory;
+using TicketsReservationSystem.API.Filters;
+
+
 
 namespace TicketsReservationSystem.API.Controllers
 {
@@ -10,10 +15,14 @@ namespace TicketsReservationSystem.API.Controllers
     public class AuthController : ControllerBase
     {
         private IAuthManager _authManager;
+        private IEmailSender _emailSender;
+        private IMemoryCache _cache;
 
-        public AuthController(IAuthManager authManager)
+        public AuthController(IAuthManager authManager , IEmailSender emailSender , IMemoryCache cache)
         {
             _authManager = authManager;
+            _emailSender = emailSender;
+            _cache = cache;
         }
 
         [HttpPost("Login")]
@@ -28,23 +37,33 @@ namespace TicketsReservationSystem.API.Controllers
         }
 
         [HttpPost("Register")]
-        public async Task<ActionResult> Register(RegisterDto registerDto)
+        [RegisterFilter]
+        public async Task<ActionResult> Register(RegisterDto registerDto , int otpVerfiy)
         {
-            try
+            int otp = 456789;
+
+            if (otpVerfiy == 0)
             {
-                var token = await _authManager.Register(registerDto);
-                return Ok(new { token });
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(new { message = ex.Message });
-            }
-            catch (InvalidOperationException ex)
-            {
-                return Conflict(new { message = ex.Message });
+                await _emailSender.SendEmailAsync(registerDto.email, "Verfying your email", $"Your OTP is {otp}");
+                return Ok("otp sent to your email");
             }
 
+            if (otpVerfiy == otp)
+            {
+                try
+                {
+                    var token = await _authManager.Register(registerDto);
+                    return Ok(new { token });
+                }
+
+                catch (InvalidOperationException ex)
+                {
+                    return BadRequest(ex.Message);
+                }
+                
+            }
+
+            return BadRequest("Wrong OTP make sure that you entered a valid email");
         }
-
     }
 }

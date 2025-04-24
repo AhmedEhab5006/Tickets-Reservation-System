@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using System.Text;
@@ -32,6 +33,8 @@ internal class Program
         builder.Services.AddScoped<IUserRepository, UserRepository>();
         builder.Services.AddScoped<IAuthManager, AuthManager>();
         builder.Services.AddScoped<IGetLoggedData, GetLoggedData>();
+        builder.Services.AddScoped<IEmailSender, EmailSender>();
+        builder.Services.AddScoped<IMemoryCache , MemoryCache>();
         builder.Services.AddHttpContextAccessor();
         builder.Services.AddAutoMapper(typeof(ClientProfile).Assembly);
 
