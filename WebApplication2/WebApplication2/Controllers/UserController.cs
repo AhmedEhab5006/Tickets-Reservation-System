@@ -7,44 +7,41 @@ namespace WebApplication2.Controllers
     public class UserController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly HttpClient _client;
+        
 
-        public UserController(ILogger<HomeController> logger)
+        public UserController(ILogger<HomeController> logger , HttpClient httpClient)
         {
             _logger = logger;
+            _client = httpClient;
+            _client.BaseAddress = new Uri("https://localhost:7110/");
         }
 
 
-        public IActionResult Register()
+        public async Task <IActionResult> Register(RegisterVM registerVM)
         {
-            var result = new ViewResult();
-            result.ViewName = "Register";
-            return result;
+            await _client.PostAsJsonAsync<RegisterVM>("api/Auth/Register", registerVM);
+            return View();
         }
 
-        public IActionResult sign_in()
+        public async Task <IActionResult> sign_in(LoginVM loginVM)
         {
-            var result = new ViewResult();
-            result.ViewName = "Sign_in";
-            return result;
+            await _client.PostAsJsonAsync<LoginVM>("api/Auth/Login", loginVM);
+            return View();
         }
 
 
-        public IActionResult Sport_events()
+        public async Task <IActionResult> Sport_events()
         {
-            var result = new ViewResult();
-            result.ViewName = "Sports_events";
-            return result;
+            await _client.GetFromJsonAsync<List<SportEventVM>>("api/Client/SportEvents");
+            return View();
         }
 
-        public IActionResult Entertainment_events()
+        public async Task<IActionResult> Entertainment_events()
         {
-            var result = new ViewResult();
-            result.ViewName = "Entertaimnet_events";
-            return result;
+            await _client.GetFromJsonAsync<List<EntertainmentVM>>("api/Client/EntertainmentEvents");
+            return View();
         }
-
-
-
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

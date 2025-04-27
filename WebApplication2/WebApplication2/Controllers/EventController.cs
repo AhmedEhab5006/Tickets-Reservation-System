@@ -19,9 +19,7 @@ namespace WebApplication2.Controllers
 
         public IActionResult All_events()
         {
-            var result = new ViewResult();
-            result.ViewName = "All_events";
-            return result;
+            return View();
         }
 
 
