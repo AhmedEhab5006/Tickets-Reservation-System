@@ -18,5 +18,7 @@ namespace TicketsReservationSystem.BLL.Dto_s
         public string year { get; set; }
         public string location { get; set; }
         public int aviilableSeats { get; set; }
+        public string team1Image { get; set; }
+        public string team2Image { get; set; }
     }
 }

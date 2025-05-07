@@ -9,7 +9,7 @@ namespace TicketsReservationSystem.DAL.Models
     public class Event
     {
         public int id { get; set; }
-        public int vendorId { get; set; }
+        public string vendorId { get; set; }
         public Vendor? vendor { get; set; }
         public DateTime date { get; set; }
         public string location { get; set; }

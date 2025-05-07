@@ -12,47 +12,60 @@ using System.Threading.Tasks;
 using TicketsReservationSystem.BLL.Dto_s;
 using TicketsReservationSystem.BLL.Dto_s.AuthDto_s;
 using TicketsReservationSystem.DAL.Models;
+using TicketsReservationSystem.DAL.Repository;
 
 namespace TicketsReservationSystem.BLL.Managers.AuthManagers
 {
     public class AuthManager : IAuthManager
     {
-        private UserManager<ApplicationUser> _userManager;
+        private IUserRepository _userRepository;
+        private IApplicationUserRoleRepository _applicationUserRoleRepository;
         private IConfiguration _configuration;
-        private IUserManager _Manager;
-        private IClientManager _clientManager;
-        private IVendorManager _vendorManager;
 
-        public AuthManager(UserManager<ApplicationUser> userManager, IConfiguration configuration
-                                , IUserManager manager, IClientManager clientManager, IVendorManager vendorManager)
+        public AuthManager(IUserRepository userRepository, IApplicationUserRoleRepository applicationUserRoleRepository, IConfiguration configuration)
         {
-            _userManager = userManager;
+            _userRepository = userRepository;
+            _applicationUserRoleRepository = applicationUserRoleRepository;
             _configuration = configuration;
-            _Manager = manager;
-            _clientManager = clientManager;
-            _vendorManager = vendorManager;
         }
 
-        public async Task<string> Login(LoginDto user)
+        public string GenerateToken(IList<Claim> claims)
         {
-            var logged = await _userManager.FindByEmailAsync(user.email);
+            var secretkey = _configuration.GetSection("SecretKey").Value;
+            var byteSecretKey = Encoding.UTF8.GetBytes(secretkey);
+            SecurityKey securityKey = new SymmetricSecurityKey(byteSecretKey);
+            SigningCredentials signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+            var expiryDate = DateTime.Now.AddDays(5);
+            JwtSecurityToken jwtSecurityToken = new JwtSecurityToken(claims: claims, expires: expiryDate, signingCredentials: signingCredentials);
+            JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
+            var token = handler.WriteToken(jwtSecurityToken);
+
+            return token;
+        }
+
+        public async Task<string> Login(LoginDto loginDto)
+        {
+            var logged = await _userRepository.GetByEmail(loginDto.email);
 
             if (logged == null)
             {
                 return null;
             }
 
-            var check = await _userManager.CheckPasswordAsync(logged, user.password);
+            var check = await _userRepository.CheckPassword(loginDto.password, logged);
+
             if (check == null)
             {
                 return null;
             }
 
-            var claims = await _userManager.GetClaimsAsync(logged);
-            claims.Add(new Claim(ClaimTypes.Role, logged.Role)); 
+            var role = await _applicationUserRoleRepository.GetRole(logged);
+            var claims = await _userRepository.GetClaims(logged);
             claims.Add(new Claim(ClaimTypes.NameIdentifier, logged.Id));
             claims.Add(new Claim(ClaimTypes.Name, logged.UserName));
             claims.Add(new Claim(ClaimTypes.Email, logged.Email));
+            claims.Add(new Claim(ClaimTypes.Role, role));
+            
 
             var token = GenerateToken(claims);
 
@@ -60,102 +73,49 @@ namespace TicketsReservationSystem.BLL.Managers.AuthManagers
 
         }
 
-
-        public async Task<string> Register(RegisterDto user)
+        public async Task<string> Register(RegisterDto registerDto)
         {
-            ApplicationUser applicationUser = new ApplicationUser();
-            applicationUser.Email = user.email;
-            applicationUser.UserName = user.firstname + user.lastname;
-            applicationUser.Role = user.role;
-            applicationUser.PhoneNumber = user.phoneNumber;
 
-            var result = await _userManager.CreateAsync(applicationUser, user.password);
-
-            if (result.Succeeded)
+            var addedUser = new ApplicationUser
             {
+                Email = registerDto.email,
+                UserName = registerDto.username
+            };
 
-                var id = _Manager.Add(new UserAddDto
+            var emailExists = await _userRepository.GetByEmail(addedUser.Email);
+            var userNameExists = await _userRepository.GetByUserName(addedUser.UserName);
+
+            if (emailExists != null || userNameExists != null)
+            {
+                return "exsist";
+            }
+
+            if (registerDto.role == "Vendor")
+            {
+                var addedVendor = new VendorAddDto(); 
+                await _userRepository.CreateVendor(new Vendor
                 {
-                    email = user.email,
-                    password = user.password,
-                    firstname = user.firstname,
-                    lastname = user.lastname,
-                    role = user.role,
-                    phoneNumber = user.phoneNumber,
+                    acceptanceStatus = addedVendor.acceptanceStatus
                 });
+            }
+            
+            var addingResult = await _userRepository.AddAsync(registerDto.password, addedUser);
+            var addingRoleResult = await _applicationUserRoleRepository.Add(registerDto.role, addedUser);
 
-                switch (user.role)
-                {
-                    case "Client":
-
-                        var addressAddDto = new AddressAddDto();
-                        
-                        int addressId = _clientManager.AddAddressAsync(addressAddDto);
-
-                        var clientDto = new ClientAddDto
-                        {
-                            userId = id,
-                            AddressId = addressId
-                        };
-
-                        
-                        _clientManager.Add(clientDto, id);
-
-                        break;
-
-                    case "Vendor":
-                        var vendorDto = new VendorAddDto
-                        {
-                            id = id,
-                        };
-                        _vendorManager.Add(vendorDto, id);
-                        break;
-                }
-
-
-
-
+            if (addingResult == "done" && addingRoleResult == "done")
+            {
                 List<Claim> claims = new List<Claim>();
-                claims.Add(new Claim("UserName", user.firstname + user.lastname));
-                claims.Add(new Claim("Email", user.email));
-                claims.Add(new Claim("Password", user.password));
-                claims.Add(new Claim("Role", user.role));
-                claims.Add(new Claim("PhoneNumber" , user.phoneNumber));
+                claims.Add(new Claim("UserName", registerDto.username));
+                claims.Add(new Claim("Email", registerDto.email));
+                claims.Add(new Claim("Password", registerDto.password));
+                claims.Add(new Claim("Role", registerDto.role));
 
                 var token = GenerateToken(claims);
                 return token;
 
             }
+
             return null;
-
-        }
-
-        public String GenerateToken(IList<Claim> claims)
-        {
-            var secretkey = _configuration.GetSection("SecretKey").Value;
-            var byteSecretKey = Encoding.UTF8.GetBytes(secretkey);
-            SecurityKey securityKey = new SymmetricSecurityKey(byteSecretKey);
-
-            var _rsa = new RSACryptoServiceProvider(2048);
-            SigningCredentials signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-            var expiryDate = DateTime.Now.AddDays(5);
-            JwtSecurityToken jwtSecurityToken = new JwtSecurityToken(claims: claims, expires: expiryDate, signingCredentials: signingCredentials);
-            JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
-            var token = handler.WriteToken(jwtSecurityToken);
-            Console.WriteLine(token);
-            return token;
-        }
-
-        public async Task<bool> GetEmailAndUsernameFromDB(string email, string username)
-        {
-
-            if (await _userManager.FindByEmailAsync(email) != null || await _userManager.FindByNameAsync(username) != null)
-            {
-                return true;
-            }
-
-            return false;
-
         }
     }
 }

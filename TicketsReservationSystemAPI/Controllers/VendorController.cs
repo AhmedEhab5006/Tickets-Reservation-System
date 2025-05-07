@@ -20,23 +20,22 @@ namespace TicketsReservationSystem.API.Controllers
     {
         private IVendorManager _vendorManager;
         private IGetLoggedData _getLoggedData;
-        private IEmailSender _emailSender;
-        private int vendorId;
+        private string vendorId;
 
-        public VendorController(IVendorManager vendorManager , IGetLoggedData getLoggedData , IEmailSender EmailSender) {
+        public VendorController(IVendorManager vendorManager, IGetLoggedData getLoggedData)
+        {
             _vendorManager = vendorManager;
             _getLoggedData = getLoggedData;
-            _emailSender = EmailSender;
         }
 
         [HttpPost("Event")]
         [EventAddFilter]
-        public IActionResult AddEvent(FullEventAddDto Event)
+        public async Task <IActionResult> AddEvent(FullEventAddDto Event)
         {
-            
+
             vendorId = _getLoggedData.GetId();
-            string acceptance = _getLoggedData.GetVendorStatus(vendorId); 
-            
+            string acceptance = await _getLoggedData.GetVendorStatus(vendorId);
+
             if (acceptance != "Pending")
             {
                 Event.Event.vendorId = vendorId;
@@ -56,26 +55,26 @@ namespace TicketsReservationSystem.API.Controllers
 
         }
         [HttpPut("Event")]
-        public IActionResult EditEvent(int id , EventUpdateDto Event)
+        public async Task <IActionResult> EditEvent(int id, EventUpdateDto Event)
         {
-            
+
             Event.id = id;
             var found = _vendorManager.GetEventById(Event.id);
             vendorId = _getLoggedData.GetId();
-            string acceptance = _getLoggedData.GetVendorStatus(vendorId);
-            
+            string acceptance = await _getLoggedData.GetVendorStatus(vendorId);
+
             if (acceptance == "Pending")
             {
                 return Unauthorized("You Don't have the permission to edit an event");
             }
-            
-            
+
+
             if (found == null)
             {
                 return NotFound("Desired Event isn't found");
             }
 
-            
+
             if (found.vendorId != vendorId)
             {
                 return Unauthorized("You cannot update this event");
@@ -86,13 +85,14 @@ namespace TicketsReservationSystem.API.Controllers
         }
 
         [HttpPut("Entertainment")]
-        public IActionResult EditEntertainmentEvent(int id , EntertainmentEventUpdateDto entertainmentEventUpdateDto){
+        public async Task <IActionResult> EditEntertainmentEvent(int id, EntertainmentEventUpdateDto entertainmentEventUpdateDto)
+        {
 
             entertainmentEventUpdateDto.id = id;
             var found = _vendorManager.GetEntertainmentEventById(entertainmentEventUpdateDto.id);
 
             vendorId = _getLoggedData.GetId();
-            string acceptance = _getLoggedData.GetVendorStatus(vendorId);
+            string acceptance = await _getLoggedData.GetVendorStatus(vendorId);
 
             if (acceptance == "Pending")
             {
@@ -113,22 +113,23 @@ namespace TicketsReservationSystem.API.Controllers
             return Ok("Updated");
         }
         [HttpPut("Sport")]
-        public IActionResult EditSportsEvent(int id , SportEventUpdateDto SportsEvent){
-            
-            
+        public async Task <IActionResult> EditSportsEvent(int id, SportEventUpdateDto SportsEvent)
+        {
+
+
             SportsEvent.id = id;
             var found = _vendorManager.GetSportEventById(SportsEvent.id);
 
 
             vendorId = _getLoggedData.GetId();
-            string acceptance = _getLoggedData.GetVendorStatus(vendorId);
+            string acceptance = await _getLoggedData.GetVendorStatus(vendorId);
 
             if (acceptance == "Pending")
             {
                 return Unauthorized("You Don't have the permission to edit an event");
 
             }
-            
+
             if (found == null)
             {
                 return NotFound("Desired Event isn't found");
@@ -144,13 +145,13 @@ namespace TicketsReservationSystem.API.Controllers
         }
 
         [HttpDelete("Event")]
-        public IActionResult Delete(int id)
+        public async Task <IActionResult> Delete(int id)
         {
             var found = _vendorManager.GetEventById(id);
 
 
             vendorId = _getLoggedData.GetId();
-            string acceptance = _getLoggedData.GetVendorStatus(vendorId);
+            string acceptance = await _getLoggedData.GetVendorStatus(vendorId);
 
             if (acceptance == "Pending")
             {
@@ -163,7 +164,7 @@ namespace TicketsReservationSystem.API.Controllers
                 return NotFound("Desired Event isn't found");
             }
 
-            if (_vendorManager.GetEventById(found.vendorId).vendorId != vendorId)
+            if (found.vendorId != vendorId)
             {
                 return Unauthorized("You cannot delete this event");
             }
@@ -177,7 +178,7 @@ namespace TicketsReservationSystem.API.Controllers
         {
             vendorId = _getLoggedData.GetId();
             var found = _vendorManager.GetMyEntertainmentEvent(vendorId);
-           
+
             if (found != null)
             {
                 return Ok(found);
@@ -191,8 +192,8 @@ namespace TicketsReservationSystem.API.Controllers
         {
             vendorId = _getLoggedData.GetId();
             var found = _vendorManager.GetMySportEvent(vendorId);
-            
-            if(found != null)
+
+            if (found != null)
             {
                 return Ok(found);
             }
@@ -201,12 +202,12 @@ namespace TicketsReservationSystem.API.Controllers
         }
         [HttpPost("AddTicket")]
         [TicketsAddFilter]
-        public IActionResult AddTicket(TicketAddDto ticketAddDto)
+        public async Task <IActionResult> AddTicket(TicketAddDto ticketAddDto)
         {
             var sucssed = _vendorManager.AddTicket(ticketAddDto);
 
             vendorId = _getLoggedData.GetId();
-            string acceptance = _getLoggedData.GetVendorStatus(vendorId);
+            string acceptance = await _getLoggedData.GetVendorStatus(vendorId);
 
             if (acceptance == "Pending")
             {
@@ -218,7 +219,7 @@ namespace TicketsReservationSystem.API.Controllers
             {
                 return Unauthorized("You don't have a permission to add tickets to this event");
             }
-            
+
             if (sucssed)
             {
                 return Created(nameof(ticketAddDto), new
@@ -233,12 +234,12 @@ namespace TicketsReservationSystem.API.Controllers
         }
 
         [HttpPut("EditTicket")]
-        public IActionResult EditTicket(int id , TicketUpdateDto ticketUpdateDto)
+        public async Task <IActionResult> EditTicket(int id, TicketUpdateDto ticketUpdateDto)
         {
             ticketUpdateDto.Id = id;
 
             vendorId = _getLoggedData.GetId();
-            string acceptance = _getLoggedData.GetVendorStatus(vendorId);
+            string acceptance = await _getLoggedData.GetVendorStatus(vendorId);
 
             if (acceptance == "Pending")
             {
@@ -254,11 +255,11 @@ namespace TicketsReservationSystem.API.Controllers
             return BadRequest("desired avillable seats number is greater than event avillable seats");
         }
         [HttpDelete("DeleteTicket")]
-        public IActionResult DeleteTicket (int id)
+        public async Task <IActionResult> DeleteTicket(int id)
         {
 
             vendorId = _getLoggedData.GetId();
-            string acceptance = _getLoggedData.GetVendorStatus(vendorId);
+            string acceptance = await _getLoggedData.GetVendorStatus(vendorId);
 
             if (acceptance == "Pending")
             {

@@ -13,8 +13,9 @@ namespace TicketsReservationSystem.DAL.Repository
     {
         private ProgramContext _context;
 
-        public VendorRepository(ProgramContext context) {
-            _context = context; 
+        public VendorRepository(ProgramContext context)
+        {
+            _context = context;
         }
 
         public void Add(Vendor vendor)
@@ -26,7 +27,8 @@ namespace TicketsReservationSystem.DAL.Repository
 
         public int AddEvent(Event Event)
         {
-            var added = new Event{
+            var added = new Event
+            {
                 numberOfSeats = Event.numberOfSeats,
                 vendorId = Event.vendorId,
                 location = Event.location,
@@ -36,7 +38,7 @@ namespace TicketsReservationSystem.DAL.Repository
                 bookedSeats = Event.bookedSeats,
                 status = Event.status,
             };
-            
+
             _context.Events.Add(added);
             _context.SaveChanges();
 
@@ -45,7 +47,7 @@ namespace TicketsReservationSystem.DAL.Repository
 
         public void AddEntertainmentEvent(EntertainmentEvent Event)
         {
-           _context.EntertainmentEvents.Add(Event);
+            _context.EntertainmentEvents.Add(Event);
             _context.SaveChanges();
         }
 
@@ -99,28 +101,23 @@ namespace TicketsReservationSystem.DAL.Repository
             return found;
         }
 
-        public Vendor GetByUserId(int id)
+        public async Task <Vendor?> GetById(string id)
         {
-            var found = _context.vendors.Where(a=> a.userId == id).FirstOrDefault();
-            return found;
+            return await _context.vendors
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(v => v.Id == id);
         }
 
-        public Vendor GetById (int id)
+        public IQueryable<Event> GetMySportEvents(string id)
         {
-            var found = _context.vendors.Where(a=> a.Id == id).FirstOrDefault();
-            return found;
-        }
-
-        public IQueryable<Event> GetMySportEvents(int id)
-        {
-            var returned = _context.Events.Where(a=>a.vendorId == id)
+            var returned = _context.Events.Where(a => a.vendorId == id)
                                 .Include(a => a.sportEvent);
 
             return returned;
 
         }
 
-        public IQueryable<Event> GetMyEntertainmentEvents(int id)
+        public IQueryable<Event> GetMyEntertainmentEvents(string id)
         {
             var returned = _context.Events.Where(a => a.vendorId == id)
                                             .Include(a => a.entertainment);
@@ -158,9 +155,9 @@ namespace TicketsReservationSystem.DAL.Repository
             return found;
         }
 
-        public IQueryable <Ticket> GetMyEventTickets(int eventId)
+        public IQueryable<Ticket> GetMyEventTickets(int eventId)
         {
-            var found = _context.Tickets.Where(a=>a.EventId == eventId);
+            var found = _context.Tickets.Where(a => a.EventId == eventId);
             return found;
         }
     }

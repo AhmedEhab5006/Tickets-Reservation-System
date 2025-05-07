@@ -8,7 +8,7 @@ namespace TicketsReservationSystem.BLL.Dto_s
 {
     public class VendorAddDto
     {
-        public int id { get; set; }
+        public string id { get; set; }
         public string acceptanceStatus = "Pending";
     }
 }

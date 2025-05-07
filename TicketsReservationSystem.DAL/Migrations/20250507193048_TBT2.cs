@@ -5,15 +5,16 @@
 namespace TicketsReservationSystem.DAL.Migrations
 {
     /// <inheritdoc />
-    public partial class phoneNumberAdded : Migration
+    public partial class TBT2 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<string>(
-                name: "phoneNumber",
-                table: "Users",
-                type: "nvarchar(max)",
+                name: "Discriminator",
+                table: "AspNetRoles",
+                type: "nvarchar(21)",
+                maxLength: 21,
                 nullable: false,
                 defaultValue: "");
         }
@@ -22,8 +23,8 @@ namespace TicketsReservationSystem.DAL.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "phoneNumber",
-                table: "Users");
+                name: "Discriminator",
+                table: "AspNetRoles");
         }
     }
 }

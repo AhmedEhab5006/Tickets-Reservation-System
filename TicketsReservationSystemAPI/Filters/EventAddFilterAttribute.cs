@@ -27,7 +27,8 @@ namespace TicketsReservationSystem.API.Filters
                     eventAddDto.EntertainmentEvent.duration <= 0 ||
                     string.IsNullOrWhiteSpace(eventAddDto.EntertainmentEvent.showCategory) ||
                     eventAddDto.EntertainmentEvent.ageRestriction <= 0 ||
-                    string.IsNullOrWhiteSpace(eventAddDto.EntertainmentEvent.genre))
+                    string.IsNullOrWhiteSpace(eventAddDto.EntertainmentEvent.genre) || 
+                    string.IsNullOrWhiteSpace(eventAddDto.EntertainmentEvent.eventImage))
                 {
                     context.ModelState.AddModelError("", "Missing info, make sure that all fields are complete");
                     context.Result = new BadRequestObjectResult(context.ModelState);
@@ -47,7 +48,8 @@ namespace TicketsReservationSystem.API.Filters
                     string.IsNullOrWhiteSpace(eventAddDto.SportsEvent.tournamentStage) ||
                     string.IsNullOrWhiteSpace(eventAddDto.SportsEvent.tournament) ||
                     string.IsNullOrWhiteSpace(eventAddDto.SportsEvent.team1) ||
-                    string.IsNullOrWhiteSpace(eventAddDto.SportsEvent.team2))
+                    string.IsNullOrWhiteSpace(eventAddDto.SportsEvent.team2) || string.IsNullOrWhiteSpace(eventAddDto.SportsEvent.team1Image)
+                    || string.IsNullOrWhiteSpace(eventAddDto.SportsEvent.team2Image))
                 {
                     context.ModelState.AddModelError("", "Missing info, make sure that all fields are complete");
                     context.Result = new BadRequestObjectResult(context.ModelState);

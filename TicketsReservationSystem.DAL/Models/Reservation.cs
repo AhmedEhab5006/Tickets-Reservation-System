@@ -10,7 +10,7 @@ namespace TicketsReservationSystem.DAL.Models
     public class Reservation
     {
         public int id { get; set; }
-        public int clientId { get; set; }
+        public Guid clientId { get; set; }
         public Client? client { get; set; }
         public int ticketId { get; set; }
         public Ticket? ticket { get; set; }  

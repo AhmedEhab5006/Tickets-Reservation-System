@@ -8,6 +8,7 @@ namespace TicketsReservationSystem.BLL.Dto_s
 {
     public class VendorUpdateDto
     {
+        public string id {  get; set; }
         public string acceptanceStatus { get; set; }
     }
 }

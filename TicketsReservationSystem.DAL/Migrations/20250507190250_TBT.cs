@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace TicketsReservationSystem.DAL.Migrations
 {
     /// <inheritdoc />
-    public partial class intial : Migration
+    public partial class TBT : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -30,7 +30,7 @@ namespace TicketsReservationSystem.DAL.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Role = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    isDeleted = table.Column<bool>(type: "bit", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -49,23 +49,6 @@ namespace TicketsReservationSystem.DAL.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Users",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    firstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    lastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    password = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    role = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Users", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
@@ -175,22 +158,20 @@ namespace TicketsReservationSystem.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "vendors",
+                name: "Vendors",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    userId = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     acceptanceStatus = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_vendors", x => x.Id);
+                    table.PrimaryKey("PK_Vendors", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_vendors_Users_userId",
-                        column: x => x.userId,
-                        principalTable: "Users",
-                        principalColumn: "id",
+                        name: "FK_Vendors_AspNetUsers_Id",
+                        column: x => x.Id,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -200,24 +181,22 @@ namespace TicketsReservationSystem.DAL.Migrations
                 {
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    vendorId = table.Column<int>(type: "int", nullable: false),
-                    name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    category = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    describtion = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    vendorId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     location = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     numberOfSeats = table.Column<int>(type: "int", nullable: false),
                     avillableSeats = table.Column<int>(type: "int", nullable: false),
                     bookedSeats = table.Column<int>(type: "int", nullable: false),
-                    status = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    category = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Events", x => x.id);
                     table.ForeignKey(
-                        name: "FK_Events_vendors_vendorId",
+                        name: "FK_Events_Vendors_vendorId",
                         column: x => x.vendorId,
-                        principalTable: "vendors",
+                        principalTable: "Vendors",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -230,6 +209,7 @@ namespace TicketsReservationSystem.DAL.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     EventId = table.Column<int>(type: "int", nullable: false),
                     performerName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    eventImage = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     showCategory = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ageRestriction = table.Column<int>(type: "int", nullable: false),
                     duration = table.Column<double>(type: "float", nullable: false),
@@ -254,7 +234,9 @@ namespace TicketsReservationSystem.DAL.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     EventId = table.Column<int>(type: "int", nullable: false),
                     team1 = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    team1Image = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     team2 = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    team2Image = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     tournament = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     sport = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     tournamentStage = table.Column<string>(type: "nvarchar(max)", nullable: false)
@@ -276,12 +258,11 @@ namespace TicketsReservationSystem.DAL.Migrations
                 {
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    clientId = table.Column<int>(type: "int", nullable: false),
-                    street = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    city = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    state = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    street = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    city = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    state = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     postalCode = table.Column<int>(type: "int", nullable: false),
-                    ticketid = table.Column<int>(type: "int", nullable: true)
+                    ClientId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -292,14 +273,12 @@ namespace TicketsReservationSystem.DAL.Migrations
                 name: "Clients",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    userId = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     addressId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Clients", x => x.id);
+                    table.PrimaryKey("PK_Clients", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Clients_Address_addressId",
                         column: x => x.addressId,
@@ -307,10 +286,10 @@ namespace TicketsReservationSystem.DAL.Migrations
                         principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Clients_Users_userId",
-                        column: x => x.userId,
-                        principalTable: "Users",
-                        principalColumn: "id",
+                        name: "FK_Clients_AspNetUsers_Id",
+                        column: x => x.Id,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -321,28 +300,20 @@ namespace TicketsReservationSystem.DAL.Migrations
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     EventId = table.Column<int>(type: "int", nullable: false),
-                    clientId = table.Column<int>(type: "int", nullable: false),
-                    shippingAddressId = table.Column<int>(type: "int", nullable: false),
                     price = table.Column<double>(type: "float", nullable: false),
-                    seatNumber = table.Column<int>(type: "int", nullable: false),
+                    avillableCount = table.Column<int>(type: "int", nullable: false),
                     category = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    status = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ClientId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Tickets", x => x.id);
                     table.ForeignKey(
-                        name: "FK_Tickets_Address_shippingAddressId",
-                        column: x => x.shippingAddressId,
-                        principalTable: "Address",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Tickets_Clients_clientId",
-                        column: x => x.clientId,
+                        name: "FK_Tickets_Clients_ClientId",
+                        column: x => x.ClientId,
                         principalTable: "Clients",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Tickets_Events_EventId",
                         column: x => x.EventId,
@@ -351,15 +322,44 @@ namespace TicketsReservationSystem.DAL.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Address_clientId",
-                table: "Address",
-                column: "clientId");
+            migrationBuilder.CreateTable(
+                name: "Reservations",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    clientId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    clientId1 = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    ticketId = table.Column<int>(type: "int", nullable: false),
+                    shippingAddressId = table.Column<int>(type: "int", nullable: false),
+                    bookedCount = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Reservations", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_Reservations_Address_shippingAddressId",
+                        column: x => x.shippingAddressId,
+                        principalTable: "Address",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Reservations_Clients_clientId1",
+                        column: x => x.clientId1,
+                        principalTable: "Clients",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Reservations_Tickets_ticketId",
+                        column: x => x.ticketId,
+                        principalTable: "Tickets",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Address_ticketid",
+                name: "IX_Address_ClientId",
                 table: "Address",
-                column: "ticketid");
+                column: "ClientId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -406,12 +406,6 @@ namespace TicketsReservationSystem.DAL.Migrations
                 column: "addressId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Clients_userId",
-                table: "Clients",
-                column: "userId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
                 name: "IX_EntertainmentEvents_EventId",
                 table: "EntertainmentEvents",
                 column: "EventId",
@@ -423,62 +417,49 @@ namespace TicketsReservationSystem.DAL.Migrations
                 column: "vendorId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Reservations_clientId1",
+                table: "Reservations",
+                column: "clientId1");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Reservations_shippingAddressId",
+                table: "Reservations",
+                column: "shippingAddressId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Reservations_ticketId",
+                table: "Reservations",
+                column: "ticketId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_SportEvents_EventId",
                 table: "SportEvents",
                 column: "EventId",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Tickets_clientId",
+                name: "IX_Tickets_ClientId",
                 table: "Tickets",
-                column: "clientId");
+                column: "ClientId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Tickets_EventId",
                 table: "Tickets",
                 column: "EventId");
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Tickets_shippingAddressId",
-                table: "Tickets",
-                column: "shippingAddressId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_vendors_userId",
-                table: "vendors",
-                column: "userId",
-                unique: true);
-
             migrationBuilder.AddForeignKey(
-                name: "FK_Address_Clients_clientId",
+                name: "FK_Address_Clients_ClientId",
                 table: "Address",
-                column: "clientId",
+                column: "ClientId",
                 principalTable: "Clients",
-                principalColumn: "id",
-                onDelete: ReferentialAction.Restrict);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Address_Tickets_ticketid",
-                table: "Address",
-                column: "ticketid",
-                principalTable: "Tickets",
-                principalColumn: "id");
+                principalColumn: "Id");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_Address_Clients_clientId",
-                table: "Address");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_Tickets_Clients_clientId",
-                table: "Tickets");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_Address_Tickets_ticketid",
+                name: "FK_Address_Clients_ClientId",
                 table: "Address");
 
             migrationBuilder.DropTable(
@@ -500,31 +481,31 @@ namespace TicketsReservationSystem.DAL.Migrations
                 name: "EntertainmentEvents");
 
             migrationBuilder.DropTable(
+                name: "Reservations");
+
+            migrationBuilder.DropTable(
                 name: "SportEvents");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
-                name: "Clients");
-
-            migrationBuilder.DropTable(
                 name: "Tickets");
-
-            migrationBuilder.DropTable(
-                name: "Address");
 
             migrationBuilder.DropTable(
                 name: "Events");
 
             migrationBuilder.DropTable(
-                name: "vendors");
+                name: "Vendors");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "Clients");
+
+            migrationBuilder.DropTable(
+                name: "Address");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUsers");
         }
     }
 }
