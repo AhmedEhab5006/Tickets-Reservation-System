@@ -16,4 +16,12 @@ namespace TicketsReservationSystem.DAL.Repository
         //public void ConfirmVendor (int vendorId);
         //public void RejectVendor (int vendorId);
    }
+        IQueryable<User> GetAll();
+        User GetById(int id);
+        void Delete(User deleted);
+        void AddAdmin(User admin);
+        void ConfirmVendor(int vendorId);
+        void RejectVendor(int vendorId);
+    }
+
 }

@@ -24,6 +24,10 @@ namespace TicketsReservationSystem.DAL.Repository
             _context.SaveChanges();
         }
 
+        public IQueryable<Vendor> GetAllPendingVendors()
+        {
+            return _context.vendors.Include(v => v.user).Where(v => v.acceptanceStatus == "Pending");
+        }
 
         public int AddEvent(Event Event)
         {

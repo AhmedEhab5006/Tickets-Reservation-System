@@ -28,6 +28,8 @@ namespace TicketsReservationSystem.DAL.Repository
         public void EditTicket(Ticket ticket);
         public void DeleteTicket(Ticket ticket);
         public Ticket GetTicketById(int id);
+        public IQueryable<Vendor> GetAllPendingVendors();
+
         public IQueryable<Ticket> GetMyEventTickets(int eventId);
     }
 }
