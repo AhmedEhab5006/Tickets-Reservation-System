@@ -37,11 +37,11 @@ namespace TicketsReservationSystem.API.Controllers
         {
 
             
-            string acceptance = _vendorManager.GetAcceptanceStatus("5b867008-62a4-47bf-8050-91ab8530c432");
+            string acceptance = _vendorManager.GetAcceptanceStatus(_getLoggedData.GetId());
 
             if (acceptance != "Pending")
             {
-                Event.Event.vendorId = "5b867008-62a4-47bf-8050-91ab8530c432";
+                Event.Event.vendorId = _getLoggedData.GetId();
                 _vendorManager.AddEvent(Event.Event, Event.EntertainmentEvent, Event.SportsEvent);
                 return Created(nameof(Event.Event.vendorId), new
                 {
@@ -58,7 +58,7 @@ namespace TicketsReservationSystem.API.Controllers
 
         }
         [HttpPut("Event")]
-        public async Task <IActionResult> EditEvent(int id, EventUpdateDto Event)
+        public IActionResult EditEvent(int id, EventUpdateDto Event)
         {
 
             Event.id = id;
@@ -88,7 +88,7 @@ namespace TicketsReservationSystem.API.Controllers
         }
 
         [HttpPut("Entertainment")]
-        public async Task <IActionResult> EditEntertainmentEvent(int id, EntertainmentEventUpdateDto entertainmentEventUpdateDto)
+        public IActionResult EditEntertainmentEvent(int id, EntertainmentEventUpdateDto entertainmentEventUpdateDto)
         {
 
             entertainmentEventUpdateDto.id = id;
@@ -116,7 +116,7 @@ namespace TicketsReservationSystem.API.Controllers
             return Ok("Updated");
         }
         [HttpPut("Sport")]
-        public async Task <IActionResult> EditSportsEvent(int id, SportEventUpdateDto SportsEvent)
+        public IActionResult EditSportsEvent(int id, SportEventUpdateDto SportsEvent)
         {
 
 
@@ -148,7 +148,7 @@ namespace TicketsReservationSystem.API.Controllers
         }
 
         [HttpDelete("Event")]
-        public async Task <IActionResult> Delete(int id)
+        public IActionResult Delete(int id)
         {
             var found = _vendorManager.GetEventById(id);
 
@@ -206,7 +206,7 @@ namespace TicketsReservationSystem.API.Controllers
         }
         [HttpPost("AddTicket")]
         [TicketsAddFilter]
-        public async Task <IActionResult> AddTicket(TicketAddDto ticketAddDto)
+        public IActionResult AddTicket(TicketAddDto ticketAddDto)
         {
             var sucssed = _vendorManager.AddTicket(ticketAddDto);
 
@@ -238,7 +238,7 @@ namespace TicketsReservationSystem.API.Controllers
         }
 
         [HttpPut("EditTicket")]
-        public async Task <IActionResult> EditTicket(int id, TicketUpdateDto ticketUpdateDto)
+        public IActionResult EditTicket(int id, TicketUpdateDto ticketUpdateDto)
         {
             ticketUpdateDto.Id = id;
 
@@ -259,7 +259,7 @@ namespace TicketsReservationSystem.API.Controllers
             return BadRequest("desired avillable seats number is greater than event avillable seats");
         }
         [HttpDelete("DeleteTicket")]
-        public async Task <IActionResult> DeleteTicket(int id)
+        public IActionResult DeleteTicket(int id)
         {
 
             vendorId = _getLoggedData.GetId();
