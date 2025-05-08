@@ -21,14 +21,12 @@ namespace TicketsReservationSystem.API.Controllers
     {
         private IVendorManager _vendorManager;
         private IGetLoggedData _getLoggedData;
-        private ProgramContext _context;
         private string vendorId;
 
-        public VendorController(IVendorManager vendorManager, IGetLoggedData getLoggedData , ProgramContext context)
+        public VendorController(IVendorManager vendorManager, IGetLoggedData getLoggedData)
         {
             _vendorManager = vendorManager;
             _getLoggedData = getLoggedData;
-            _context = context;
         }
 
         [HttpPost("Event")]
@@ -64,7 +62,7 @@ namespace TicketsReservationSystem.API.Controllers
             Event.id = id;
             var found = _vendorManager.GetEventById(Event.id);
             vendorId = _getLoggedData.GetId();
-            string acceptance = _getLoggedData.GetVendorStatus(vendorId);
+            string acceptance = _vendorManager.GetAcceptanceStatus(_getLoggedData.GetId());
 
             if (acceptance == "Pending")
             {
@@ -95,7 +93,7 @@ namespace TicketsReservationSystem.API.Controllers
             var found = _vendorManager.GetEntertainmentEventById(entertainmentEventUpdateDto.id);
 
             vendorId = _getLoggedData.GetId();
-            string acceptance = _getLoggedData.GetVendorStatus(vendorId);
+            string acceptance = _vendorManager.GetAcceptanceStatus(_getLoggedData.GetId());
 
             if (acceptance == "Pending")
             {
@@ -125,7 +123,7 @@ namespace TicketsReservationSystem.API.Controllers
 
 
             vendorId = _getLoggedData.GetId();
-            string acceptance = _getLoggedData.GetVendorStatus(vendorId);
+            string acceptance = _vendorManager.GetAcceptanceStatus(_getLoggedData.GetId());
 
             if (acceptance == "Pending")
             {
@@ -154,7 +152,7 @@ namespace TicketsReservationSystem.API.Controllers
 
 
             vendorId = _getLoggedData.GetId();
-            string acceptance = _getLoggedData.GetVendorStatus(vendorId);
+            string acceptance = _vendorManager.GetAcceptanceStatus(_getLoggedData.GetId());
 
             if (acceptance == "Pending")
             {
@@ -211,7 +209,7 @@ namespace TicketsReservationSystem.API.Controllers
             var sucssed = _vendorManager.AddTicket(ticketAddDto);
 
             vendorId = _getLoggedData.GetId();
-            string acceptance = _getLoggedData.GetVendorStatus(vendorId);
+            string acceptance = _vendorManager.GetAcceptanceStatus(_getLoggedData.GetId());
 
             if (acceptance == "Pending")
             {
@@ -243,7 +241,7 @@ namespace TicketsReservationSystem.API.Controllers
             ticketUpdateDto.Id = id;
 
             vendorId = _getLoggedData.GetId();
-            string acceptance = _getLoggedData.GetVendorStatus(vendorId);
+            string acceptance = _vendorManager.GetAcceptanceStatus(_getLoggedData.GetId());
 
             if (acceptance == "Pending")
             {
@@ -263,7 +261,7 @@ namespace TicketsReservationSystem.API.Controllers
         {
 
             vendorId = _getLoggedData.GetId();
-            string acceptance = _getLoggedData.GetVendorStatus(vendorId);
+            string acceptance = _vendorManager.GetAcceptanceStatus(_getLoggedData.GetId());
 
             if (acceptance == "Pending")
             {
