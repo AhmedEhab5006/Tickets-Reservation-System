@@ -21,14 +21,10 @@ namespace TicketsReservationSystem.API.Controllers
     public class AuthController : ControllerBase
     {
         private IAuthManager _authManager;
-        private IVendorManager _vendorManager;
-        private IGetLoggedData _getLoggedData;
 
-        public AuthController(IAuthManager authManager , IVendorManager vendorManager , IGetLoggedData getLoggedData)
+        public AuthController(IAuthManager authManager)
         {
             _authManager = authManager;
-            _vendorManager = vendorManager;
-            _getLoggedData = getLoggedData;
         }
 
         [HttpPost("Register")]
@@ -59,42 +55,7 @@ namespace TicketsReservationSystem.API.Controllers
                 return NotFound("Wrong email or password");
             }
 
-
-            var handler = new JwtSecurityTokenHandler();
-            var jwtToken = handler.ReadJwtToken(token);
-            var role = jwtToken.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
-            var id = jwtToken.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-
-
-            if (role == "Vendor")
-            {
-
-                var exists = await _vendorManager.GetById(id);
-
-
-                if (exists == null)
-                { 
-                _vendorManager.Add(new VendorAddDto
-                {
-                        id = id,
-                });
-                    
-                }
-            }
-            //else if (role == "Customer")
-            //{
-            //    var exists = await _customerRepository.ExistsAsync(Guid.Parse(userId));
-            //    if (!exists)
-            //    {
-            //        await _customerRepository.AddAsync(new Customer
-            //        {
-            //            Id = Guid.Parse(userId),
-            //            // Add other defaults if needed
-            //        });
-            //    }
-            //}
-
-            return Ok(token);
+             return Ok(token);
         }
     }
 }

@@ -24,7 +24,7 @@ internal class Program
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
-        //builder.Services.AddScoped<IClientRepository, ClientRepository>();
+        builder.Services.AddScoped<IClientRepository, ClientRepository>();
         //builder.Services.AddScoped<IClientManager, ClientManager>();
         //builder.Services.AddScoped<IAdminRepository, AdminRepository>();
         builder.Services.AddScoped<IVendorRepository, VendorRepository>();

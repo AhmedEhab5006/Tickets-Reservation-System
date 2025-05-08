@@ -3,6 +3,6 @@
     public interface IGetLoggedData
     {
         public string GetId();
-        public Task<string> GetVendorStatus(string id);
+        public string GetVendorStatus(string id);
     }
 }

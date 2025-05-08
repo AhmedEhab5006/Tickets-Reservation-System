@@ -191,7 +191,7 @@ namespace TicketsReservationSystem.DAL.Migrations
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("Address");
+                    b.ToTable("Address", (string)null);
                 });
 
             modelBuilder.Entity("TicketsReservationSystem.DAL.Models.ApplicationUser", b =>
@@ -302,7 +302,7 @@ namespace TicketsReservationSystem.DAL.Migrations
                     b.HasIndex("EventId")
                         .IsUnique();
 
-                    b.ToTable("EntertainmentEvents");
+                    b.ToTable("EntertainmentEvents", (string)null);
                 });
 
             modelBuilder.Entity("TicketsReservationSystem.DAL.Models.Event", b =>
@@ -345,7 +345,7 @@ namespace TicketsReservationSystem.DAL.Migrations
 
                     b.HasIndex("vendorId");
 
-                    b.ToTable("Events");
+                    b.ToTable("Events", (string)null);
                 });
 
             modelBuilder.Entity("TicketsReservationSystem.DAL.Models.Reservation", b =>
@@ -379,7 +379,7 @@ namespace TicketsReservationSystem.DAL.Migrations
 
                     b.HasIndex("ticketId");
 
-                    b.ToTable("Reservations");
+                    b.ToTable("Reservations", (string)null);
                 });
 
             modelBuilder.Entity("TicketsReservationSystem.DAL.Models.SportEvent", b =>
@@ -426,7 +426,7 @@ namespace TicketsReservationSystem.DAL.Migrations
                     b.HasIndex("EventId")
                         .IsUnique();
 
-                    b.ToTable("SportEvents");
+                    b.ToTable("SportEvents", (string)null);
                 });
 
             modelBuilder.Entity("TicketsReservationSystem.DAL.Models.Ticket", b =>
@@ -463,7 +463,7 @@ namespace TicketsReservationSystem.DAL.Migrations
 
                     b.HasIndex("EventId");
 
-                    b.ToTable("Tickets");
+                    b.ToTable("Tickets", (string)null);
                 });
 
             modelBuilder.Entity("TicketsReservationSystem.DAL.Models.ApplicationUserRole", b =>

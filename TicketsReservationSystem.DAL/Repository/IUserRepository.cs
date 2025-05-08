@@ -20,6 +20,7 @@ namespace TicketsReservationSystem.DAL.Repository
         public Task<string> CheckPassword(string password, ApplicationUser user);
         public Task<IList<Claim>> GetClaims(ApplicationUser user);
         public Task <string> CreateVendor (Vendor vendor);
+        public Task UntrackUser (string id);
     }
 
 }

@@ -21,7 +21,7 @@ namespace TicketsReservationSystem.DAL.Repository
         public EntertainmentEvent GetEntertainmentEventById(int id);
         public SportEvent GetSportEventById(int id);
         public int ShowBookings(int eventId);
-        public Task <Vendor?> GetById(string id);
+        public Vendor GetById(string id);
         public IQueryable<Event> GetMySportEvents(string id);
         public IQueryable<Event> GetMyEntertainmentEvents(string id);
         public void AddTicket(Ticket ticket);
@@ -30,5 +30,6 @@ namespace TicketsReservationSystem.DAL.Repository
         public Ticket GetTicketById(int id);
         //public IQueryable<Vendor> GetAllPendingVendors();
         public IQueryable<Ticket> GetMyEventTickets(int eventId);
+        public string GetAcceptanceStatus (string vendorId);
     }
 }

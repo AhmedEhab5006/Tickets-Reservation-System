@@ -24,6 +24,7 @@ namespace TicketsReservationSystem.DAL.Repository
             _context.SaveChanges();
         }
 
+
         //public IQueryable<Vendor> GetAllPendingVendors()
         //{
         //    return _context.vendors.Include(v => v.user).Where(v => v.acceptanceStatus == "Pending");
@@ -105,11 +106,10 @@ namespace TicketsReservationSystem.DAL.Repository
             return found;
         }
 
-        public async Task <Vendor?> GetById(string id)
+        public Vendor GetById(string id)
         {
-            return await _context.vendors
-                    .AsNoTracking()
-                    .FirstOrDefaultAsync(v => v.Id == id);
+            var found = _context.vendors.Where(a=>a.Id == id).FirstOrDefault();
+            return found;
         }
 
         public IQueryable<Event> GetMySportEvents(string id)
@@ -162,6 +162,12 @@ namespace TicketsReservationSystem.DAL.Repository
         public IQueryable<Ticket> GetMyEventTickets(int eventId)
         {
             var found = _context.Tickets.Where(a => a.EventId == eventId);
+            return found;
+        }
+
+        public string GetAcceptanceStatus(string vendorId)
+        {
+            var found = _context.vendors.Where(a=>a.Id == vendorId).Select(a=>a.acceptanceStatus).FirstOrDefault();
             return found;
         }
     }

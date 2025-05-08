@@ -26,9 +26,9 @@ namespace TicketsReservationSystem.API.Helpers
 
         }
 
-        public async Task <string> GetVendorStatus(string id)
+        public string GetVendorStatus(string id)
         {
-            var found = await _vendorManager.GetById(id);
+            var found =  _vendorManager.GetById(id);
             return found.acceptanceStatus.ToString();
 
         }

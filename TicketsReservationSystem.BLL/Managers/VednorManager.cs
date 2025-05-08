@@ -200,9 +200,9 @@ namespace TicketsReservationSystem.BLL.Managers
             return null;
         }
 
-        public async Task <VendorReadDto?> GetById(string id)
+        public VendorReadDto GetById(string id)
         {
-            var foundModel = await _vendorRepository.GetById(id);
+            var foundModel = _vendorRepository.GetById(id);
 
 
             if (foundModel != null)
@@ -359,6 +359,12 @@ namespace TicketsReservationSystem.BLL.Managers
             }
 
             return null;
+        }
+
+        public string GetAcceptanceStatus(string vendorId)
+        {
+            var found = _vendorRepository.GetAcceptanceStatus(vendorId);
+            return found;
         }
     }
 }

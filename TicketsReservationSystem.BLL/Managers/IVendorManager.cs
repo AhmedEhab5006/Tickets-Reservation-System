@@ -20,13 +20,13 @@ namespace TicketsReservationSystem.BLL.Managers
         public SportEventReadDto GetSportEventById(int id);
         public void DeleteEvent(int id);
         public int ShowBookings(int eventId);
-        public Task<VendorReadDto?> GetById(string id);
+        public VendorReadDto GetById(string id);
         public IEnumerable<FullDetailEntertainmentEventReadDto> GetMyEntertainmentEvent(string id);
         public IEnumerable<FullDetailSportEventReadDto> GetMySportEvent(string id);
         public bool AddTicket(TicketAddDto ticketAddDto);
         public bool UpdateTicket(TicketUpdateDto ticketUpdateDto);
         public void DeleteTicket(int id);
         public TicketReadDto GetTicketById(int id);
-
+        public string GetAcceptanceStatus(string vendorId);
     }
 }

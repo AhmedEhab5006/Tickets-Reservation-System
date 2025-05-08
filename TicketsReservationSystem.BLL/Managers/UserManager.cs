@@ -19,20 +19,9 @@ namespace TicketsReservationSystem.BLL.Managers
             _userRepository = userRepository;
         }
 
-        public async Task<string> CreateVendor(VendorAddDto dto)
+        public async Task UntrackUser(string id)
         {
-            var done = await _userRepository.CreateVendor(new Vendor
-            {
-                Id = dto.id,
-                acceptanceStatus = dto.acceptanceStatus,
-            });
-
-            if (done != null)
-            {
-                return "done";
-            }
-
-            return null;
+           await _userRepository.UntrackUser(id);
         }
     }
 }

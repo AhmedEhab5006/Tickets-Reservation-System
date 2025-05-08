@@ -21,12 +21,14 @@ namespace TicketsReservationSystem.BLL.Managers.AuthManagers
         private IUserRepository _userRepository;
         private IApplicationUserRoleRepository _applicationUserRoleRepository;
         private IConfiguration _configuration;
+        private IClientRepository _clientRepository;
 
-        public AuthManager(IUserRepository userRepository, IApplicationUserRoleRepository applicationUserRoleRepository, IConfiguration configuration)
+        public AuthManager(IUserRepository userRepository, IApplicationUserRoleRepository applicationUserRoleRepository, IConfiguration configuration , IClientRepository clientRepository)
         {
             _userRepository = userRepository;
             _applicationUserRoleRepository = applicationUserRoleRepository;
             _configuration = configuration;
+            _clientRepository = clientRepository;
         }
 
         public string GenerateToken(IList<Claim> claims)
@@ -90,32 +92,65 @@ namespace TicketsReservationSystem.BLL.Managers.AuthManagers
                 return "exsist";
             }
 
+
+
+            string addingResult = string.Empty;
+            string addingRoleResult = string.Empty;
+
             if (registerDto.role == "Vendor")
             {
-                var addedVendor = new VendorAddDto(); 
-                await _userRepository.CreateVendor(new Vendor
+                var addedVendor = new Vendor
                 {
-                    acceptanceStatus = addedVendor.acceptanceStatus
-                });
+                    UserName = registerDto.username,
+                    Email = registerDto.email,
+                    acceptanceStatus = "Pending"
+                    
+                    // Add any other needed properties
+                };
+
+                addingResult = await _userRepository.AddAsync(registerDto.password, addedVendor);
+                addingRoleResult = await _applicationUserRoleRepository.Add(registerDto.role, addedVendor);
+
+                addedUser = addedVendor;
             }
-            
-            var addingResult = await _userRepository.AddAsync(registerDto.password, addedUser);
-            var addingRoleResult = await _applicationUserRoleRepository.Add(registerDto.role, addedUser);
+            else if (registerDto.role == "Client")
+            {
+                var address = new Address();
+               var id =  _clientRepository.AddAddress(address);
+                var addedClient = new Client
+                {
+                    UserName = registerDto.username,
+                    Email = registerDto.email,
+                    addressId = id
+                    
+                };
+
+                addingResult = await _userRepository.AddAsync(registerDto.password, addedClient);
+                addingRoleResult = await _applicationUserRoleRepository.Add(registerDto.role, addedClient);
+
+                addedUser = addedClient;
+            }
+            else
+            {
+                return "Invalid role"; // Or handle unsupported roles as needed
+            }
 
             if (addingResult == "done" && addingRoleResult == "done")
             {
-                List<Claim> claims = new List<Claim>();
-                claims.Add(new Claim("UserName", registerDto.username));
-                claims.Add(new Claim("Email", registerDto.email));
-                claims.Add(new Claim("Password", registerDto.password));
-                claims.Add(new Claim("Role", registerDto.role));
+                var claims = new List<Claim>
+                {
+                new Claim("UserName", registerDto.username),
+                new Claim("Email", registerDto.email),
+                new Claim("Password", registerDto.password),
+                new Claim("Role", registerDto.role)
+                };
 
                 var token = GenerateToken(claims);
                 return token;
-
             }
 
-            return null;
+            return null; // Or appropriate error
+
         }
     }
 }

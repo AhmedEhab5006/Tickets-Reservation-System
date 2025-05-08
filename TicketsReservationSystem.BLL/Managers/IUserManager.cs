@@ -11,7 +11,7 @@ namespace TicketsReservationSystem.BLL.Managers
     public interface IUserManager
     {
     
-        public Task <string> CreateVendor (VendorAddDto dto);
+        public Task UntrackUser (string id);
         
     }
 }

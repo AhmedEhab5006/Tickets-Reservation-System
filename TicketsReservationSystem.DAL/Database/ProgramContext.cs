@@ -66,11 +66,13 @@ namespace TicketsReservationSystem.DAL.Database
 
 
             // User Configuration
+            builder.Entity<ApplicationUser>().ToTable("AspNetUsers");
             builder.Entity<Vendor>().ToTable("vendors");
             builder.Entity<Client>().ToTable("Clients");
+  
 
             // Optional: map base table name
-            builder.Entity<ApplicationUser>().ToTable("AspNetUsers");
+            
 
             // Vendor Configuration
             builder.Entity<Vendor>()

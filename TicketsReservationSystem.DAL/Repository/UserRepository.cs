@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,10 +14,12 @@ namespace TicketsReservationSystem.DAL.Repository
         public class UserRepository : IUserRepository
         {
             private UserManager<ApplicationUser> _userManager;
+            private ProgramContext _context;
 
-            public UserRepository(UserManager<ApplicationUser> userManager)
+        public UserRepository(UserManager<ApplicationUser> userManager , ProgramContext context)
             {
                 _userManager = userManager;
+                _context = context;
             }
 
             public async Task<string> AddAsync(string password, ApplicationUser user)
@@ -44,8 +47,9 @@ namespace TicketsReservationSystem.DAL.Repository
 
         public async Task<string> CreateVendor(Vendor vendor)
         { 
-            var done = await _userManager.CreateAsync(vendor);
-            if (done.Succeeded)
+              _context.vendors.Add(vendor);
+            var done = await _context.SaveChangesAsync();
+            if (done > 0)
             {
                 return "done";
             }
@@ -63,7 +67,7 @@ namespace TicketsReservationSystem.DAL.Repository
                 return null;
             }
 
-            public async Task<IQueryable<ApplicationUser>> GetAllAsync()
+        public async Task<IQueryable<ApplicationUser>> GetAllAsync()
             {
                 return await Task.FromResult(_userManager.Users);
             }
@@ -104,13 +108,22 @@ namespace TicketsReservationSystem.DAL.Repository
 
                 if (found != null)
                 {
-                    return found;
+                    return found.ToList();
                 }
 
                 return null;
             }
 
-            public async Task<string> UpdateAsync(ApplicationUser user)
+        public async Task UntrackUser(string id)
+        {
+            var baseEntity = await _userManager.FindByIdAsync(id);
+            if (baseEntity != null)
+            {
+                _context.Entry(baseEntity).State = EntityState.Detached;
+            }
+        }
+
+        public async Task<string> UpdateAsync(ApplicationUser user)
             {
                 var done = await _userManager.UpdateAsync(user);
                 if (done.Succeeded)
