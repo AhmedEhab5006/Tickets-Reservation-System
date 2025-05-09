@@ -101,7 +101,7 @@ namespace TicketsReservationSystem.API.Controllers
         [HttpGet("{clientId}/ViewBookings")]
         public async Task<ActionResult<List<ClientBookingDto>>> ViewBookings(string clientId)
         {
-            var bookings = await _clientManager.ViewBookingsAsync(clientId);
+            var bookings = await _clientManager.ViewBookingsAsync(clientId); 
 
             if (bookings == null || bookings.Count == 0)
             {
