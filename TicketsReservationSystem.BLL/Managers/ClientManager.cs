@@ -40,7 +40,6 @@ namespace TicketsReservationSystem.BLL.Managers
         }
 
 
-        // Async version using AutoMapper
         public async Task AddClientAsync(ClientAddDto clientDto)
         {
             var client = _mapper.Map<Client>(clientDto);
@@ -58,23 +57,16 @@ namespace TicketsReservationSystem.BLL.Managers
         }
 
         // Book ticket
-        public void Book(int ticketId)
-        {
-            _clientRepository.Book(ticketId);
-        }
+      
 
-        public async Task BookTicketAsync(int ticketId)
+        public async Task BookAsync(int ticketId)
         {
             _clientRepository.Book(ticketId);
             await Task.CompletedTask;
         }
 
         // Cancel booking
-        public void CancelBooking(int ticketId)
-        {
-            _clientRepository.CancelBooking(ticketId);
-        }
-
+       
         public async Task CancelTicketBookingAsync(int ticketId)
         {
             _clientRepository.CancelBooking(ticketId);
@@ -181,10 +173,7 @@ namespace TicketsReservationSystem.BLL.Managers
             return await Task.FromResult(_mapper.Map<ClientReadDto>(client));
         }
 
-        // Removed the duplicate method definition for AddClientAddressAsync.  
-        // The duplicate method was already defined earlier in the file.  
-        // Keeping only one definition of AddClientAddressAsync.  
-
+      
 
         public int AddAddressAsync(AddressAddDto addressDto)
         {
@@ -204,5 +193,7 @@ namespace TicketsReservationSystem.BLL.Managers
 
            
         }
+
+      
     }
 }

@@ -13,8 +13,8 @@ namespace TicketsReservationSystem.BLL.Managers
         public void Add(ClientAddDto clientAddDto , int userId);
         int AddAddressAsync(AddressAddDto addressDto);
         Task EditAddressAsync(AddressUpdateDto addressDto);
-        public void Book(int ticketId);
-        public void CancelBooking(int ticketId);
+        Task BookAsync(int ticketId);  // Updated to be async
+        Task CancelTicketBookingAsync(int ticketId);  // Already updated
         public IEnumerable<FullDetailSportEventReadDto> GetSportEvents();
         public IEnumerable<FullDetailEntertainmentEventReadDto> GetEntertainmentEvents();
         Task<IEnumerable<ClientReadDto>> GetAllClientsAsync();
