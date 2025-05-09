@@ -5,6 +5,12 @@ using TicketsReservationSystem.BLL.Managers.AuthManagers;
 using TicketsReservationSystem.API.Helpers;
 using Microsoft.Extensions.Caching.Memory;
 using TicketsReservationSystem.API.Filters;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using TicketsReservationSystem.DAL.Models;
+using TicketsReservationSystem.BLL.Managers;
+using TicketsReservationSystem.DAL.Repository;
+using TicketsReservationSystem.BLL.Dto_s;
 
 
 
@@ -15,51 +21,42 @@ namespace TicketsReservationSystem.API.Controllers
     public class AuthController : ControllerBase
     {
         private IAuthManager _authManager;
-        private IEmailSender _emailSender;
 
-        public AuthController(IAuthManager authManager , IEmailSender emailSender)
+        public AuthController(IAuthManager authManager)
         {
             _authManager = authManager;
-            _emailSender = emailSender;
-        }
-
-        [HttpPost("Login")]
-        [LoginFilter]
-        public async Task<ActionResult> Login(LoginDto loginDto)
-        {
-            var logged = await _authManager.Login(loginDto);
-            if (logged == null)
-            {
-                return Unauthorized("Wrong Email Or Password");
-            }
-            return Ok(logged);
         }
 
         [HttpPost("Register")]
-        [RegisterFilter]
-        public async Task<ActionResult> Register(RegisterDto registerDto , int otpVerfiy)
+        public async Task<IActionResult> Register(RegisterDto registerDto)
         {
-            int otp = 456789;
+            var done = await _authManager.Register(registerDto);
 
-            if (await _authManager.GetEmailAndUsernameFromDB(registerDto.email , registerDto.firstname + registerDto.lastname))
+            if (done == "exsist")
             {
                 return BadRequest("Email or username already taken");
             }
-              
-            if (otpVerfiy == 0)
+
+            if (done == null)
             {
-                await _emailSender.SendEmailAsync(registerDto.email, "Verfying your email", $"Your OTP is {otp}");
-                return Ok("otp sent to your email");
+                return BadRequest();
             }
 
-            if (otpVerfiy == otp)
-            {
-                var token = await _authManager.Register(registerDto);
-                return Ok(new { token });
+            return Ok(done);
+        }
 
+        [HttpPost("Login")]
+        public async Task<IActionResult> Login(LoginDto loginDto)
+        {
+            var token = await _authManager.Login(loginDto);
+            
+            if (token == null)
+            {
+                return NotFound("Wrong email or password");
             }
 
-            return BadRequest("Wrong OTP make sure that you entered a valid email");
+             return Ok(token);
         }
     }
 }
+    

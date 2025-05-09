@@ -9,8 +9,7 @@ namespace TicketsReservationSystem.BLL.Dto_s
     public class VendorReadDto
     {
         
-        public int id {  get; set; }
-        public int userId { get; set; }
+        public string id {  get; set; }
         public string acceptanceStatus { get; set; }
     }
 }

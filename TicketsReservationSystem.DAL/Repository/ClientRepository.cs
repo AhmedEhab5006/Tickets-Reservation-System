@@ -35,7 +35,7 @@ namespace TicketsReservationSystem.DAL.Repository
                 state = address.state,
                 street = address.street,
             };
-            
+
             _context.Address.Add(added);
             _context.SaveChanges();
 
@@ -108,21 +108,21 @@ namespace TicketsReservationSystem.DAL.Repository
             return returned;
         }
 
-        public Client? GetClientById(int clientId)
+        public Client? GetClientById(string clientId)
         {
             return _context.Clients
-                .Include(c => c.user) 
+                .Include(c => c.Id)
                 .Include(c => c.address)
-                .Include(c => c.tickets) 
-                .FirstOrDefault(c => c.UserId == clientId); 
+                .Include(c => c.tickets)
+                .FirstOrDefault(c => c.Id == clientId);
         }
 
         public IQueryable<Client> GetAllClients()
         {
             return _context.Clients
-                .Include(c => c.user) 
-                .Include(c => c.address) 
-                .Include(c => c.tickets); 
+                .Include(c => c.Id)
+                .Include(c => c.address)
+                .Include(c => c.tickets);
         }
 
         public Address? GetAddressById(int addressId)

@@ -4,6 +4,7 @@ using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,18 +20,16 @@ namespace TicketsReservationSystem.DAL.Database
 
         }
 
+        public DbSet<Vendor> vendors { get; set; }
+        public DbSet<Client> Clients { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
 
             base.OnModelCreating(builder);
 
             // Client Configuration
-            builder.Entity<Client>()
-                .HasOne(c => c.user)
-                .WithOne(u => u.client)
-                .HasForeignKey<Client>(c => c.UserId)
-                .OnDelete(DeleteBehavior.Cascade);
-
+            
             builder.Entity<Client>()
                 .HasOne(c => c.address)
                 .WithMany()
@@ -65,19 +64,15 @@ namespace TicketsReservationSystem.DAL.Database
                 .HasForeignKey<SportEvent>(se => se.EventId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            
-            // User Configuration
-            builder.Entity<User>()
-                .HasOne(u => u.client)
-                .WithOne(c => c.user)
-                .HasForeignKey<Client>(c => c.UserId)
-                .OnDelete(DeleteBehavior.Cascade);
 
-            builder.Entity<User>()
-                .HasOne(u => u.vendor)
-                .WithOne(v => v.user)
-                .HasForeignKey<Vendor>(v => v.userId)
-                .OnDelete(DeleteBehavior.Cascade);
+            // User Configuration
+            builder.Entity<ApplicationUser>().ToTable("AspNetUsers");
+            builder.Entity<Vendor>().ToTable("vendors");
+            builder.Entity<Client>().ToTable("Clients");
+  
+
+            // Optional: map base table name
+            
 
             // Vendor Configuration
             builder.Entity<Vendor>()
@@ -91,14 +86,12 @@ namespace TicketsReservationSystem.DAL.Database
         
 
         public DbSet<Address> Address { get; set; }
-        public DbSet<Client> Clients { get; set; }
         public DbSet<Event> Events { get; set; }
         public DbSet<EntertainmentEvent> EntertainmentEvents { get; set; }
         public DbSet<SportEvent> SportEvents { get; set; }
         public DbSet<Ticket> Tickets { get; set; }
-        public DbSet<User> Users { get; set; }
-        public DbSet <Vendor> vendors { get; set; }
         public DbSet<Reservation> Reservations { get; set; }
+        public DbSet<ApplicationUserRole> applicationUserRoles { get; set; }
 
     }
 }

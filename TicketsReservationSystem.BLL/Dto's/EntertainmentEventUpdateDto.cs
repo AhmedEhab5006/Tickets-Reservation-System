@@ -15,5 +15,6 @@ namespace TicketsReservationSystem.BLL.Dto_s
         public int ageRestriction { get; set; }
         public double duration { get; set; }
         public string? genre { get; set; }
+        public string eventImage { get; set; }
     }
 }

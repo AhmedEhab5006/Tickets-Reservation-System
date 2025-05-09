@@ -8,12 +8,8 @@ using System.Threading.Tasks;
 
 namespace TicketsReservationSystem.DAL.Models
 {
-    public class Client
+    public class Client : ApplicationUser
     {
-        [ForeignKey("User")]
-        [Key]
-        public int UserId { get; set; }
-        public User? user { get; set; }
         public int addressId { get; set; }
         public Address? address { get; set; }
         public ICollection<Ticket>? tickets { get; set; }

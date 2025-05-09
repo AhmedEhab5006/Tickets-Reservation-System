@@ -25,8 +25,8 @@ internal class Program
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
         builder.Services.AddScoped<IClientRepository, ClientRepository>();
-        builder.Services.AddScoped<IClientManager, ClientManager>();
-        builder.Services.AddScoped<IAdminRepository, AdminRepository>();
+        //builder.Services.AddScoped<IClientManager, ClientManager>();
+        //builder.Services.AddScoped<IAdminRepository, AdminRepository>();
         builder.Services.AddScoped<IVendorRepository, VendorRepository>();
         builder.Services.AddScoped<IVendorManager, VednorManager>();
         builder.Services.AddScoped<IUserManager, UserManager>();
@@ -35,28 +35,27 @@ internal class Program
         builder.Services.AddScoped<IGetLoggedData, GetLoggedData>();
         builder.Services.AddScoped<IEmailSender, EmailSender>();
         builder.Services.AddScoped<IMemoryCache , MemoryCache>();
+        builder.Services.AddScoped<IApplicationUserRoleRepository, ApplicationUserRoleRepository>();
+        builder.Services.AddScoped<RoleManager<ApplicationUserRole>>();
         builder.Services.AddHttpContextAccessor();
         builder.Services.AddAutoMapper(typeof(ClientProfile).Assembly);
 
 
-
+        builder.Services.AddIdentity<ApplicationUser, ApplicationUserRole>
+           (options =>
+           {
+               options.Password.RequireDigit = false;
+               options.Password.RequiredLength = 5;
+               options.Password.RequireNonAlphanumeric = false;
+               options.Password.RequireUppercase = false;
+               options.Password.RequireLowercase = false;
+           })
+                .AddEntityFrameworkStores<ProgramContext>();
 
         builder.Services.AddDbContext<ProgramContext>(option =>
             
         option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
         
-
-
-        builder.Services.AddIdentity<ApplicationUser, IdentityRole>
-            (options =>
-            {
-                options.Password.RequireDigit = false;
-                options.Password.RequiredLength = 5;
-                options.Password.RequireNonAlphanumeric = false;
-                options.Password.RequireUppercase = false;
-                options.Password.RequireLowercase = false;
-            })
-         .AddEntityFrameworkStores<ProgramContext>();
 
         builder.Services.AddScoped<IAuthManager, AuthManager>();
 

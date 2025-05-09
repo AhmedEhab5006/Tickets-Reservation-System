@@ -10,9 +10,8 @@ namespace TicketsReservationSystem.BLL.Managers
 {
     public interface IUserManager
     {
-        public int Add(UserAddDto user);
-        public void Update(UserUpdateDto user);
-        public UserReadDto GetByEmail(string email);
-
+    
+        public Task UntrackUser (string id);
+        
     }
 }

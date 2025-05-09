@@ -9,7 +9,7 @@ public interface IClientRepository
     void CancelBooking(int ticketId);
     IQueryable<Event> GetSportEvent();
     IQueryable<Event> GetEntertainmentEvents();
-    Client? GetClientById(int clientId);
+    Client? GetClientById(string clientId);
     IQueryable<Client> GetAllClients();
 
     // New method to get an address by ID

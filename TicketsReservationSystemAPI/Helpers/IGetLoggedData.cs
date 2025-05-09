@@ -2,7 +2,7 @@
 {
     public interface IGetLoggedData
     {
-        public int GetId();
-        public string GetVendorStatus(int id);
+        public string GetId();
+        public string GetVendorStatus(string id);
     }
 }

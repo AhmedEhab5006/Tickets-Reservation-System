@@ -18,11 +18,11 @@ namespace TicketsReservationSystem.BLL.Managers
         {
             _vendorRepository = vendorRepository;
         }
-        public void Add(VendorAddDto vendor, int userId)
+        public void Add(VendorAddDto vendor)
         {
             _vendorRepository.Add(new Vendor
             {
-                userId = userId,
+                Id = vendor.id,
                 acceptanceStatus = vendor.acceptanceStatus
             });
         }
@@ -49,7 +49,9 @@ namespace TicketsReservationSystem.BLL.Managers
                     tournament = SportsEvent.tournament,
                     tournamentStage = SportsEvent.tournamentStage,
                     sport = SportsEvent.sport,
-                    EventId = added
+                    EventId = added,
+                    team1Image = SportsEvent.team1Image,
+                    team2Image = SportsEvent.team2Image,
                 });
             }
 
@@ -62,7 +64,8 @@ namespace TicketsReservationSystem.BLL.Managers
                     ageRestriction = entertaimentEvent.ageRestriction,
                     duration = entertaimentEvent.duration,
                     showCategory = entertaimentEvent.showCategory,
-                    EventId = added
+                    EventId = added,
+                    eventImage = entertaimentEvent.eventImage
                 });
 
             }
@@ -88,6 +91,7 @@ namespace TicketsReservationSystem.BLL.Managers
                 found.duration = entertainmentEventUpdateDto.duration > 0 ? entertainmentEventUpdateDto.duration : found.duration;
                 found.performerName = !string.IsNullOrWhiteSpace(entertainmentEventUpdateDto.performerName) ? entertainmentEventUpdateDto.performerName : found.performerName;
                 found.showCategory = !string.IsNullOrWhiteSpace(entertainmentEventUpdateDto.showCategory) ? entertainmentEventUpdateDto.showCategory : found.showCategory;
+                found.eventImage = !string.IsNullOrEmpty(entertainmentEventUpdateDto.eventImage) ? entertainmentEventUpdateDto.eventImage : found.eventImage;
 
                 _vendorRepository.EditEntertainmentEvent(found);
             }
@@ -120,22 +124,12 @@ namespace TicketsReservationSystem.BLL.Managers
                 found.team2 = !string.IsNullOrWhiteSpace(SportsEvent.team2) ? SportsEvent.team2 : found.team2;
                 found.tournament = !string.IsNullOrWhiteSpace(SportsEvent.tournament) ? SportsEvent.tournament : found.tournament;
                 found.sport = !string.IsNullOrWhiteSpace(SportsEvent.sport) ? SportsEvent.sport : found.sport;
+                found.team1Image = !string.IsNullOrWhiteSpace(SportsEvent.team1Image) ? SportsEvent.team1Image : found.team1Image;
+                found.team2Image = !string.IsNullOrWhiteSpace(SportsEvent.team2Image) ? SportsEvent.team2Image : found.team2Image;
 
                 _vendorRepository.EditSportsEvent(found);
             }
 
-        }
-
-        public VendorReadDto GetByUserId(int id)
-        {
-            var foundModel = _vendorRepository.GetByUserId(id);
-            var found = new VendorReadDto
-            {
-                id = foundModel.Id,
-                userId = foundModel.userId,
-                acceptanceStatus = foundModel.acceptanceStatus,
-            };
-            return found;
         }
 
         public EntertainmentEventReadDto GetEntertainmentEventById(int id)
@@ -152,6 +146,7 @@ namespace TicketsReservationSystem.BLL.Managers
                     ageRestriction = foundModel.ageRestriction,
                     showCategory = foundModel.showCategory,
                     EventId = foundModel.EventId,
+                    eventImage = foundModel.eventImage,
 
                 };
 
@@ -196,6 +191,8 @@ namespace TicketsReservationSystem.BLL.Managers
                     tournament = foundModel.tournament,
                     tournamentStage = foundModel.tournamentStage,
                     EventId = foundModel.EventId,
+                    team1Image = foundModel.team1Image,
+                    team2Image = foundModel.team2Image,
                 };
                 return found;
             }
@@ -203,7 +200,7 @@ namespace TicketsReservationSystem.BLL.Managers
             return null;
         }
 
-        public VendorReadDto GetById(int id)
+        public VendorReadDto GetById(string id)
         {
             var foundModel = _vendorRepository.GetById(id);
 
@@ -214,7 +211,6 @@ namespace TicketsReservationSystem.BLL.Managers
                 {
                     id = foundModel.Id,
                     acceptanceStatus = foundModel.acceptanceStatus,
-                    userId = foundModel.userId,
                 };
 
                 return found;
@@ -230,7 +226,7 @@ namespace TicketsReservationSystem.BLL.Managers
             throw new NotImplementedException();
         }
 
-        public IEnumerable<FullDetailEntertainmentEventReadDto> GetMyEntertainmentEvent(int id)
+        public IEnumerable<FullDetailEntertainmentEventReadDto> GetMyEntertainmentEvent(string id)
         {
             var foundModel = _vendorRepository.GetMyEntertainmentEvents(id);
 
@@ -248,7 +244,8 @@ namespace TicketsReservationSystem.BLL.Managers
                     day = a.date.Day.ToString(),
                     mounth = a.date.Month.ToString(),
                     year = a.date.Year.ToString(),
-                    location = a.location
+                    location = a.location,
+                    eventImage = a.entertainment.eventImage
 
                 }).ToList();
                 return found;
@@ -258,7 +255,7 @@ namespace TicketsReservationSystem.BLL.Managers
 
         }
 
-        public IEnumerable<FullDetailSportEventReadDto> GetMySportEvent(int id)
+        public IEnumerable<FullDetailSportEventReadDto> GetMySportEvent(string id)
         {
             var foundModel = _vendorRepository.GetMySportEvents(id);
 
@@ -276,7 +273,9 @@ namespace TicketsReservationSystem.BLL.Managers
                     day = a.date.Day.ToString(),
                     mounth = a.date.Month.ToString(),
                     year = a.date.Year.ToString(),
-                    location = a.location
+                    location = a.location,
+                    team1Image = a.sportEvent.team1Image,
+                    team2Image = a.sportEvent.team2Image,
 
                 }).ToList();
                 return found;
@@ -346,7 +345,7 @@ namespace TicketsReservationSystem.BLL.Managers
         {
             var foundModel = _vendorRepository.GetTicketById(id);
 
-            if(foundModel != null)
+            if (foundModel != null)
             {
                 var returned = new TicketReadDto
                 {
@@ -361,7 +360,13 @@ namespace TicketsReservationSystem.BLL.Managers
 
             return null;
         }
+
+        public string GetAcceptanceStatus(string vendorId)
+        {
+            var found = _vendorRepository.GetAcceptanceStatus(vendorId);
+            return found;
+        }
     }
 }
-    
+
 

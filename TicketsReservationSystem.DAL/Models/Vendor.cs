@@ -6,12 +6,9 @@ using System.Threading.Tasks;
 
 namespace TicketsReservationSystem.DAL.Models
 {
-    public class Vendor
+    public class Vendor : ApplicationUser
+
     {
-        
-        public int Id { get; set; }
-        public int userId { get; set; }
-        public User? user {  get; set; }
         public string acceptanceStatus {  get; set; }
         public ICollection<Event>? Events { get; set; }
     }

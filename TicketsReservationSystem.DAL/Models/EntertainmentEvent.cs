@@ -12,6 +12,7 @@ namespace TicketsReservationSystem.DAL.Models
         public int EventId { get; set; }
         public Event? Event { get; set; }
         public string performerName { get; set; }
+        public string eventImage { get; set; }
         public string showCategory { get; set; }
         public int ageRestriction { get; set; }
         public double duration { get; set; }

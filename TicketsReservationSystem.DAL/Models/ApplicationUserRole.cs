@@ -7,8 +7,7 @@ using System.Threading.Tasks;
 
 namespace TicketsReservationSystem.DAL.Models
 {
-    public class ApplicationUser : IdentityUser
+    public class ApplicationUserRole : IdentityRole
     {
-        public bool isDeleted { get; set; }
     }
 }
