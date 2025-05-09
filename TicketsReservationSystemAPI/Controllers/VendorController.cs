@@ -178,9 +178,9 @@ namespace TicketsReservationSystem.API.Controllers
         public IActionResult GetMyEntertainmentEvent()
         {
             vendorId = _getLoggedData.GetId();
-            var found = _vendorManager.GetMyEntertainmentEvent(vendorId);
+            var found = _vendorManager.GetMyEntertainmentEvent(vendorId).ToList();
 
-            if (found != null)
+            if (found.Count() > 0)
             {
                 return Ok(found);
             }
@@ -193,9 +193,9 @@ namespace TicketsReservationSystem.API.Controllers
         public IActionResult GetMySportEvent()
         {
             vendorId = _getLoggedData.GetId();
-            var found = _vendorManager.GetMySportEvent(vendorId);
+            var found = _vendorManager.GetMySportEvent(vendorId).ToList();
 
-            if (found != null)
+            if (found.Count() > 0)
             {
                 return Ok(found);
             }

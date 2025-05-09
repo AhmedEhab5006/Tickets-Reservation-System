@@ -20,7 +20,7 @@ namespace TicketsReservationSystem.API.Helpers
         public string GetId()
         {
             var user = _httpContextAccessor.HttpContext?.User;
-            var id = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var id = user.FindFirst(ClaimTypes.NameIdentifier)?.Value.ToString();
 
             return id;
 

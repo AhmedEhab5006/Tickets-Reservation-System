@@ -55,7 +55,7 @@ namespace TicketsReservationSystem.BLL.Managers
                 });
             }
 
-            if (Event.category == "Entetainment")
+           if (Event.category == "Entertainment")
             {
                 _vendorRepository.AddEntertainmentEvent(new EntertainmentEvent
                 {
@@ -228,7 +228,7 @@ namespace TicketsReservationSystem.BLL.Managers
 
         public IEnumerable<FullDetailEntertainmentEventReadDto> GetMyEntertainmentEvent(string id)
         {
-            var foundModel = _vendorRepository.GetMyEntertainmentEvents(id);
+            var foundModel = _vendorRepository.GetMyEntertainmentEvents(id).ToList();
 
 
             if (foundModel != null)
@@ -257,7 +257,7 @@ namespace TicketsReservationSystem.BLL.Managers
 
         public IEnumerable<FullDetailSportEventReadDto> GetMySportEvent(string id)
         {
-            var foundModel = _vendorRepository.GetMySportEvents(id);
+            var foundModel = _vendorRepository.GetMySportEvents(id).ToList();
 
 
             if (foundModel != null)

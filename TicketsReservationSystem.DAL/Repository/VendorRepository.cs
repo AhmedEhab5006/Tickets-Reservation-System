@@ -114,8 +114,9 @@ namespace TicketsReservationSystem.DAL.Repository
 
         public IQueryable<Event> GetMySportEvents(string id)
         {
-            var returned = _context.Events.Where(a => a.vendorId == id)
-                                .Include(a => a.sportEvent);
+            var returned = _context.Events.Where(a => a.vendorId.ToString() == id)
+                                        .Where(a=>a.category == "Sport")
+                                        .Include(a => a.sportEvent);
 
             return returned;
 
@@ -123,8 +124,9 @@ namespace TicketsReservationSystem.DAL.Repository
 
         public IQueryable<Event> GetMyEntertainmentEvents(string id)
         {
-            var returned = _context.Events.Where(a => a.vendorId == id)
-                                            .Include(a => a.entertainment);
+            var returned = _context.Events.Where(a => a.vendorId.ToString() == id)
+                                            .Where(a => a.category == "Entertainment")
+                                            .Include(a => a.entertainment); 
 
             return returned;
 
