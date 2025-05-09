@@ -231,7 +231,7 @@ namespace TicketsReservationSystem.BLL.Managers
             var foundModel = _vendorRepository.GetMyEntertainmentEvents(id).ToList();
 
 
-            if (foundModel.Count() > 0)
+            if (foundModel != null)
             {
                 var found = foundModel.Select(a => new FullDetailEntertainmentEventReadDto
                 {

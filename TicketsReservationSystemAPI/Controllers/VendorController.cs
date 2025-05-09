@@ -180,7 +180,7 @@ namespace TicketsReservationSystem.API.Controllers
             vendorId = _getLoggedData.GetId();
             var found = _vendorManager.GetMyEntertainmentEvent(vendorId).ToList();
 
-            if (found.Count() > 0 )
+            if (found.Count() > 0)
             {
                 return Ok(found);
             }

@@ -126,7 +126,7 @@ namespace TicketsReservationSystem.DAL.Repository
         {
             var returned = _context.Events.Where(a => a.vendorId.ToString() == id)
                                             .Where(a => a.category == "Entertainment")
-                                            .Include(a => a.entertainment);
+                                            .Include(a => a.entertainment); 
 
             return returned;
 
