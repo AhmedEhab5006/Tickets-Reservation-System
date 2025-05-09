@@ -74,7 +74,7 @@ namespace TicketsReservationSystem.BLL.Managers
                     TicketStatus = ticket.status,
                     TicketPrice = ticket.price, // comes from ticket
                     EventStatus = eventDetails.status,
-                    EventCategory = eventDetails.category,                   
+                    EventCategory = eventDetails.category,
                 };
 
                 clientBookings.Add(bookingDto);
@@ -82,11 +82,6 @@ namespace TicketsReservationSystem.BLL.Managers
 
             return clientBookings;
         }
-
-
-
-
-
 
 
 
@@ -117,7 +112,11 @@ namespace TicketsReservationSystem.BLL.Managers
         }
 
         // Get mapped sport events (short info)
-     
+        public async Task<IEnumerable<EventAddDto>> GetSportEventsAsync()
+        {
+            var events = _clientRepository.GetSportEvent();
+            return await Task.FromResult(_mapper.Map<IEnumerable<EventAddDto>>(events));
+        }
 
         // Get entertainment events with full details
         public IEnumerable<FullDetailEntertainmentEventReadDto> GetEntertainmentEvents()
@@ -151,49 +150,6 @@ namespace TicketsReservationSystem.BLL.Managers
             return await Task.FromResult(_mapper.Map<IEnumerable<EventAddDto>>(events));
         }
 
-        // Get all clients with detailed info
-        //public async Task<IEnumerable<ClientReadDto>> GetAllClientsAsync()
-        //{
-        //    var clients = _clientRepository.GetAllClients();
 
-        //    var clientDtos = clients.Select(client => new ClientReadDto
-        //    {
-        //        UserId = client.UserId,
-        //        UserName = client.user != null ? client.user.firstName + " " + client.user.lastName : null,
-        //        AddressId = client.addressId,
-        //        Address = client.address != null ? new AddressReadDto
-        //        {
-        //            Id = client.address.id,
-        //            Street = client.address.street,
-        //            City = client.address.city,
-        //            State = client.address.state,
-        //            PostalCode = client.address.postalCode
-        //        } : null,
-        //        Tickets = client.tickets != null ? client.tickets.Select(ticket => new TicketReadDto
-        //        {
-        //            Id = ticket.id,
-        //            price = ticket.price,
-        //            status = ticket.status
-        //        }).ToList() : new List<TicketReadDto>()
-        //    }).ToList();
-
-        //    return await Task.FromResult(clientDtos);
-        //}
-
-       
-
-
-        //        // Removed the duplicate method definition for AddClientAddressAsync.  
-        //        // The duplicate method was already defined earlier in the file.  
-        //        // Keeping only one definition of AddClientAddressAsync.  
-
-
-
- 
-
-      
     }
 }
-//        }
-//    }
-//}

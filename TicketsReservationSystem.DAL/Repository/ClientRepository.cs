@@ -139,7 +139,6 @@ namespace TicketsReservationSystem.DAL.Repository
 
 
 
-
         public async Task<List<Ticket>> GetClientBookingsAsync(string clientId)
         {
             return await _context.Tickets

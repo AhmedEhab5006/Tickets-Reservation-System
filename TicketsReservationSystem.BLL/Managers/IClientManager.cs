@@ -19,4 +19,3 @@ namespace TicketsReservationSystem.BLL.Managers
         public Task<List<ClientBookingDto>> ViewBookingsAsync(string clientId);
     }
 }
-

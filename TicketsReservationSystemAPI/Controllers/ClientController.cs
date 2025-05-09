@@ -1,13 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Security.Claims;
-using TicketsReservationSystem.API.Helpers;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using TicketsReservationSystem.BLL.Dto_s;
 using TicketsReservationSystem.BLL.Managers;
-using TicketsReservationSystem.DAL.Models;
-using TicketsReservationSystem.DAL.Repository;
+using TicketsReservationSystem.API.Helpers;
 
 namespace TicketsReservationSystem.API.Controllers
 {
@@ -57,7 +54,33 @@ namespace TicketsReservationSystem.API.Controllers
             return Ok("Ticket booking cancelled successfully.");
         }
 
+        [HttpGet("SportEvents")]
+        [AllowAnonymous]
+        public IActionResult GetSportEvents()
+        {
+            var found = _clientManager.GetSportEvents();
 
+            if (found != null && found.Count() > 0)  
+            {
+                return Ok(found);
+            }
+
+            return Ok("No Events to show");
+        }
+
+        [HttpGet("EntertainmentEvents")]
+        [AllowAnonymous]
+        public IActionResult GetEntertainmentEvents()
+        {
+            var found = _clientManager.GetEntertainmentEvents();
+
+            if (found != null && found.Count() > 0)
+            {
+                return Ok(found);
+            }
+
+            return Ok("No Events to show");
+        }
 
         [HttpPut("Edit-address")]
         public async Task<IActionResult> EditAddress([FromBody] AddressUpdateDto dto)
@@ -75,37 +98,6 @@ namespace TicketsReservationSystem.API.Controllers
             return Ok("Address updated successfully.");
         }
 
-
-
-        [HttpGet("SportEvents")]
-        [AllowAnonymous]
-        public IActionResult GetSportEvents()
-        {
-            var found = _clientManager.GetSportEvents();
-
-            if (found != null)
-            {
-                return Ok(found);
-            }
-
-            return Ok("No Events to show");
-        }
-
-        [HttpGet("EntertainmentEvents")]
-        [AllowAnonymous]
-        public IActionResult GetEntertainmentEvents()
-        {
-            var found = _clientManager.GetEntertainmentEvents();
-
-            if (found != null)
-            {
-                return Ok(found);
-            }
-
-            return Ok("No Events to show");
-        }
-
-
         [HttpGet("{clientId}/ViewBookings")]
         public async Task<ActionResult<List<ClientBookingDto>>> ViewBookings(string clientId)
         {
@@ -118,6 +110,5 @@ namespace TicketsReservationSystem.API.Controllers
 
             return Ok(bookings);
         }
-
     }
 }

@@ -1,10 +1,10 @@
-﻿////using System;
-////using System.Collections.Generic;
-////using System.Linq;
-////using System.Text;
-////using System.Threading.Tasks;
-////using TicketsReservationSystem.DAL.Database;
-////using TicketsReservationSystem.DAL.Models;
+﻿//using System;
+//using System.Collections.Generic;
+//using System.Linq;
+//using System.Text;
+//using System.Threading.Tasks;
+//using TicketsReservationSystem.DAL.Database;
+//using TicketsReservationSystem.DAL.Models;
 
 //namespace TicketsReservationSystem.DAL.Repository
 //{
@@ -12,7 +12,8 @@
 //    {
 //        private ProgramContext _context;
 
-//        public AdminRepository(ProgramContext context) {
+//        public AdminRepository(ProgramContext context)
+//        {
 //            _context = context;
 //        }
 //        public void AddAdmin(User admin)
