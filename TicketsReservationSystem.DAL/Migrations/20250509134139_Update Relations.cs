@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace TicketsReservationSystem.DAL.Migrations
 {
     /// <inheritdoc />
-    public partial class TBT : Migration
+    public partial class UpdateRelations : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -16,6 +16,7 @@ namespace TicketsReservationSystem.DAL.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Discriminator = table.Column<string>(type: "nvarchar(21)", maxLength: 21, nullable: false),
                     Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
@@ -158,7 +159,7 @@ namespace TicketsReservationSystem.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Vendors",
+                name: "vendors",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
@@ -166,9 +167,9 @@ namespace TicketsReservationSystem.DAL.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Vendors", x => x.Id);
+                    table.PrimaryKey("PK_vendors", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Vendors_AspNetUsers_Id",
+                        name: "FK_vendors_AspNetUsers_Id",
                         column: x => x.Id,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
@@ -194,9 +195,9 @@ namespace TicketsReservationSystem.DAL.Migrations
                 {
                     table.PrimaryKey("PK_Events", x => x.id);
                     table.ForeignKey(
-                        name: "FK_Events_Vendors_vendorId",
+                        name: "FK_Events_vendors_vendorId",
                         column: x => x.vendorId,
-                        principalTable: "Vendors",
+                        principalTable: "vendors",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -328,8 +329,7 @@ namespace TicketsReservationSystem.DAL.Migrations
                 {
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    clientId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    clientId1 = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    clientId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ticketId = table.Column<int>(type: "int", nullable: false),
                     shippingAddressId = table.Column<int>(type: "int", nullable: false),
                     bookedCount = table.Column<int>(type: "int", nullable: false)
@@ -344,10 +344,11 @@ namespace TicketsReservationSystem.DAL.Migrations
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Reservations_Clients_clientId1",
-                        column: x => x.clientId1,
+                        name: "FK_Reservations_Clients_clientId",
+                        column: x => x.clientId,
                         principalTable: "Clients",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Reservations_Tickets_ticketId",
                         column: x => x.ticketId,
@@ -417,9 +418,9 @@ namespace TicketsReservationSystem.DAL.Migrations
                 column: "vendorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Reservations_clientId1",
+                name: "IX_Reservations_clientId",
                 table: "Reservations",
-                column: "clientId1");
+                column: "clientId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Reservations_shippingAddressId",
@@ -496,7 +497,7 @@ namespace TicketsReservationSystem.DAL.Migrations
                 name: "Events");
 
             migrationBuilder.DropTable(
-                name: "Vendors");
+                name: "vendors");
 
             migrationBuilder.DropTable(
                 name: "Clients");

@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Abstractions;
 using TicketsReservationSystem.BLL.Dto_s;
 using TicketsReservationSystem.DAL.Models;
 using TicketsReservationSystem.DAL.Repository;
@@ -20,219 +23,164 @@ namespace TicketsReservationSystem.BLL.Managers
             _mapper = mapper;
         }
 
-        public void Add(ClientAddDto clientAddDto, int userId)
+        //book 
+        public bool Book(int ticketId, string clientId)
         {
-            throw new NotImplementedException();
+            return  _clientRepository.Book(ticketId, clientId);
+        }
+        //cancelbooking
+        public bool CancelBooking(int ticketId, string clientId)
+        {
+            return _clientRepository.CancelBooking(ticketId, clientId);
+        }
+        //edit address
+        public async Task<bool> EditAddressAsync(string clientId, AddressUpdateDto addressDto)
+        {
+            var client = await _clientRepository.GetClientWithAddressAsync(clientId);
+
+            if (client == null || client.address == null)
+                return false;
+
+            // Update the address with the new details
+            var address = new Address
+            {
+                street = addressDto.Street,
+                city = addressDto.City,
+                state = addressDto.State,
+                postalCode = addressDto.PostalCode
+            };
+
+            return await _clientRepository.EditAddressAsync(clientId, address);
         }
 
-        public int AddAddressAsync(AddressAddDto addressDto)
+
+        public async Task<List<ClientBookingDto>> ViewBookingsAsync(string clientId)
         {
-            throw new NotImplementedException();
+            var tickets = await _clientRepository.GetClientBookingsAsync(clientId);
+
+            var clientBookings = new List<ClientBookingDto>();
+
+            foreach (var ticket in tickets)
+            {
+                var eventDetails = ticket.Event;
+
+                var bookingDto = new ClientBookingDto
+                {
+                    TicketId = ticket.id,
+                    EventId = eventDetails.id,
+                    EventDate = eventDetails.date,
+                    EventLocation = eventDetails.location,
+                    BookedSeats = eventDetails.bookedSeats,
+                    TicketStatus = ticket.status,
+                    TicketPrice = ticket.price, // comes from ticket
+                    EventStatus = eventDetails.status,
+                    EventCategory = eventDetails.category,                   
+                };
+
+                clientBookings.Add(bookingDto);
+            }
+
+            return clientBookings;
         }
 
-        //// Add client manually
-        //public void Add(ClientAddDto clientAddDto, int userId)
-        //{
-        //    // Check if the address exists
-        //    var addressExists = _clientRepository.AddressExists(clientAddDto.AddressId);
-        //    if (!addressExists)
-        //    {
-        //        throw new InvalidOperationException($"Address with ID {clientAddDto.AddressId} does not exist.");
-        //    }
-
-        //            // Add the client
-        //            var client = new Client
-        //            {
-        //                UserId = userId,
-        //                addressId = clientAddDto.AddressId
-        //            };
-        //            _clientRepository.Add(client);
-        //        }
 
 
-        public async Task AddClientAsync(ClientAddDto clientDto)
-        {
-            var client = _mapper.Map<Client>(clientDto);
-            _clientRepository.Add(client);
-            await Task.CompletedTask;
-        }
-//        // Async version using AutoMapper
-//        public async Task AddClientAsync(ClientAddDto clientDto)
-//        {
-//            var client = _mapper.Map<Client>(clientDto);
-//            _clientRepository.Add(client);
-//            await Task.CompletedTask;
-//        }
-
-        
-
-//        public async Task EditAddressAsync(AddressUpdateDto addressDto)
-//        {
-//            var address = _mapper.Map<Address>(addressDto);
-//            _clientRepository.EditAddress(address);
-//            await Task.CompletedTask;
-//        }
 
 
-        // Book ticket
-      
 
-        public async Task BookAsync(int ticketId)
-        {
-            _clientRepository.Book(ticketId);
-            await Task.CompletedTask;
-        }
 
-        // Cancel booking
-       
-        public async Task CancelTicketBookingAsync(int ticketId)
-        {
-            _clientRepository.CancelBooking(ticketId);
-            await Task.CompletedTask;
-        }
 
-        public Task EditAddressAsync(AddressUpdateDto addressDto)
-        {
-            throw new NotImplementedException();
-        }
 
-        public Task<IEnumerable<ClientReadDto>> GetAllClientsAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<FullDetailEntertainmentEventReadDto> GetEntertainmentEvents()
-        {
-            throw new NotImplementedException();
-        }
-
+        // Get sport events with full details
         public IEnumerable<FullDetailSportEventReadDto> GetSportEvents()
         {
-            throw new NotImplementedException();
+            var foundModel = _clientRepository.GetSportEvent();
+
+            if (foundModel != null)
+            {
+                return foundModel.Select(a => new FullDetailSportEventReadDto
+                {
+                    aviilableSeats = a.avillableSeats,
+                    team1 = a.sportEvent.team1,
+                    team2 = a.sportEvent.team2,
+                    location = a.location,
+                    day = a.date.Day.ToString(),
+                    year = a.date.Year.ToString(),
+                    mounth = a.date.Month.ToString(),
+                    tournament = a.sportEvent.tournament,
+                    tournamentStage = a.sportEvent.tournamentStage,
+                    sport = a.sportEvent.sport,
+                }).ToList();
+            }
+
+            return null;
         }
-        //        // Book ticket
-        //        public void Book(int ticketId)
+
+        // Get mapped sport events (short info)
+     
+
+        // Get entertainment events with full details
+        public IEnumerable<FullDetailEntertainmentEventReadDto> GetEntertainmentEvents()
+        {
+            var foundModel = _clientRepository.GetEntertainmentEvents();
+
+            if (foundModel != null)
+            {
+                return foundModel.Select(a => new FullDetailEntertainmentEventReadDto
+                {
+                    aviilableSeats = a.avillableSeats,
+                    showCategory = a.entertainment.showCategory,
+                    performerName = a.entertainment.performerName,
+                    location = a.location,
+                    day = a.date.Day.ToString(),
+                    year = a.date.Year.ToString(),
+                    mounth = a.date.Month.ToString(),
+                    ageRestriction = a.entertainment.ageRestriction,
+                    duration = a.entertainment.duration,
+                    genre = a.entertainment.genre,
+                }).ToList();
+            }
+
+            return null;
+        }
+
+        // Get mapped entertainment events (short info)
+        public async Task<IEnumerable<EventAddDto>> GetEntertainmentEventsAsync()
+        {
+            var events = _clientRepository.GetEntertainmentEvents();
+            return await Task.FromResult(_mapper.Map<IEnumerable<EventAddDto>>(events));
+        }
+
+        // Get all clients with detailed info
+        //public async Task<IEnumerable<ClientReadDto>> GetAllClientsAsync()
+        //{
+        //    var clients = _clientRepository.GetAllClients();
+
+        //    var clientDtos = clients.Select(client => new ClientReadDto
+        //    {
+        //        UserId = client.UserId,
+        //        UserName = client.user != null ? client.user.firstName + " " + client.user.lastName : null,
+        //        AddressId = client.addressId,
+        //        Address = client.address != null ? new AddressReadDto
         //        {
-        //            _clientRepository.Book(ticketId);
-        //        }
-
-        //        public async Task BookTicketAsync(int ticketId)
+        //            Id = client.address.id,
+        //            Street = client.address.street,
+        //            City = client.address.city,
+        //            State = client.address.state,
+        //            PostalCode = client.address.postalCode
+        //        } : null,
+        //        Tickets = client.tickets != null ? client.tickets.Select(ticket => new TicketReadDto
         //        {
-        //            _clientRepository.Book(ticketId);
-        //            await Task.CompletedTask;
-        //        }
+        //            Id = ticket.id,
+        //            price = ticket.price,
+        //            status = ticket.status
+        //        }).ToList() : new List<TicketReadDto>()
+        //    }).ToList();
 
-        //        // Cancel booking
-        //        public void CancelBooking(int ticketId)
-        //        {
-        //            _clientRepository.CancelBooking(ticketId);
-        //        }
+        //    return await Task.FromResult(clientDtos);
+        //}
 
-        //        public async Task CancelTicketBookingAsync(int ticketId)
-        //        {
-        //            _clientRepository.CancelBooking(ticketId);
-        //            await Task.CompletedTask;
-        //        }
-
-        //        // Get sport events with full details
-        //        public IEnumerable<FullDetailSportEventReadDto> GetSportEvents()
-        //        {
-        //            var foundModel = _clientRepository.GetSportEvent();
-
-        //            if (foundModel != null)
-        //            {
-        //                return foundModel.Select(a => new FullDetailSportEventReadDto
-        //                {
-        //                    aviilableSeats = a.avillableSeats,
-        //                    team1 = a.sportEvent.team1,
-        //                    team2 = a.sportEvent.team2,
-        //                    location = a.location,
-        //                    day = a.date.Day.ToString(),
-        //                    year = a.date.Year.ToString(),
-        //                    mounth = a.date.Month.ToString(),
-        //                    tournament = a.sportEvent.tournament,
-        //                    tournamentStage = a.sportEvent.tournamentStage,
-        //                    sport = a.sportEvent.sport,
-        //                }).ToList();
-        //            }
-
-        //            return null;
-        //        }
-
-        //        // Get mapped sport events (short info)
-        //        public async Task<IEnumerable<EventAddDto>> GetSportEventsAsync()
-        //        {
-        //            var events = _clientRepository.GetSportEvent();
-        //            return await Task.FromResult(_mapper.Map<IEnumerable<EventAddDto>>(events));
-        //        }
-
-        //        // Get entertainment events with full details
-        //        public IEnumerable<FullDetailEntertainmentEventReadDto> GetEntertainmentEvents()
-        //        {
-        //            var foundModel = _clientRepository.GetEntertainmentEvents();
-
-        //            if (foundModel != null)
-        //            {
-        //                return foundModel.Select(a => new FullDetailEntertainmentEventReadDto
-        //                {
-        //                    aviilableSeats = a.avillableSeats,
-        //                    showCategory = a.entertainment.showCategory,
-        //                    performerName = a.entertainment.performerName,
-        //                    location = a.location,
-        //                    day = a.date.Day.ToString(),
-        //                    year = a.date.Year.ToString(),
-        //                    mounth = a.date.Month.ToString(),
-        //                    ageRestriction = a.entertainment.ageRestriction,
-        //                    duration = a.entertainment.duration,
-        //                    genre = a.entertainment.genre,
-        //                }).ToList();
-        //            }
-
-        //            return null;
-        //        }
-
-        //        // Get mapped entertainment events (short info)
-        //        public async Task<IEnumerable<EventAddDto>> GetEntertainmentEventsAsync()
-        //        {
-        //            var events = _clientRepository.GetEntertainmentEvents();
-        //            return await Task.FromResult(_mapper.Map<IEnumerable<EventAddDto>>(events));
-        //        }
-
-        //        // Get all clients with detailed info
-        //        public async Task<IEnumerable<ClientReadDto>> GetAllClientsAsync()
-        //        {
-        //            var clients = _clientRepository.GetAllClients();
-
-        //            var clientDtos = clients.Select(client => new ClientReadDto
-        //            {
-        //                UserId = client.UserId,
-        //                UserName = client.user != null ? client.user.firstName + " " + client.user.lastName : null,
-        //                AddressId = client.addressId,
-        //                Address = client.address != null ? new AddressReadDto
-        //                {
-        //                    Id = client.address.id,
-        //                    Street = client.address.street,
-        //                    City = client.address.city,
-        //                    State = client.address.state,
-        //                    PostalCode = client.address.postalCode
-        //                } : null,
-        //                Tickets = client.tickets != null ? client.tickets.Select(ticket => new TicketReadDto
-        //                {
-        //                    Id = ticket.id,
-        //                    price = ticket.price,
-        //                    status = ticket.status
-        //                }).ToList() : new List<TicketReadDto>()
-        //            }).ToList();
-
-        //            return await Task.FromResult(clientDtos);
-        //        }
-
-        //        // Get a single client by ID
-        //        public async Task<ClientReadDto?> GetClientByIdAsync(int clientId)
-        //        {
-        //            var client = _clientRepository.GetClientById(clientId);
-        //            return await Task.FromResult(_mapper.Map<ClientReadDto>(client));
-        //        }
+       
 
 
         //        // Removed the duplicate method definition for AddClientAddressAsync.  
@@ -241,28 +189,11 @@ namespace TicketsReservationSystem.BLL.Managers
 
 
 
-        //        public int AddAddressAsync(AddressAddDto addressDto)
-        //        {
-        //            // Map AddressReadDto to Address entity
-        //            var address = new Address
-        //            {
-        //                city = addressDto.City,
-        //                postalCode = addressDto.PostalCode,
-        //                state = addressDto.State,
-        //                street = addressDto.Street,
-
-        //            };
-
-
-        //           var added = _clientRepository.AddAddress(address);
-        //           return added;
-
-
-    }
+ 
 
       
     }
-
-//      }
+}
+//        }
 //    }
 //}

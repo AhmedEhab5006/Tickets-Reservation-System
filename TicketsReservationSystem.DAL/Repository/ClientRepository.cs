@@ -19,78 +19,107 @@ namespace TicketsReservationSystem.DAL.Repository
             _context = context;
         }
 
-        public void Add(Client client)
+        public async Task<Client> GetClientWithAddressAsync(string clientId)
         {
-            _context.Clients.Add(client);
-            _context.SaveChanges();
+            return await _context.Clients
+                .Where(c => c.Id == clientId)
+                .Include(c => c.address)
+                .FirstOrDefaultAsync();
         }
 
-        public int AddAddress(Address address)
+
+
+
+        public bool Book(int ticketId, string clientId)
         {
-            var added = new Address
-            {
-                id = address.id,
-                city = address.city,
-                postalCode = address.postalCode,
-                state = address.state,
-                street = address.street,
-            };
-
-            _context.Address.Add(added);
-            _context.SaveChanges();
-
-            return added.id;
-        }
-
-        public void Book(int ticketId)
-        {
-            var ticket = _context.Tickets.Include(t => t.Event).FirstOrDefault(t => t.id == ticketId);
+            var ticket = _context.Tickets
+                .Include(t => t.Event)
+                .FirstOrDefault(t => t.id == ticketId);
 
             if (ticket == null)
             {
-                throw new InvalidOperationException("Ticket not found.");
+                Console.WriteLine($"[ERROR] Ticket with ID {ticketId} not found.");
+                return false;
             }
 
-            if (ticket.status != "Available")
+            // Debug output
+            Console.WriteLine($"[INFO] Ticket ID: {ticketId}, Status: {ticket.status}, AvailableSeats: {ticket.Event.avillableSeats}, BookedSeats: {ticket.Event.bookedSeats}");
+
+            // Combined check for availability
+            if (ticket.status != "Available" || ticket.Event.avillableSeats <= 0)
             {
-                throw new InvalidOperationException("Ticket is not available for booking.");
+                Console.WriteLine($"[ERROR] Ticket ID {ticketId} cannot be booked. Either not available or no available seats.");
+                return false;
             }
 
-            // Update ticket status and event's booked/available seats
+            var client = _context.Clients.FirstOrDefault(c => c.Id == clientId);
+            if (client == null)
+            {
+                Console.WriteLine($"[ERROR] Client with ID {clientId} not found.");
+                return false;
+            }
+
+            // Update booking
             ticket.status = "Booked";
+            ticket.ClientId = clientId;
             ticket.Event.bookedSeats += 1;
             ticket.Event.avillableSeats -= 1;
 
             _context.SaveChanges();
+
+            Console.WriteLine($"[SUCCESS] Ticket ID {ticketId} successfully booked for Client ID {clientId}.");
+            return true;
         }
 
-        public void CancelBooking(int ticketId)
+
+        public bool CancelBooking(int ticketId, string clientId)
         {
-            var ticket = _context.Tickets.Include(t => t.Event).FirstOrDefault(t => t.id == ticketId);
+            var ticket = _context.Tickets
+                .Include(t => t.Event)
+                .FirstOrDefault(t => t.id == ticketId && t.ClientId == clientId);
 
             if (ticket == null)
             {
-                throw new InvalidOperationException("Ticket not found.");
+                Console.WriteLine($"No booking found for ticket ID {ticketId} and client ID {clientId}.");
+                return false;
             }
 
             if (ticket.status != "Booked")
             {
-                throw new InvalidOperationException("Ticket is not currently booked.");
+                Console.WriteLine($"Ticket ID {ticketId} is not booked, so it can't be cancelled.");
+                return false;
             }
 
-            // Update ticket status and event's booked/available seats
+            // Cancel the booking
             ticket.status = "Available";
+            ticket.ClientId = null;
             ticket.Event.bookedSeats -= 1;
             ticket.Event.avillableSeats += 1;
 
             _context.SaveChanges();
+            Console.WriteLine($"Booking for ticket ID {ticketId} successfully cancelled.");
+            return true;
         }
 
-        public void EditAddress(Address address)
+        public async Task<bool> EditAddressAsync(string clientId, Address address)
         {
-            _context.Address.Update(address);
-            _context.SaveChanges();
+            var client = await _context.Clients
+               .Include(c => c.address) // Include the related address entity
+               .SingleOrDefaultAsync(c => c.Id == clientId);
+
+
+            if (client == null || client.address == null)
+                return false;
+
+            client.address.street = address.street;
+            client.address.city = address.city;
+            client.address.state = address.state;
+            client.address.postalCode = address.postalCode;
+
+            await _context.SaveChangesAsync();
+            return true;
         }
+
 
         public IQueryable<Event> GetSportEvent()
         {
@@ -108,31 +137,32 @@ namespace TicketsReservationSystem.DAL.Repository
             return returned;
         }
 
-        public Client? GetClientById(string clientId)
+
+
+
+        public async Task<List<Ticket>> GetClientBookingsAsync(string clientId)
         {
-            return _context.Clients
-                .Include(c => c.Id)
-                .Include(c => c.address)
-                .Include(c => c.tickets)
-                .FirstOrDefault(c => c.Id == clientId);
+            return await _context.Tickets
+                .Include(t => t.Event)
+                .Where(t => t.ClientId == clientId)
+                .ToListAsync();
         }
 
-        public IQueryable<Client> GetAllClients()
+        public int AddAddress(Address address)
         {
-            return _context.Clients
-                .Include(c => c.Id)
-                .Include(c => c.address)
-                .Include(c => c.tickets);
-        }
+            var added = new Address
+            {
+                id = address.id,
+                city = address.city,
+                postalCode = address.postalCode,
+                state = address.state,
+                street = address.street,
+            };
 
-        public Address? GetAddressById(int addressId)
-        {
-            return _context.Address.FirstOrDefault(a => a.id == addressId);
-        }
+            _context.Address.Add(added);
+            _context.SaveChanges();
 
-        public bool AddressExists(int addressId)
-        {
-            return _context.Address.Any(a => a.id == addressId);
+            return added.id;
         }
 
     }

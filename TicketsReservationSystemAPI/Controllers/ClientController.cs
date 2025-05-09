@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
+using TicketsReservationSystem.API.Helpers;
 using TicketsReservationSystem.BLL.Dto_s;
 using TicketsReservationSystem.BLL.Managers;
 using TicketsReservationSystem.DAL.Models;
@@ -14,11 +17,65 @@ namespace TicketsReservationSystem.API.Controllers
     public class ClientController : ControllerBase
     {
         private IClientManager _clientManager;
+        private readonly IGetLoggedData _getLoggedData;
 
-        public ClientController(IClientManager clientManager)
+        public ClientController(IClientManager clientManager, IGetLoggedData getLoggedData)
         {
             _clientManager = clientManager;
+            _getLoggedData = getLoggedData;
         }
+
+        [HttpPost("Booking/{ticketId}")]
+        public IActionResult BookTicket(int ticketId)
+        {
+            var clientId = _getLoggedData.GetId(); // from JWT
+
+            // Call the Manager method to book the ticket
+            bool bookingSuccessful = _clientManager.Book(ticketId, clientId);
+
+            if (!bookingSuccessful)
+            {
+                // Return a BadRequest if the ticket is not available or booking fails
+                return BadRequest("Failed to book the ticket. Please ensure the ticket is available.");
+            }
+
+            return Ok("Ticket booked successfully.");
+        }
+
+        [HttpPost("CancelBooking/{ticketId}")]
+        public IActionResult CancelBooking(int ticketId)
+        {
+            var clientId = _getLoggedData.GetId(); // from JWT
+            if (string.IsNullOrEmpty(clientId))
+                return Unauthorized("Client not authenticated.");
+
+            bool result = _clientManager.CancelBooking(ticketId, clientId);
+
+            if (!result)
+                return BadRequest("Cancellation failed. Ticket may not exist or is not booked.");
+
+            return Ok("Ticket booking cancelled successfully.");
+        }
+
+
+
+        [HttpPut("Edit-address")]
+        public async Task<IActionResult> EditAddress([FromBody] AddressUpdateDto dto)
+        {
+            var clientId = _getLoggedData.GetId();
+
+            if (string.IsNullOrEmpty(clientId))
+                return Unauthorized("Client not authenticated.");
+
+            bool result = await _clientManager.EditAddressAsync(clientId, dto);
+
+            if (!result)
+                return NotFound("Client or address not found.");
+
+            return Ok("Address updated successfully.");
+        }
+
+
 
         [HttpGet("SportEvents")]
         [AllowAnonymous]
@@ -48,151 +105,19 @@ namespace TicketsReservationSystem.API.Controllers
             return Ok("No Events to show");
         }
 
-        //        [HttpPost]
-        //        public IActionResult AddClient([FromBody] ClientAddDto clientAddDto)
-        //        {
-        //            var userId = int.Parse(User.FindFirst("UserId")?.Value ?? "0"); // Extract UserId from JWT token
-        //            _clientManager.Add(clientAddDto, userId);
-        //            return Ok("Client added successfully.");
-        //        }
 
+        [HttpGet("{clientId}/ViewBookings")]
+        public async Task<ActionResult<List<ClientBookingDto>>> ViewBookings(string clientId)
+        {
+            var bookings = await _clientManager.ViewBookingsAsync(clientId);
 
-        // Book a ticket
-        //[HttpPost("Book/{ticketId}")]
-        //public IActionResult BookTicket(int ticketId)
-        //{
-        //    try
-        //    {
-        //        _clientManager.BookAsync(ticketId);
-        //        return Ok("Ticket booked successfully.");
-        //    }
-        //    catch (InvalidOperationException ex)
-        //    {
-        //        return BadRequest(ex.Message);
-        //    }
-        //}
+            if (bookings == null || bookings.Count == 0)
+            {
+                return NotFound("No bookings found for this client.");
+            }
 
-        // Cancel a ticket booking
-        //[HttpPost("Cancel/{ticketId}")]
-        //public IActionResult CancelBooking(int ticketId)
-        //{
-        //    try
-        //    {
-        //        _clientManager.CancelTicketBookingAsync(ticketId);
-        //        return Ok("Ticket booking canceled successfully.");
-        //    }
-        //    catch (InvalidOperationException ex)
-        //    {
-        //        return BadRequest(ex.Message);
-        //    }
-        //}
-        //        //[HttpPost("Address")]
-        //        //public async Task<IActionResult> AddAddress([FromBody] AddressReadDto addressDto)
-        //        //{
-        //        //    await _clientManager.AddAddressAsync(addressDto);
-        //        //    return Ok("Address added successfully.");
-        //        //}
-
-
-
-
-        //        //[HttpPut("Address")]
-        //        //public IActionResult EditAddress([FromBody] Address address)
-        //        //{
-        //        //    _clientManager.EditAddress(address);
-        //        //    return Ok("Address updated successfully.");
-        //        //}
-
-        //        // Book a ticket
-        //        [HttpPost("Book/{ticketId}")]
-        //        public IActionResult BookTicket(int ticketId)
-        //        {
-        //            try
-        //            {
-        //                _clientManager.Book(ticketId);
-        //                return Ok("Ticket booked successfully.");
-        //            }
-        //            catch (InvalidOperationException ex)
-        //            {
-        //                return BadRequest(ex.Message);
-        //            }
-        //        }
-
-        //        // Cancel a ticket booking
-        //        [HttpPost("Cancel/{ticketId}")]
-        //        public IActionResult CancelBooking(int ticketId)
-        //        {
-        //            try
-        //            {
-        //                _clientManager.CancelBooking(ticketId);
-        //                return Ok("Ticket booking canceled successfully.");
-        //            }
-        //            catch (InvalidOperationException ex)
-        //            {
-        //                return BadRequest(ex.Message);
-        //            }
-        //        }
-
-        //        [HttpGet]
-        //        public async Task<IActionResult> GetAllClients()
-        //        {
-        //            var clients = await _clientManager.GetAllClientsAsync();
-        //            return Ok(clients);
-        //        }
-
-
-
-
-        // POST: api/Client/AddAddress
-        // [HttpPost("AddAddress")]
-        //public IActionResult AddAddress([FromBody] AddressAddDto addressDto)
-        //{
-        //    if (addressDto == null)
-        //    {
-        //        return BadRequest("Invalid address data.");
-        //    }
-
-        //    try
-        //    {
-        //        // Call AddAddressAsync in the Manager layer
-        //        var addressId = _clientManager.AddAddressAsync(addressDto);
-
-        //        return CreatedAtAction(nameof(AddAddress), new { id = addressId }, addressDto);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return StatusCode(500, $"Internal server error: {ex.Message}");
-        //    }
-        //}
-
-
-
-
-
-        //        [HttpPut("EditAddress")]
-        //        public async Task<IActionResult> EditAddress([FromBody] AddressUpdateDto addressDto)
-        //        {
-        //            if (addressDto == null)
-        //            {
-        //                return BadRequest("Invalid address data.");
-        //            }
-
-        //            try
-        //            {
-        //                // Call EditAddressAsync in the Manager layer
-        //                await _clientManager.EditAddressAsync(addressDto);
-        //                return NoContent(); // Returns HTTP 204 No Content on success
-        //            }
-        //            catch (Exception ex)
-        //            {
-        //                return StatusCode(500, $"Internal server error: {ex.Message}");
-        //            }
-        //        }
-
-
-
-        //    }
-        //}
+            return Ok(bookings);
+        }
 
     }
 }

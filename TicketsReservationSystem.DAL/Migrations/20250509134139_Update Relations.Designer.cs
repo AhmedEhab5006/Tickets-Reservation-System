@@ -12,8 +12,8 @@ using TicketsReservationSystem.DAL.Database;
 namespace TicketsReservationSystem.DAL.Migrations
 {
     [DbContext(typeof(ProgramContext))]
-    [Migration("20250425200103_Update RelationShips")]
-    partial class UpdateRelationShips
+    [Migration("20250509134139_Update Relations")]
+    partial class UpdateRelations
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -34,6 +34,11 @@ namespace TicketsReservationSystem.DAL.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasMaxLength(21)
+                        .HasColumnType("nvarchar(21)");
+
                     b.Property<string>("Name")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -50,6 +55,10 @@ namespace TicketsReservationSystem.DAL.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityRole");
+
+                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -166,8 +175,8 @@ namespace TicketsReservationSystem.DAL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
 
-                    b.Property<int?>("ClientId")
-                        .HasColumnType("int");
+                    b.Property<string>("ClientId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("city")
                         .HasColumnType("nvarchar(max)");
@@ -230,10 +239,6 @@ namespace TicketsReservationSystem.DAL.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Role")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
@@ -243,6 +248,9 @@ namespace TicketsReservationSystem.DAL.Migrations
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
+
+                    b.Property<bool>("isDeleted")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
@@ -255,30 +263,8 @@ namespace TicketsReservationSystem.DAL.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
-                });
 
-            modelBuilder.Entity("TicketsReservationSystem.DAL.Models.Client", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("AddressId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AddressId");
-
-                    b.HasIndex("UserId")
-                        .IsUnique();
-
-                    b.ToTable("Clients");
+                    b.UseTptMappingStrategy();
                 });
 
             modelBuilder.Entity("TicketsReservationSystem.DAL.Models.EntertainmentEvent", b =>
@@ -297,6 +283,10 @@ namespace TicketsReservationSystem.DAL.Migrations
 
                     b.Property<double>("duration")
                         .HasColumnType("float");
+
+                    b.Property<string>("eventImage")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("genre")
                         .IsRequired()
@@ -350,8 +340,9 @@ namespace TicketsReservationSystem.DAL.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("vendorId")
-                        .HasColumnType("int");
+                    b.Property<string>("vendorId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("id");
 
@@ -362,31 +353,32 @@ namespace TicketsReservationSystem.DAL.Migrations
 
             modelBuilder.Entity("TicketsReservationSystem.DAL.Models.Reservation", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
 
-                    b.Property<int>("BookedCount")
+                    b.Property<int>("bookedCount")
                         .HasColumnType("int");
 
-                    b.Property<int>("ClientId")
+                    b.Property<string>("clientId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("shippingAddressId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ShippingAddressId")
+                    b.Property<int>("ticketId")
                         .HasColumnType("int");
 
-                    b.Property<int>("TicketId")
-                        .HasColumnType("int");
+                    b.HasKey("id");
 
-                    b.HasKey("Id");
+                    b.HasIndex("clientId");
 
-                    b.HasIndex("ClientId");
+                    b.HasIndex("shippingAddressId");
 
-                    b.HasIndex("ShippingAddressId");
-
-                    b.HasIndex("TicketId");
+                    b.HasIndex("ticketId");
 
                     b.ToTable("Reservations");
                 });
@@ -410,7 +402,15 @@ namespace TicketsReservationSystem.DAL.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("team1Image")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("team2")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("team2Image")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -438,8 +438,8 @@ namespace TicketsReservationSystem.DAL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
 
-                    b.Property<int?>("ClientId")
-                        .HasColumnType("int");
+                    b.Property<string>("ClientId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("EventId")
                         .HasColumnType("int");
@@ -467,64 +467,34 @@ namespace TicketsReservationSystem.DAL.Migrations
                     b.ToTable("Tickets");
                 });
 
-            modelBuilder.Entity("TicketsReservationSystem.DAL.Models.User", b =>
+            modelBuilder.Entity("TicketsReservationSystem.DAL.Models.ApplicationUserRole", b =>
                 {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
+                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityRole");
+
+                    b.HasDiscriminator().HasValue("ApplicationUserRole");
+                });
+
+            modelBuilder.Entity("TicketsReservationSystem.DAL.Models.Client", b =>
+                {
+                    b.HasBaseType("TicketsReservationSystem.DAL.Models.ApplicationUser");
+
+                    b.Property<int>("addressId")
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+                    b.HasIndex("addressId");
 
-                    b.Property<string>("email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("firstName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("lastName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("password")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("phoneNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("role")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("id");
-
-                    b.ToTable("Users");
+                    b.ToTable("Clients", (string)null);
                 });
 
             modelBuilder.Entity("TicketsReservationSystem.DAL.Models.Vendor", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.HasBaseType("TicketsReservationSystem.DAL.Models.ApplicationUser");
 
                     b.Property<string>("acceptanceStatus")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("userId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("userId")
-                        .IsUnique();
-
-                    b.ToTable("Vendors");
+                    b.ToTable("vendors", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -581,26 +551,8 @@ namespace TicketsReservationSystem.DAL.Migrations
             modelBuilder.Entity("TicketsReservationSystem.DAL.Models.Address", b =>
                 {
                     b.HasOne("TicketsReservationSystem.DAL.Models.Client", null)
-                        .WithMany("Addresses")
+                        .WithMany("addresses")
                         .HasForeignKey("ClientId");
-                });
-
-            modelBuilder.Entity("TicketsReservationSystem.DAL.Models.Client", b =>
-                {
-                    b.HasOne("TicketsReservationSystem.DAL.Models.Address", "Address")
-                        .WithMany()
-                        .HasForeignKey("AddressId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("TicketsReservationSystem.DAL.Models.User", "User")
-                        .WithOne("client")
-                        .HasForeignKey("TicketsReservationSystem.DAL.Models.Client", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Address");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("TicketsReservationSystem.DAL.Models.EntertainmentEvent", b =>
@@ -627,29 +579,29 @@ namespace TicketsReservationSystem.DAL.Migrations
 
             modelBuilder.Entity("TicketsReservationSystem.DAL.Models.Reservation", b =>
                 {
-                    b.HasOne("TicketsReservationSystem.DAL.Models.Client", "Client")
-                        .WithMany("Reservations")
-                        .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("TicketsReservationSystem.DAL.Models.Address", "ShippingAddress")
+                    b.HasOne("TicketsReservationSystem.DAL.Models.Client", "client")
                         .WithMany()
-                        .HasForeignKey("ShippingAddressId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .HasForeignKey("clientId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TicketsReservationSystem.DAL.Models.Ticket", "Ticket")
-                        .WithMany("Reservations")
-                        .HasForeignKey("TicketId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                    b.HasOne("TicketsReservationSystem.DAL.Models.Address", "shippingAddress")
+                        .WithMany()
+                        .HasForeignKey("shippingAddressId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Client");
+                    b.HasOne("TicketsReservationSystem.DAL.Models.Ticket", "ticket")
+                        .WithMany()
+                        .HasForeignKey("ticketId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("ShippingAddress");
+                    b.Navigation("client");
 
-                    b.Navigation("Ticket");
+                    b.Navigation("shippingAddress");
+
+                    b.Navigation("ticket");
                 });
 
             modelBuilder.Entity("TicketsReservationSystem.DAL.Models.SportEvent", b =>
@@ -665,10 +617,9 @@ namespace TicketsReservationSystem.DAL.Migrations
 
             modelBuilder.Entity("TicketsReservationSystem.DAL.Models.Ticket", b =>
                 {
-                    b.HasOne("TicketsReservationSystem.DAL.Models.Client", "Client")
-                        .WithMany("Tickets")
-                        .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                    b.HasOne("TicketsReservationSystem.DAL.Models.Client", null)
+                        .WithMany("tickets")
+                        .HasForeignKey("ClientId");
 
                     b.HasOne("TicketsReservationSystem.DAL.Models.Event", "Event")
                         .WithMany("Tickets")
@@ -676,29 +627,33 @@ namespace TicketsReservationSystem.DAL.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("Client");
-
                     b.Navigation("Event");
-                });
-
-            modelBuilder.Entity("TicketsReservationSystem.DAL.Models.Vendor", b =>
-                {
-                    b.HasOne("TicketsReservationSystem.DAL.Models.User", "user")
-                        .WithOne("vendor")
-                        .HasForeignKey("TicketsReservationSystem.DAL.Models.Vendor", "userId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("user");
                 });
 
             modelBuilder.Entity("TicketsReservationSystem.DAL.Models.Client", b =>
                 {
-                    b.Navigation("Addresses");
+                    b.HasOne("TicketsReservationSystem.DAL.Models.ApplicationUser", null)
+                        .WithOne()
+                        .HasForeignKey("TicketsReservationSystem.DAL.Models.Client", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("Reservations");
+                    b.HasOne("TicketsReservationSystem.DAL.Models.Address", "address")
+                        .WithMany()
+                        .HasForeignKey("addressId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
-                    b.Navigation("Tickets");
+                    b.Navigation("address");
+                });
+
+            modelBuilder.Entity("TicketsReservationSystem.DAL.Models.Vendor", b =>
+                {
+                    b.HasOne("TicketsReservationSystem.DAL.Models.ApplicationUser", null)
+                        .WithOne()
+                        .HasForeignKey("TicketsReservationSystem.DAL.Models.Vendor", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("TicketsReservationSystem.DAL.Models.Event", b =>
@@ -710,16 +665,11 @@ namespace TicketsReservationSystem.DAL.Migrations
                     b.Navigation("sportEvent");
                 });
 
-            modelBuilder.Entity("TicketsReservationSystem.DAL.Models.Ticket", b =>
+            modelBuilder.Entity("TicketsReservationSystem.DAL.Models.Client", b =>
                 {
-                    b.Navigation("Reservations");
-                });
+                    b.Navigation("addresses");
 
-            modelBuilder.Entity("TicketsReservationSystem.DAL.Models.User", b =>
-                {
-                    b.Navigation("client");
-
-                    b.Navigation("vendor");
+                    b.Navigation("tickets");
                 });
 
             modelBuilder.Entity("TicketsReservationSystem.DAL.Models.Vendor", b =>

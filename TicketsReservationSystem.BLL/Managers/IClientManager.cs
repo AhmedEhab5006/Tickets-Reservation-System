@@ -10,28 +10,13 @@ namespace TicketsReservationSystem.BLL.Managers
 {
     public interface IClientManager
     {
-        public void Add(ClientAddDto clientAddDto, int userId);
-        int AddAddressAsync(AddressAddDto addressDto);
-        Task EditAddressAsync(AddressUpdateDto addressDto);
-        Task BookAsync(int ticketId);  // Updated to be async
-        Task CancelTicketBookingAsync(int ticketId);  // Already updated
+        public Task<bool> EditAddressAsync(string clientId, AddressUpdateDto addressDto);
+        public bool Book(int ticketId, string clientId);
+        public bool CancelBooking(int ticketId, string clientId);
         public IEnumerable<FullDetailSportEventReadDto> GetSportEvents();
         public IEnumerable<FullDetailEntertainmentEventReadDto> GetEntertainmentEvents();
-        Task<IEnumerable<ClientReadDto>> GetAllClientsAsync();
+
+        public Task<List<ClientBookingDto>> ViewBookingsAsync(string clientId);
     }
 }
-//namespace TicketsReservationSystem.BLL.Managers
-//{
-//    public interface IClientManager
-//    {
-//        public void Add(ClientAddDto clientAddDto , int userId);
-//        int AddAddressAsync(AddressAddDto addressDto);
-//        Task EditAddressAsync(AddressUpdateDto addressDto);
-//        public void Book(int ticketId);
-//        public void CancelBooking(int ticketId);
-//        public IEnumerable<FullDetailSportEventReadDto> GetSportEvents();
-//        public IEnumerable<FullDetailEntertainmentEventReadDto> GetEntertainmentEvents();
-//        Task<IEnumerable<ClientReadDto>> GetAllClientsAsync();
 
-//    }
-//}

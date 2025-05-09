@@ -13,5 +13,6 @@ namespace TicketsReservationSystem.BLL.Dto_s
         public int avillableNumber { get; set; }
         public string category { get; set; }
         public string status = "Availlable";
+        public string? ClientId { get; set; }
     }
 }

@@ -1,20 +1,17 @@
 ﻿using TicketsReservationSystem.DAL.Models;
-
 public interface IClientRepository
 {
-    void Add(Client client);
-    int AddAddress(Address address);
-    void EditAddress(Address address);
-    void Book(int ticketId);
-    void CancelBooking(int ticketId);
+    public int AddAddress(Address address);
+
+    Task<bool> EditAddressAsync(string clientId, Address address);
+
+    public bool Book(int ticketId, string clientId);
+    public bool CancelBooking(int ticketId, string clientId);
     IQueryable<Event> GetSportEvent();
     IQueryable<Event> GetEntertainmentEvents();
-    Client? GetClientById(string clientId);
-    IQueryable<Client> GetAllClients();
 
-    // New method to get an address by ID
-    Address? GetAddressById(int addressId);
-    bool AddressExists(int addressId);
+   public Task<Client> GetClientWithAddressAsync(string clientId);
 
+    public Task<List<Ticket>> GetClientBookingsAsync(string clientId);
 }
 
