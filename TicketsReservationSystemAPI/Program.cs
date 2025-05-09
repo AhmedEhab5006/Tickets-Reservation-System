@@ -25,7 +25,7 @@ internal class Program
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
         builder.Services.AddScoped<IClientRepository, ClientRepository>();
-        //builder.Services.AddScoped<IClientManager, ClientManager>();
+        builder.Services.AddScoped<IClientManager, ClientManager>();
         //builder.Services.AddScoped<IAdminRepository, AdminRepository>();
         builder.Services.AddScoped<IVendorRepository, VendorRepository>();
         builder.Services.AddScoped<IVendorManager, VednorManager>();
