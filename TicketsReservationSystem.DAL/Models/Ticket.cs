@@ -15,7 +15,7 @@ namespace TicketsReservationSystem.DAL.Models
         public int avillableCount { get; set; }
         public string category { get; set; }
         public string status { get; set; }
-        // NEW: Link ticket to a client (who booked it)
+        //NEW link
         public string? ClientId { get; set; }
         public Client? Client { get; set; }
     }
