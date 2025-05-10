@@ -11,7 +11,7 @@ namespace TicketsReservationSystem.BLL.Managers
     public interface IVendorManager
     {
         public void Add(VendorAddDto vendor);
-        public void AddEvent(EventAddDto Event, EntertainmentEventAddDto? entertaimentEvent = null, SportEventAddDto? SportsEvent = null);
+       // public void AddEvent(EventAddDto Event, EntertainmentEventAddDto? entertaimentEvent = null, SportEventAddDto? SportsEvent = null);
         public void EditEvent(EventUpdateDto Event);
         public void EditEntertainmentEvent(EntertainmentEventUpdateDto entertainmentEventUpdateDto);
         public void EditSportsEvent(SportEventUpdateDto SportsEvent);
@@ -28,5 +28,7 @@ namespace TicketsReservationSystem.BLL.Managers
         public void DeleteTicket(int id);
         public TicketReadDto GetTicketById(int id);
         public string GetAcceptanceStatus(string vendorId);
+        public void AddSportEvent(SportAddDto sportAdd);
+        public void AddEntertainmentEvent(EntertainmentAddDto entertainmentAdd);
     }
 }

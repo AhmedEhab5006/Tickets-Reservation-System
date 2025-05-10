@@ -54,7 +54,7 @@ internal class Program
 
         builder.Services.AddDbContext<ProgramContext>(option =>
             
-        option.UseSqlServer(builder.Configuration.GetConnectionString("cs")));
+        option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
         
 
         builder.Services.AddScoped<IAuthManager, AuthManager>();

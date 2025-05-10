@@ -29,33 +29,90 @@ namespace TicketsReservationSystem.API.Controllers
             _getLoggedData = getLoggedData;
         }
 
-        [HttpPost("Event")]
-        [EventAddFilter]
-        public IActionResult AddEvent(FullEventAddDto Event)
-        {
+        //[HttpPost("Event")]
+        //[EventAddFilter]
+        //public IActionResult AddEvent(FullEventAddDto Event)
+        //{
 
-            
+
+        //    string acceptance = _vendorManager.GetAcceptanceStatus(_getLoggedData.GetId());
+
+        //    if (acceptance != "Pending")
+        //    {
+        //        Event.Event.vendorId = _getLoggedData.GetId();
+        //        _vendorManager.AddEvent(Event.Event, Event.EntertainmentEvent, Event.SportsEvent);
+        //        return Created(nameof(Event.Event.vendorId), new
+        //        {
+        //            Event.Event.location,
+        //            Event.Event.numberOfSeats,
+        //            Event.Event.category,
+        //            Event.Event.date
+        //        });
+
+        //    }
+
+        //    return Unauthorized("You don't have the permission to add an event");
+
+
+
+        //}
+        [HttpPost("AddSportEvent")]
+        public IActionResult AddSportEvent (SportAddDto sportAdd)
+        {
             string acceptance = _vendorManager.GetAcceptanceStatus(_getLoggedData.GetId());
 
             if (acceptance != "Pending")
             {
-                Event.Event.vendorId = _getLoggedData.GetId();
-                _vendorManager.AddEvent(Event.Event, Event.EntertainmentEvent, Event.SportsEvent);
-                return Created(nameof(Event.Event.vendorId), new
+                sportAdd.vendorId = _getLoggedData.GetId();
+                _vendorManager.AddSportEvent(sportAdd);
+                return Created(nameof(sportAdd.vendorId), new
                 {
-                    Event.Event.location,
-                    Event.Event.numberOfSeats,
-                    Event.Event.category,
-                    Event.Event.date
+                    sportAdd.location,
+                    sportAdd.numberOfSeats,
+                    sportAdd.category,
+                    sportAdd.date,
+                    sportAdd.tournament,
+                    sportAdd.tournamentStage,
+                    sportAdd.sport,
+                    sportAdd.team1,
+                    sportAdd.team2,
+                    sportAdd.team1Image,
+                    sportAdd.team2Image,
                 });
 
             }
 
             return Unauthorized("You don't have the permission to add an event");
-
-
         }
-        [HttpPut("Event")]
+
+        [HttpPost("AddEntertainmentEvent")]
+        public IActionResult AddEntertainmentEvent(EntertainmentAddDto entertainmentAdd)
+        {
+            string acceptance = _vendorManager.GetAcceptanceStatus(_getLoggedData.GetId());
+
+            if (acceptance != "Pending")
+            {
+                entertainmentAdd.vendorId = _getLoggedData.GetId();
+                _vendorManager.AddEntertainmentEvent(entertainmentAdd);
+                return Created(nameof(entertainmentAdd.vendorId), new
+                {
+                    entertainmentAdd.location,
+                    entertainmentAdd.numberOfSeats,
+                    entertainmentAdd.category,
+                    entertainmentAdd.date,
+                    entertainmentAdd.showCategory,
+                    entertainmentAdd.duration,
+                    entertainmentAdd.ageRestriction,
+                    entertainmentAdd.eventImage,
+                    entertainmentAdd.genre,
+                });
+
+            }
+
+            return Unauthorized("You don't have the permission to add an event");
+        }
+
+        [HttpPut("Event/{id}")]
         public IActionResult EditEvent(int id, EventUpdateDto Event)
         {
 
@@ -85,7 +142,7 @@ namespace TicketsReservationSystem.API.Controllers
             return Ok("Updated");
         }
 
-        [HttpPut("Entertainment")]
+        [HttpPut("Entertainment/{id}")]
         public IActionResult EditEntertainmentEvent(int id, EntertainmentEventUpdateDto entertainmentEventUpdateDto)
         {
 
@@ -113,7 +170,7 @@ namespace TicketsReservationSystem.API.Controllers
             _vendorManager.EditEntertainmentEvent(entertainmentEventUpdateDto);
             return Ok("Updated");
         }
-        [HttpPut("Sport")]
+        [HttpPut("Sport/{id}")]
         public IActionResult EditSportsEvent(int id, SportEventUpdateDto SportsEvent)
         {
 
@@ -145,7 +202,7 @@ namespace TicketsReservationSystem.API.Controllers
             return Ok("Updated");
         }
 
-        [HttpDelete("Event")]
+        [HttpDelete("Event/{id}")]
         public IActionResult Delete(int id)
         {
             var found = _vendorManager.GetEventById(id);
@@ -235,7 +292,7 @@ namespace TicketsReservationSystem.API.Controllers
             return BadRequest("desired avillable seats number is greater than event avillable seats");
         }
 
-        [HttpPut("EditTicket")]
+        [HttpPut("EditTicket/{id}")]
         public IActionResult EditTicket(int id, TicketUpdateDto ticketUpdateDto)
         {
             ticketUpdateDto.Id = id;
@@ -256,7 +313,7 @@ namespace TicketsReservationSystem.API.Controllers
 
             return BadRequest("desired avillable seats number is greater than event avillable seats");
         }
-        [HttpDelete("DeleteTicket")]
+        [HttpDelete("DeleteTicket/{id}")]
         public IActionResult DeleteTicket(int id)
         {
 

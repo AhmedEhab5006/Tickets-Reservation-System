@@ -27,49 +27,103 @@ namespace TicketsReservationSystem.BLL.Managers
             });
         }
 
-        public void AddEvent(EventAddDto Event, EntertainmentEventAddDto? entertaimentEvent = null, SportEventAddDto? SportsEvent = null)
+        //public void AddEvent(EventAddDto Event, EntertainmentEventAddDto? entertaimentEvent = null, SportEventAddDto? SportsEvent = null)
+        //{
+        //    var added = _vendorRepository.AddEvent(new Event
+        //    {
+        //        numberOfSeats = Event.numberOfSeats,
+        //        vendorId = Event.vendorId,
+        //        date = Event.date,
+        //        location = Event.location,
+        //        category = Event.category,
+        //        avillableSeats = Event.numberOfSeats,
+        //        status = Event.status
+        //    });
+
+        //    if (Event.category == "Sport")
+        //    {
+        //        _vendorRepository.AddSportsEvent(new SportEvent
+        //        {
+        //            team1 = SportsEvent.team1,
+        //            team2 = SportsEvent.team2,
+        //            tournament = SportsEvent.tournament,
+        //            tournamentStage = SportsEvent.tournamentStage,
+        //            sport = SportsEvent.sport,
+        //            EventId = added,
+        //            team1Image = SportsEvent.team1Image,
+        //            team2Image = SportsEvent.team2Image,
+        //        });
+        //    }
+
+        //   if (Event.category == "Entertainment")
+        //    {
+        //        _vendorRepository.AddEntertainmentEvent(new EntertainmentEvent
+        //        {
+        //            performerName = entertaimentEvent.performerName,
+        //            genre = entertaimentEvent.genre,
+        //            ageRestriction = entertaimentEvent.ageRestriction,
+        //            duration = entertaimentEvent.duration,
+        //            showCategory = entertaimentEvent.showCategory,
+        //            EventId = added,
+        //            eventImage = entertaimentEvent.eventImage
+        //        });
+
+        //    }
+        //}
+
+
+        public void AddSportEvent (SportAddDto sportAdd)
         {
             var added = _vendorRepository.AddEvent(new Event
             {
-                numberOfSeats = Event.numberOfSeats,
-                vendorId = Event.vendorId,
-                date = Event.date,
-                location = Event.location,
-                category = Event.category,
-                avillableSeats = Event.numberOfSeats,
-                status = Event.status
+                status = sportAdd.status,
+                avillableSeats = sportAdd.numberOfSeats,
+                category = sportAdd.category,
+                vendorId = sportAdd.vendorId,
+                date = sportAdd.date,
+                location = sportAdd.location,
+                numberOfSeats = sportAdd.numberOfSeats,
             });
 
-            if (Event.category == "Sport")
+            _vendorRepository.AddSportsEvent(new SportEvent
             {
-                _vendorRepository.AddSportsEvent(new SportEvent
-                {
-                    team1 = SportsEvent.team1,
-                    team2 = SportsEvent.team2,
-                    tournament = SportsEvent.tournament,
-                    tournamentStage = SportsEvent.tournamentStage,
-                    sport = SportsEvent.sport,
-                    EventId = added,
-                    team1Image = SportsEvent.team1Image,
-                    team2Image = SportsEvent.team2Image,
-                });
-            }
-
-           if (Event.category == "Entertainment")
-            {
-                _vendorRepository.AddEntertainmentEvent(new EntertainmentEvent
-                {
-                    performerName = entertaimentEvent.performerName,
-                    genre = entertaimentEvent.genre,
-                    ageRestriction = entertaimentEvent.ageRestriction,
-                    duration = entertaimentEvent.duration,
-                    showCategory = entertaimentEvent.showCategory,
-                    EventId = added,
-                    eventImage = entertaimentEvent.eventImage
-                });
-
-            }
+                tournamentStage = sportAdd.tournamentStage,
+                sport = sportAdd.sport,
+                EventId = added,
+                team1 = sportAdd.team1,
+                team2 = sportAdd.team2,
+                team1Image = sportAdd.team1Image,
+                team2Image = sportAdd.team2Image,
+                tournament = sportAdd.tournament,
+            });
         }
+
+        public void AddEntertainmentEvent (EntertainmentAddDto entertainmentAdd)
+        {
+            var added = _vendorRepository.AddEvent(new Event
+            {
+                status = entertainmentAdd.status,
+                avillableSeats = entertainmentAdd.numberOfSeats,
+                category = entertainmentAdd.category,
+                vendorId = entertainmentAdd.vendorId,
+                date = entertainmentAdd.date,
+                location = entertainmentAdd.location,
+                numberOfSeats = entertainmentAdd.numberOfSeats,
+            });
+
+            _vendorRepository.AddEntertainmentEvent(new EntertainmentEvent
+            {
+                showCategory = entertainmentAdd.showCategory,
+                ageRestriction = entertainmentAdd.ageRestriction,
+                duration = entertainmentAdd.duration,
+                EventId = added,
+                eventImage = entertainmentAdd.eventImage,
+                genre = entertainmentAdd.genre,
+                performerName = entertainmentAdd.performerName,
+            });
+
+        }
+
 
         public void DeleteEvent(int id)
         {
