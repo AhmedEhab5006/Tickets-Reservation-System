@@ -9,18 +9,15 @@ namespace TicketsReservationSystem.DAL.Repository
 {
     public interface IAdminRepository
     {
-        //public IQueryable<User> GetAll();
-        //public User GetById (int id);
-        //public void Delete (User deleted);
-        //public void AddAdmin(User admin);
-        //public void ConfirmVendor (int vendorId);
-        //public void RejectVendor (int vendorId);
-   }
-        //IQueryable<User> GetAll();
-        //User GetById(int id);
-        //void Delete(User deleted);
-        //void AddAdmin(User admin);
-        //void ConfirmVendor(int vendorId);
-        //void RejectVendor(int vendorId);
+        public IQueryable<ApplicationUser> GetAllPendingVendors();
+        public void AddAdmin(ApplicationUser admin);
+        public Vendor ConfirmVendor(string vendorId);
+        public Vendor RejectVendor(string vendorId);
+        public IQueryable<Event> GetPendingSportEvents();
+        public IQueryable<Event> GetPendingEntertainmentEvents();
+        public void AcceptEvent(Event Event);
+        public void RejectEvent(Event Event);
+
     }
+}
 

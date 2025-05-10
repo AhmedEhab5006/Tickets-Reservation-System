@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Numerics;
 using System.Security.Claims;
-using TicketsReservationSystem.API.Filters;
 using TicketsReservationSystem.API.Helpers;
 using TicketsReservationSystem.BLL.Dto_s;
 using TicketsReservationSystem.BLL.Dto_s.ControllerDto;
@@ -29,33 +28,6 @@ namespace TicketsReservationSystem.API.Controllers
             _getLoggedData = getLoggedData;
         }
 
-        //[HttpPost("Event")]
-        //[EventAddFilter]
-        //public IActionResult AddEvent(FullEventAddDto Event)
-        //{
-
-
-        //    string acceptance = _vendorManager.GetAcceptanceStatus(_getLoggedData.GetId());
-
-        //    if (acceptance != "Pending")
-        //    {
-        //        Event.Event.vendorId = _getLoggedData.GetId();
-        //        _vendorManager.AddEvent(Event.Event, Event.EntertainmentEvent, Event.SportsEvent);
-        //        return Created(nameof(Event.Event.vendorId), new
-        //        {
-        //            Event.Event.location,
-        //            Event.Event.numberOfSeats,
-        //            Event.Event.category,
-        //            Event.Event.date
-        //        });
-
-        //    }
-
-        //    return Unauthorized("You don't have the permission to add an event");
-
-
-
-        //}
         [HttpPost("AddSportEvent")]
         public IActionResult AddSportEvent (SportAddDto sportAdd)
         {
@@ -260,7 +232,6 @@ namespace TicketsReservationSystem.API.Controllers
             return NotFound("You Haven't posted any events yet");
         }
         [HttpPost("AddTicket")]
-        [TicketsAddFilter]
         public IActionResult AddTicket(TicketAddDto ticketAddDto)
         {
             var sucssed = _vendorManager.AddTicket(ticketAddDto);

@@ -1,53 +1,93 @@
-﻿//using System;
-//using System.Collections.Generic;
-//using System.Linq;
-//using System.Text;
-//using System.Threading.Tasks;
-//using TicketsReservationSystem.DAL.Database;
-//using TicketsReservationSystem.DAL.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using TicketsReservationSystem.DAL.Database;
+using TicketsReservationSystem.DAL.Models;
 
-//namespace TicketsReservationSystem.DAL.Repository
-//{
-//    public class AdminRepository : IAdminRepository
-//    {
-//        private ProgramContext _context;
+namespace TicketsReservationSystem.DAL.Repository
+{
+    public class AdminRepository : IAdminRepository
+    {
+        private ProgramContext _context;
 
-//        public AdminRepository(ProgramContext context)
-//        {
-//            _context = context;
-//        }
-//        public void AddAdmin(User admin)
-//        {
-//            var added = _context.Users.Add(admin);
-//            _context.SaveChanges();
-//        }
+        public AdminRepository(ProgramContext context)
+        {
+            _context = context;
+        }
 
-//        public void ConfirmVendor(int vendorId)
-//        {
-//            throw new NotImplementedException();
-//        }
+        public void AcceptEvent(Event Event)
+        {
+            _context.Update(Event);
+            _context.SaveChanges();
+        }
 
-//        public void Delete(User deleted)
-//        {
-//            _context.Users.Remove(deleted);
-//            _context.SaveChanges();
-//        }
+        public void AddAdmin(ApplicationUser admin)
+        {
+            
+        }
 
-//        public IQueryable<User> GetAll()
-//        {
-//            var query = _context.Users;
-//            return query;
-//        }
+        public Vendor ConfirmVendor(string vendorId)
+        {
+            var found = _context.vendors
+                                    .Where(a => a.Id == vendorId)
+                                    .FirstOrDefault();
 
-//        public User GetById(int id)
-//        {
-//            var user = _context.Users.Find(id);
-//            return user;
-//        }
+            found.acceptanceStatus = "Accepted";
+            _context.Update(found);
+            _context.SaveChanges();
+            return found;
+            
+        }
 
-//        public void RejectVendor(int vendorId)
-//        {
-//            throw new NotImplementedException();
-//        }
-//    }
-//}
+        public IQueryable<ApplicationUser> GetAllPendingVendors()
+        {
+           var found =  _context.vendors.Where(a => a.acceptanceStatus == "Pending");
+
+            return found;
+                                                          
+        }
+
+        public IQueryable<Event> GetPendingEntertainmentEvents()
+        {
+            var found = _context.Events.Include(a=>a.entertainment)
+                                        .Where(a => a.status == "Pending")
+                                       .Where(a => a.category == "Entertainment");
+                                        
+
+            return found;
+        }
+
+        public IQueryable<Event> GetPendingSportEvents()
+        {
+            var found = _context.Events.Include(a => a.sportEvent)
+                                        .Where(a => a.status == "Pending")
+                                       .Where(a => a.category == "Sport");
+
+            return found;
+        }
+
+        public void RejectEvent(Event Event)
+        {
+            _context.Update(Event);
+            _context.SaveChanges();
+        }
+
+        public Vendor RejectVendor(string vendorId)
+        {
+            var found = _context.vendors
+                        .Where(a => a.Id == vendorId)
+                        .FirstOrDefault();
+
+
+            found.acceptanceStatus = "Rejected";
+            _context.Update(found);
+            _context.SaveChanges();
+
+
+            return found;
+        }
+    }
+}

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using System;
@@ -80,6 +81,40 @@ namespace TicketsReservationSystem.DAL.Database
                 .WithOne(e => e.vendor)
                 .HasForeignKey(e => e.vendorId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+
+
+            var roleId = "8f8d4f6a-4e90-4a5c-92b2-f32483c6e7d1";
+            var userId = "14c60e1c-6f6d-4c6a-8a6c-623b9d2c9110";
+
+            // Role
+            builder.Entity<ApplicationUserRole>().HasData(new ApplicationUserRole
+            {
+                Id = roleId,
+                Name = "Admin",
+                NormalizedName = "ADMIN"
+            });
+
+            // User
+            var hasher = new PasswordHasher<ApplicationUser>();
+            var adminUser = new ApplicationUser
+            {
+                Id = userId,
+                UserName = "admin",
+                NormalizedUserName = "ADMIN",
+                Email = "admin@example.com",
+                NormalizedEmail = "ADMIN@EXAMPLE.COM",
+                EmailConfirmed = true,
+                PhoneNumberConfirmed = true,
+                LockoutEnabled = false,
+                SecurityStamp = Guid.NewGuid().ToString("D"),
+                ConcurrencyStamp = Guid.NewGuid().ToString("D"),
+            };
+            adminUser.PasswordHash = hasher.HashPassword(adminUser, "Admin@123");
+
+            builder.Entity<ApplicationUser>().HasData(adminUser);
+            
+
 
         }
             

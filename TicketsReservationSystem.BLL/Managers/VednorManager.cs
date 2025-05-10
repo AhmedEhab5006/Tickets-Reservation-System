@@ -27,50 +27,6 @@ namespace TicketsReservationSystem.BLL.Managers
             });
         }
 
-        //public void AddEvent(EventAddDto Event, EntertainmentEventAddDto? entertaimentEvent = null, SportEventAddDto? SportsEvent = null)
-        //{
-        //    var added = _vendorRepository.AddEvent(new Event
-        //    {
-        //        numberOfSeats = Event.numberOfSeats,
-        //        vendorId = Event.vendorId,
-        //        date = Event.date,
-        //        location = Event.location,
-        //        category = Event.category,
-        //        avillableSeats = Event.numberOfSeats,
-        //        status = Event.status
-        //    });
-
-        //    if (Event.category == "Sport")
-        //    {
-        //        _vendorRepository.AddSportsEvent(new SportEvent
-        //        {
-        //            team1 = SportsEvent.team1,
-        //            team2 = SportsEvent.team2,
-        //            tournament = SportsEvent.tournament,
-        //            tournamentStage = SportsEvent.tournamentStage,
-        //            sport = SportsEvent.sport,
-        //            EventId = added,
-        //            team1Image = SportsEvent.team1Image,
-        //            team2Image = SportsEvent.team2Image,
-        //        });
-        //    }
-
-        //   if (Event.category == "Entertainment")
-        //    {
-        //        _vendorRepository.AddEntertainmentEvent(new EntertainmentEvent
-        //        {
-        //            performerName = entertaimentEvent.performerName,
-        //            genre = entertaimentEvent.genre,
-        //            ageRestriction = entertaimentEvent.ageRestriction,
-        //            duration = entertaimentEvent.duration,
-        //            showCategory = entertaimentEvent.showCategory,
-        //            EventId = added,
-        //            eventImage = entertaimentEvent.eventImage
-        //        });
-
-        //    }
-        //}
-
 
         public void AddSportEvent (SportAddDto sportAdd)
         {

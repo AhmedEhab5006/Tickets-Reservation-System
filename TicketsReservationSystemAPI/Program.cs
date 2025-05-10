@@ -26,7 +26,7 @@ internal class Program
         builder.Services.AddSwaggerGen();
         builder.Services.AddScoped<IClientRepository, ClientRepository>();
         builder.Services.AddScoped<IClientManager, ClientManager>();
-        //builder.Services.AddScoped<IAdminRepository, AdminRepository>();
+        builder.Services.AddScoped<IAdminRepository, AdminRepository>();
         builder.Services.AddScoped<IVendorRepository, VendorRepository>();
         builder.Services.AddScoped<IVendorManager, VednorManager>();
         builder.Services.AddScoped<IUserManager, UserManager>();
@@ -37,6 +37,7 @@ internal class Program
         builder.Services.AddScoped<IMemoryCache , MemoryCache>();
         builder.Services.AddScoped<IApplicationUserRoleRepository, ApplicationUserRoleRepository>();
         builder.Services.AddScoped<RoleManager<ApplicationUserRole>>();
+        builder.Services.AddScoped<IAdminManager, AdminManager>();
         builder.Services.AddHttpContextAccessor();
         builder.Services.AddAutoMapper(typeof(ClientProfile).Assembly);
 

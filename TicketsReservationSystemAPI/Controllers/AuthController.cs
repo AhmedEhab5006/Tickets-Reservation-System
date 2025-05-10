@@ -2,9 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using TicketsReservationSystem.BLL.Dto_s.AuthDto_s;
 using TicketsReservationSystem.BLL.Managers.AuthManagers;
-using TicketsReservationSystem.API.Helpers;
 using Microsoft.Extensions.Caching.Memory;
-using TicketsReservationSystem.API.Filters;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using TicketsReservationSystem.DAL.Models;
