@@ -73,7 +73,8 @@ namespace TicketsReservationSystem.BLL.Managers
                     eventImage = a.entertainment.eventImage,
                     genre = a.entertainment.genre,
                     location = a.location,
-                    performerName = a.entertainment.performerName
+                    performerName = a.entertainment.performerName,
+                    Id = a.id
                 }).ToList();
 
                 return found;
@@ -101,7 +102,8 @@ namespace TicketsReservationSystem.BLL.Managers
                     team2 = a.sportEvent.team2,
                     team1Image = a.sportEvent.team1Image,
                     team2Image = a.sportEvent.team2Image,
-                    tournament = a.sportEvent.tournament
+                    tournament = a.sportEvent.tournament,
+                    Id = a.id
                 }).ToList();
 
                 return found;

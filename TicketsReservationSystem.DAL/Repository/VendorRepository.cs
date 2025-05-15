@@ -96,13 +96,13 @@ namespace TicketsReservationSystem.DAL.Repository
 
         public EntertainmentEvent GetEntertainmentEventById(int id)
         {
-            var found = _context.EntertainmentEvents.Find(id);
+            var found = _context.EntertainmentEvents.Where(a=>a.EventId == id).FirstOrDefault();
             return found;
         }
 
         public SportEvent GetSportEventById(int id)
         {
-            var found = _context.SportEvents.Find(id);
+            var found = _context.SportEvents.Where(a => a.EventId == id).FirstOrDefault();
             return found;
         }
 

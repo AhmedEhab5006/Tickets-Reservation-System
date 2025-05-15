@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,7 +9,7 @@ namespace TicketsReservationSystem.DAL.Models
 {
     public class SportEvent
     {
-        public int Id { get; set; }
+        [Key]
         public int EventId { get; set; }
         public Event? Event { get; set; }
         public string team1 { get; set; }

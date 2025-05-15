@@ -8,6 +8,7 @@ namespace TicketsReservationSystem.BLL.Dto_s
 {
     public class FullDetailSportEventReadDto
     {
+        public int Id { get; set; }
         public string team1 { get; set; }
         public string team2 { get; set; }
         public string tournament { get; set; }

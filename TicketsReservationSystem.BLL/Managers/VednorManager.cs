@@ -203,6 +203,7 @@ namespace TicketsReservationSystem.BLL.Managers
                     EventId = foundModel.EventId,
                     team1Image = foundModel.team1Image,
                     team2Image = foundModel.team2Image,
+                    
                 };
                 return found;
             }
@@ -255,7 +256,8 @@ namespace TicketsReservationSystem.BLL.Managers
                     mounth = a.date.Month.ToString(),
                     year = a.date.Year.ToString(),
                     location = a.location,
-                    eventImage = a.entertainment.eventImage
+                    eventImage = a.entertainment.eventImage,
+                    Id = a.id
 
                 }).ToList();
                 return found;
@@ -286,6 +288,7 @@ namespace TicketsReservationSystem.BLL.Managers
                     location = a.location,
                     team1Image = a.sportEvent.team1Image,
                     team2Image = a.sportEvent.team2Image,
+                    Id = a.id
 
                 }).ToList();
                 return found;

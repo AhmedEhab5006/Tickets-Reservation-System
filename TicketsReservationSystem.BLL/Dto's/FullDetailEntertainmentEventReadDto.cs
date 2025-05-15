@@ -8,6 +8,7 @@ namespace TicketsReservationSystem.BLL.Dto_s
 {
     public class FullDetailEntertainmentEventReadDto
     {
+        public int Id { get; set; }
         public string performerName { get; set; }
         public string showCategory { get; set; }
         public int ageRestriction { get; set; }
