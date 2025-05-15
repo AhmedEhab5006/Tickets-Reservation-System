@@ -37,3 +37,43 @@ D:\new front\new Front\new Front\bin\Debug\net8.0\Newtonsoft.Json.dll
 D:\new front\new Front\new Front\bin\Debug\net8.0\System.IdentityModel.Tokens.Jwt.dll
 D:\new front\new Front\new Front\obj\Debug\net8.0\new Front.csproj.AssemblyReference.cache
 D:\new front\new Front\new Front\obj\Debug\net8.0\new Front.csproj.Up2Date
+D:\new front\Tickets-Reservation-System\new Front\bin\Debug\net8.0\appsettings.Development.json
+D:\new front\Tickets-Reservation-System\new Front\bin\Debug\net8.0\appsettings.json
+D:\new front\Tickets-Reservation-System\new Front\bin\Debug\net8.0\new Front.staticwebassets.runtime.json
+D:\new front\Tickets-Reservation-System\new Front\bin\Debug\net8.0\new Front.exe
+D:\new front\Tickets-Reservation-System\new Front\bin\Debug\net8.0\new Front.deps.json
+D:\new front\Tickets-Reservation-System\new Front\bin\Debug\net8.0\new Front.runtimeconfig.json
+D:\new front\Tickets-Reservation-System\new Front\bin\Debug\net8.0\new Front.dll
+D:\new front\Tickets-Reservation-System\new Front\bin\Debug\net8.0\new Front.pdb
+D:\new front\Tickets-Reservation-System\new Front\bin\Debug\net8.0\Microsoft.Bcl.Memory.dll
+D:\new front\Tickets-Reservation-System\new Front\bin\Debug\net8.0\Microsoft.IdentityModel.Abstractions.dll
+D:\new front\Tickets-Reservation-System\new Front\bin\Debug\net8.0\Microsoft.IdentityModel.JsonWebTokens.dll
+D:\new front\Tickets-Reservation-System\new Front\bin\Debug\net8.0\Microsoft.IdentityModel.Logging.dll
+D:\new front\Tickets-Reservation-System\new Front\bin\Debug\net8.0\Microsoft.IdentityModel.Tokens.dll
+D:\new front\Tickets-Reservation-System\new Front\bin\Debug\net8.0\Newtonsoft.Json.dll
+D:\new front\Tickets-Reservation-System\new Front\bin\Debug\net8.0\System.IdentityModel.Tokens.Jwt.dll
+D:\new front\Tickets-Reservation-System\new Front\obj\Debug\net8.0\new Front.csproj.AssemblyReference.cache
+D:\new front\Tickets-Reservation-System\new Front\obj\Debug\net8.0\new Front.GeneratedMSBuildEditorConfig.editorconfig
+D:\new front\Tickets-Reservation-System\new Front\obj\Debug\net8.0\new Front.AssemblyInfoInputs.cache
+D:\new front\Tickets-Reservation-System\new Front\obj\Debug\net8.0\new Front.AssemblyInfo.cs
+D:\new front\Tickets-Reservation-System\new Front\obj\Debug\net8.0\new Front.csproj.CoreCompileInputs.cache
+D:\new front\Tickets-Reservation-System\new Front\obj\Debug\net8.0\new Front.MvcApplicationPartsAssemblyInfo.cache
+D:\new front\Tickets-Reservation-System\new Front\obj\Debug\net8.0\new Front.RazorAssemblyInfo.cache
+D:\new front\Tickets-Reservation-System\new Front\obj\Debug\net8.0\new Front.RazorAssemblyInfo.cs
+D:\new front\Tickets-Reservation-System\new Front\obj\Debug\net8.0\new Front.sourcelink.json
+D:\new front\Tickets-Reservation-System\new Front\obj\Debug\net8.0\staticwebassets.build.json
+D:\new front\Tickets-Reservation-System\new Front\obj\Debug\net8.0\staticwebassets.development.json
+D:\new front\Tickets-Reservation-System\new Front\obj\Debug\net8.0\staticwebassets\msbuild.new Front.Microsoft.AspNetCore.StaticWebAssets.props
+D:\new front\Tickets-Reservation-System\new Front\obj\Debug\net8.0\staticwebassets\msbuild.build.new Front.props
+D:\new front\Tickets-Reservation-System\new Front\obj\Debug\net8.0\staticwebassets\msbuild.buildMultiTargeting.new Front.props
+D:\new front\Tickets-Reservation-System\new Front\obj\Debug\net8.0\staticwebassets\msbuild.buildTransitive.new Front.props
+D:\new front\Tickets-Reservation-System\new Front\obj\Debug\net8.0\staticwebassets.pack.json
+D:\new front\Tickets-Reservation-System\new Front\obj\Debug\net8.0\scopedcss\Views\Shared\_Layout.cshtml.rz.scp.css
+D:\new front\Tickets-Reservation-System\new Front\obj\Debug\net8.0\scopedcss\bundle\new Front.styles.css
+D:\new front\Tickets-Reservation-System\new Front\obj\Debug\net8.0\scopedcss\projectbundle\new Front.bundle.scp.css
+D:\new front\Tickets-Reservation-System\new Front\obj\Debug\net8.0\new Front.csproj.Up2Date
+D:\new front\Tickets-Reservation-System\new Front\obj\Debug\net8.0\new Front.dll
+D:\new front\Tickets-Reservation-System\new Front\obj\Debug\net8.0\refint\new Front.dll
+D:\new front\Tickets-Reservation-System\new Front\obj\Debug\net8.0\new Front.pdb
+D:\new front\Tickets-Reservation-System\new Front\obj\Debug\net8.0\new Front.genruntimeconfig.cache
+D:\new front\Tickets-Reservation-System\new Front\obj\Debug\net8.0\ref\new Front.dll

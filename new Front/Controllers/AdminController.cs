@@ -27,20 +27,21 @@ namespace WebApplication2.Controllers
         {
             try
             {
+                // Check if user is logged in and is an admin
                 var userRole = HttpContext.Session.GetString("UserRole");
                 if (userRole != "Admin")
                 {
                     return RedirectToAction("sign_in", "User");
                 }
 
+                // Get the token from session
                 var token = HttpContext.Session.GetString("JWTToken");
                 if (string.IsNullOrEmpty(token))
                 {
                     return RedirectToAction("sign_in", "User");
                 }
 
-             //   _client.DefaultRequestHeaders.Remove("Authorization");
-                
+                // Set the authorization header with the token from session
                 _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
                 var response = await _client.GetAsync("api/Admin/vendor-requests");
@@ -117,22 +118,92 @@ namespace WebApplication2.Controllers
 
         [HttpGet]
         public IActionResult AcceptVendor() => View();
+
         [HttpPost]
         public async Task<IActionResult> AcceptVendor(string vendorId)
         {
-            var response = await _client.PutAsync($"api/Admin/accept/{vendorId}", null);
-            ViewBag.Result = response.IsSuccessStatusCode ? "Vendor accepted." : "Failed to accept vendor.";
-            return View();
+            try
+            {
+                // Check if user is logged in and is an admin
+                var userRole = HttpContext.Session.GetString("UserRole");
+                if (userRole != "Admin")
+                {
+                    return RedirectToAction("sign_in", "User");
+                }
+
+                // Get the token from session
+                var token = HttpContext.Session.GetString("JWTToken");
+                if (string.IsNullOrEmpty(token))
+                {
+                    return RedirectToAction("sign_in", "User");
+                }
+
+                // Set the authorization header with the token from session
+                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+                var response = await _client.PutAsync($"api/Admin/accept/{vendorId}", null);
+                if (response.IsSuccessStatusCode)
+                {
+                    TempData["Result"] = "Vendor accepted successfully.";
+                }
+                else
+                {
+                    var errorContent = await response.Content.ReadAsStringAsync();
+                    TempData["Error"] = errorContent ?? "Failed to accept vendor.";
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error accepting vendor: {ex.Message}");
+                TempData["Error"] = "An error occurred while accepting the vendor.";
+            }
+
+            return RedirectToAction("VendorRequests");
         }
 
         [HttpGet]
         public IActionResult RejectVendor() => View();
+
         [HttpPost]
         public async Task<IActionResult> RejectVendor(string vendorId)
         {
-            var response = await _client.PutAsync($"api/Admin/reject/{vendorId}", null);
-            ViewBag.Result = response.IsSuccessStatusCode ? "Vendor rejected." : "Failed to reject vendor.";
-            return View();
+            try
+            {
+                // Check if user is logged in and is an admin
+                var userRole = HttpContext.Session.GetString("UserRole");
+                if (userRole != "Admin")
+                {
+                    return RedirectToAction("sign_in", "User");
+                }
+
+                // Get the token from session
+                var token = HttpContext.Session.GetString("JWTToken");
+                if (string.IsNullOrEmpty(token))
+                {
+                    return RedirectToAction("sign_in", "User");
+                }
+
+                // Set the authorization header with the token from session
+                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+                var response = await _client.PutAsync($"api/Admin/reject/{vendorId}", null);
+                if (response.IsSuccessStatusCode)
+                {
+                    TempData["Result"] = "Vendor rejected successfully.";
+                }
+                else
+                {
+                    var errorContent = await response.Content.ReadAsStringAsync();
+                    TempData["Error"] = errorContent ?? "Failed to reject vendor.";
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error rejecting vendor: {ex.Message}");
+                TempData["Error"] = "An error occurred while rejecting the vendor.";
+            }
+
+            return RedirectToAction("VendorRequests");
         }
 
         [HttpGet]
@@ -153,28 +224,6 @@ namespace WebApplication2.Controllers
             var response = await _client.PutAsync($"api/Admin/RejectEvent/{eventId}", null);
             ViewBag.Result = response.IsSuccessStatusCode ? "Event rejected." : "Failed to reject event.";
             return View();
-        }
-
-        private string GenerateAdminToken()
-        {
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_configuration["JWT:Secret"] ?? "ksfjskfjwiejwiefjwoinewimxiwncowinwinecwc");
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(new[]
-                {
-                    new Claim(ClaimTypes.Role, "Admin"),
-                    new Claim(ClaimTypes.Email, "admin@example.com"),
-                    new Claim(ClaimTypes.NameIdentifier, "admin-id")
-                }),
-                Expires = DateTime.UtcNow.AddDays(7),
-                SigningCredentials = new SigningCredentials(
-                    new SymmetricSecurityKey(key),
-                    SecurityAlgorithms.HmacSha256Signature)
-            };
-
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            return tokenHandler.WriteToken(token);
         }
     }
 }

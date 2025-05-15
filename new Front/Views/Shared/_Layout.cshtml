@@ -6,13 +6,15 @@
     <title>@ViewData["Title"] - TicketNow</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/home.css" asp-append-version="true" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    @await RenderSectionAsync("Styles", required: false)
 </head>
 <body style="margin: 0; padding: 0; height: 100%;">
     <div class="hero">
         <nav>
             <h2 class="logo">Ticket<span>Now</span></h2>
             <ul class="navwords">
-               
+
                 <li><a asp-controller="Home" asp-action="ReserveTicket">Events</a></li>
                 <li><a asp-controller="User" asp-action="Register">Register</a></li>
                 <li><a asp-controller="User" asp-action="sign_in">Login</a></li>

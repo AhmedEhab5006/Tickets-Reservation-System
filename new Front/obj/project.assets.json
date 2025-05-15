@@ -447,11 +447,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\new front\\new Front\\new Front\\new Front.csproj",
+      "projectUniqueName": "D:\\new front\\Tickets-Reservation-System\\new Front\\new Front.csproj",
       "projectName": "new Front",
-      "projectPath": "D:\\new front\\new Front\\new Front\\new Front.csproj",
+      "projectPath": "D:\\new front\\Tickets-Reservation-System\\new Front\\new Front.csproj",
       "packagesPath": "C:\\Users\\JOhn\\.nuget\\packages\\",
-      "outputPath": "D:\\new front\\new Front\\new Front\\obj\\",
+      "outputPath": "D:\\new front\\Tickets-Reservation-System\\new Front\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\JOhn\\AppData\\Roaming\\NuGet\\NuGet.Config",
