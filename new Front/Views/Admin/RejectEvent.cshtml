@@ -1,0 +1,12 @@
+@{
+    ViewData["Title"] = "Reject Event";
+}
+<h2>Reject Event</h2>
+<form method="post">
+    <label for="eventId">Event ID:</label>
+    <input type="number" name="eventId" id="eventId" required />
+    <button type="submit">Reject Event</button>
+</form>
+@if (ViewBag.Result != null) {
+    <div class="alert alert-info">@ViewBag.Result</div>
+} 

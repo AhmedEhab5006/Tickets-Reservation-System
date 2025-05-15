@@ -1,0 +1,482 @@
+@model WebApplication2.ViewModels.EventVM
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vendor Event Management</title>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: black;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 50px;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: white;
+        }
+
+            .logo span {
+                color: #ff6b6b;
+            }
+
+        .navwords {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+            .navwords a {
+                color: white;
+                text-decoration: none;
+                font-weight: 500;
+                transition: color 0.3s ease;
+                position: relative;
+            }
+
+                .navwords a:hover {
+                    color: #ff6b6b;
+                }
+
+                .navwords a::after {
+                    content: '';
+                    position: absolute;
+                    width: 0;
+                    height: 2px;
+                    bottom: -5px;
+                    left: 0;
+                    background-color: #ff6b6b;
+                    transition: width 0.3s ease;
+                }
+
+                .navwords a:hover::after {
+                    width: 100%;
+                }
+
+        .container {
+            margin: 120px auto 40px;
+            max-width: 1400px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        h1, h2, h3 {
+            color: #ffffff;
+            text-align: center;
+        }
+
+        h1 {
+            color: #ff6b6b;
+            margin-bottom: 30px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+            background: linear-gradient(to right, #1e1e2f, #2a2a3e);
+            padding: 25px;
+            border-radius: 15px;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .event-form {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 30px;
+            border-radius: 15px;
+            flex: 1;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            min-width: 500px;
+            max-width: 600px;
+        }
+
+            .event-form:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 8px 25px rgba(255, 107, 107, 0.2);
+            }
+
+            .event-form h3 {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 25px;
+                color: #ff6b6b;
+                cursor: pointer;
+                padding-bottom: 15px;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+                font-size: 1.4em;
+            }
+
+                .event-form h3::after {
+                    content: '▼';
+                    font-size: 14px;
+                    transition: transform 0.3s ease;
+                }
+
+            .event-form.collapsed h3::after {
+                transform: rotate(-90deg);
+            }
+
+        .event-form-content {
+            transition: max-height 0.3s ease-out;
+            overflow: hidden;
+            max-height: 2000px;
+        }
+
+        .event-form.collapsed .event-form-content {
+            max-height: 0;
+        }
+
+        .event-form input,
+        .event-form textarea,
+        .event-form select {
+            width: 100%;
+            padding: 15px;
+            margin: 8px 0 25px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+            .event-form input:focus,
+            .event-form textarea:focus,
+            .event-form select:focus {
+                outline: none;
+                border-color: #ff6b6b;
+                box-shadow: 0 0 10px rgba(255, 107, 107, 0.2);
+            }
+
+        .event-form label {
+            font-size: 14px;
+            font-weight: 500;
+            color: #ffffff;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .button {
+            background-color: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 15px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            width: 100%;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+
+            .button:hover {
+                background-color: #e05454;
+                transform: translateY(-2px);
+            }
+
+            .button.delete {
+                background-color: #dc3545;
+            }
+
+                .button.delete:hover {
+                    background-color: #c82333;
+                }
+
+            .button.update {
+                background-color: #2196F3;
+            }
+
+                .button.update:hover {
+                    background-color: #1e88e5;
+                }
+
+        .brand {
+            font-weight: bold;
+            text-align: center;
+            margin-top: 40px;
+            font-size: 18px;
+            background: linear-gradient(to right, #1e1e2f, #2a2a3e);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .active-header {
+            box-shadow: 0 0 20px 5px rgba(255, 107, 107, 0.3);
+        }
+
+        @@media (max-width: 1200px) {
+            .form-row {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .event-form {
+                min-width: 100%;
+                max-width: 100%;
+            }
+
+            nav {
+                padding: 15px 20px;
+            }
+
+            .container {
+                margin: 100px 20px 40px;
+                padding: 20px;
+            }
+        }
+
+        @@media (max-width: 768px) {
+            .container {
+                margin: 80px 10px 20px;
+                padding: 15px;
+            }
+
+            .event-form {
+                padding: 20px;
+            }
+
+                .event-form input,
+                .event-form textarea,
+                .event-form select {
+                    padding: 12px;
+                    margin: 6px 0 20px;
+                }
+
+            .button {
+                padding: 12px 20px;
+            }
+
+            .success-message {
+                text-align: center;
+                padding: 40px;
+                background: rgba(255, 255, 255, 0.05);
+                border-radius: 15px;
+                margin-bottom: 30px;
+            }
+
+                .success-message h2 {
+                    color: #4CAF50;
+                    margin-bottom: 30px;
+                }
+
+            .action-buttons {
+                display: flex;
+                gap: 20px;
+                justify-content: center;
+                margin-top: 30px;
+            }
+
+                .action-buttons .button {
+                    min-width: 200px;
+                }
+
+                    .action-buttons .button.update {
+                        background-color: #2196F3;
+                    }
+
+                        .action-buttons .button.update:hover {
+                            background-color: #1e88e5;
+                        }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="logo">Vendor<span>Hub</span></div>
+        <ul class="navwords">
+            <li><a href="@Url.Action("Dashboard", "Vendor")">Dashboard</a></li>
+            <li><a href="@Url.Action("Profile", "User")">Profile</a></li>
+            <li><a href="@Url.Action("SignOut", "User")">Sign Out</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="success-message">
+                <h2>@TempData["SuccessMessage"]</h2>
+                <div class="action-buttons">
+                    <a href="@Url.Action("AddEvent", "Vendor")" class="button">Add Another Event</a>
+                    <a href="@Url.Action("Dashboard", "Vendor")" class="button update">Return to Dashboard</a>
+                </div>
+            </div>
+        }
+        else
+        {
+            <h1>Add New Event</h1>
+            <p style="text-align:center;">Create a new @ViewBag.EventType event.</p>
+
+            <div class="section">
+                <div class="form-row">
+                    @if (ViewBag.EventType == "sports")
+                    {
+                        <div class="event-form">
+                            <h3>Sports Event</h3>
+                            <div class="event-form-content">
+                                <form id="addSportsEventForm" asp-action="AddSportEvent" asp-controller="Vendor" method="post" enctype="multipart/form-data">
+                                    <input type="hidden" name="category" value="Sport" />
+                                    
+                                    <label for="sportsDate">Date:</label>
+                                    <input type="datetime-local" id="sportsDate" name="date" required>
+
+                                    <label for="sportsLocation">Location:</label>
+                                    <input type="text" id="sportsLocation" name="location" required>
+
+                                    <label for="sportsNumberOfSeats">Number of Seats:</label>
+                                    <input type="number" id="sportsNumberOfSeats" name="numberOfSeats" min="1" required>
+
+                                    <label for="team1">Team 1:</label>
+                                    <input type="text" id="team1" name="team1" required>
+
+                                    <label for="team2">Team 2:</label>
+                                    <input type="text" id="team2" name="team2" required>
+
+                                    <label for="team1Image">Team 1 Image:</label>
+                                    <input type="file" id="team1Image" name="team1Image" accept="image/*">
+
+                                    <label for="team2Image">Team 2 Image:</label>
+                                    <input type="file" id="team2Image" name="team2Image" accept="image/*">
+
+                                    <label for="tournament">Tournament:</label>
+                                    <input type="text" id="tournament" name="tournament" required>
+
+                                    <label for="sport">Sport:</label>
+                                    <input type="text" id="sport" name="sport" required>
+
+                                    <label for="tournamentStage">Tournament Stage:</label>
+                                    <input type="text" id="tournamentStage" name="tournamentStage" required>
+
+                                    <button type="submit" class="button">Add Sports Event</button>
+                                </form>
+                            </div>
+                        </div>
+                    }
+                    else if (ViewBag.EventType == "entertainment")
+                    {
+                        <div class="event-form">
+                            <h3>Entertainment Event</h3>
+                            <div class="event-form-content">
+                                <form id="addEntertainmentEventForm" asp-action="Add_Event" asp-controller="Vendor" method="post" enctype="multipart/form-data">
+                                    <input type="hidden" name="category" value="Entertainment" />
+
+                                    <label for="entertainmentDate">Date:</label>
+                                    <input type="datetime-local" id="entertainmentDate" name="date" required>
+
+                                    <label for="entertainmentLocation">Location:</label>
+                                    <input type="text" id="entertainmentLocation" name="location" required>
+
+                                    <label for="entertainmentNumberOfSeats">Number of Seats:</label>
+                                    <input type="number" id="entertainmentNumberOfSeats" name="numberOfSeats" min="1" required>
+
+                                    <label for="performerName">Performer Name:</label>
+                                    <input type="text" id="performerName" name="performerName" required>
+
+                                    <label for="eventImage">Event Image:</label>
+                                    <input type="file" id="eventImage" name="eventImage" accept="image/*">
+
+                                    <label for="genre">Genre:</label>
+                                    <input type="text" id="genre" name="genre" required>
+
+                                    <label for="showCategory">Show Category:</label>
+                                    <input type="text" id="showCategory" name="showCategory" required>
+
+                                    <label for="ageRestriction">Age Restriction:</label>
+                                    <input type="number" id="ageRestriction" name="ageRestriction" min="0" required>
+
+                                    <label for="duration">Duration (hours):</label>
+                                    <input type="number" id="duration" name="duration" min="0.5" step="0.5" required>
+
+                                    <button type="submit" class="button">Add Entertainment Event</button>
+                                </form>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="event-form">
+                            <h3>Please select an event type</h3>
+                            <p>Go back to the dashboard and select either Sports or Entertainment event type.</p>
+                            <a href="@Url.Action("Dashboard", "Vendor")" class="button">Back to Dashboard</a>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+
+        <div class="brand">
+            <strong>VEN</strong><br>
+            <strong>management</strong>
+        </div>
+    </div>
+
+    <script>
+        // Add collapsible functionality
+        document.querySelectorAll('.event-form').forEach(form => {
+            const header = form.querySelector('h3');
+            header.addEventListener('click', (e) => {
+                if (e.target.tagName === 'BUTTON' || e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT' || e.target.tagName === 'TEXTAREA') {
+                    return;
+                }
+
+                document.querySelectorAll('.event-form').forEach(otherForm => {
+                    if (otherForm !== form) {
+                        otherForm.classList.add('collapsed');
+                    }
+                });
+
+                form.classList.toggle('collapsed');
+            });
+        });
+
+        function highlightHeader(formElement) {
+            const header = formElement.closest(".event-form").querySelector("h3");
+            header.classList.add("active-header");
+
+            setTimeout(() => {
+                header.classList.remove("active-header");
+            }, 1000);
+        }
+
+        document.querySelectorAll("button").forEach(btn => {
+            btn.addEventListener("click", () => {
+                highlightHeader(btn.closest("form"));
+            });
+        });
+    </script>
+</body>
+</html>

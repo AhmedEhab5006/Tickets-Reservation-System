@@ -1,0 +1,293 @@
+﻿@model WebApplication2.Models.RegisterVM
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register Page</title>
+    
+    <style>
+        nav {
+            width: 100vw;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 50px;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .logo span {
+            color: #ff6b6b;
+        }
+
+        .navwords {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+        .navwords a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .navwords a:hover {
+            color: #ff6b6b;
+        }
+
+        .navwords a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: #ff6b6b;
+            transition: width 0.3s ease;
+        }
+
+        .navwords a:hover::after {
+            width: 100%;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(to right, #1e1e2f, #2a2a3e);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .register-hero {
+            color: black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 60px 20px;
+            width: 100%;
+        }
+
+        .register-container {
+            display: flex;
+            flex-direction: row;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            overflow: hidden;
+            max-width: 1000px;
+            width: 100%;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .register-image {
+            flex: 1.5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .register-image img {
+            max-width: 100%;
+            max-height: 100%;
+            transform: scale(1.4);
+        }
+
+        .form-container {
+            flex: 1;
+            padding: 40px;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .form-container h2 {
+            color: #ff6b6b;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .register-title {
+            font-size: 28px;
+            font-weight: bold;
+            color: #ff6b6b;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        .form-group input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .form-group .role-options {
+            display: flex;
+            gap: 20px;
+        }
+
+        .form-group .role-options label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .form-group .role-options input[type="radio"] {
+            accent-color: #ff6b6b;
+        }
+
+        .form-group .role-options label:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        button[type="submit"] {
+            margin-top: 10px;
+            width: 100%;
+            padding: 12px;
+            background-color: #ff6b6b;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #e05454;
+        }
+
+        .signup-link {
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .signup-link a {
+            color: #ff6b6b;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+     {
+            .register-container {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="register-hero">
+        <div class="register-container">
+
+           
+            <div class="register-image">
+                <img src="/images/another  ticket.png" alt="Register Illustration" />
+            </div>
+
+            <div class="form-container">
+                <div asp-validation-summary="All" class="text-danger"></div>
+
+                <h2 class="register-title">Create an Account</h2>
+
+                <form asp-action="Register" asp-controller="User" method="post">
+                    @Html.AntiForgeryToken()
+
+                    <div class="form-group">
+                        <label asp-for="username">Username</label>
+                        <input asp-for="username" class="form-control" />
+                        <span asp-validation-for="username" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="email">Email</label>
+                        <input asp-for="email" class="form-control" type="email" />
+                        <span asp-validation-for="email" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="password">Password</label>
+                        <input asp-for="password" class="form-control" type="password" />
+                        <span asp-validation-for="password" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="phoneNumber">Phone Number</label>
+                        <input asp-for="phoneNumber" class="form-control" />
+                        <span asp-validation-for="phoneNumber" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="role">Role</label>
+                        <div class="role-options">
+                            <label>
+                                <input type="radio" asp-for="role" value="Client" /> Client
+                            </label>
+                            <label>
+                                <input type="radio" asp-for="role" value="Vendor" /> Vendor
+                            </label>
+                        </div>
+                        <span asp-validation-for="role" class="text-danger"></span>
+                    </div>
+
+                    <button type="submit">Register</button>
+
+                    <div class="signup-link">
+                        Already have an account? <a href="@Url.Action("sign_in", "User")">Sign In</a>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+  
+    @section Scripts 
+    {
+        <partial name="_ValidationScriptsPartial" />
+    }
+</body>
+
+</html>

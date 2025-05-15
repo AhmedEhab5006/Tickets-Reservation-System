@@ -1,0 +1,229 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Panel</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 50px 20px;
+            background: linear-gradient(to right, #990000, #ff1a1a);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: auto;
+            background-color: white;
+            padding: 40px 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            font-weight: bold;
+            margin-bottom: 50px;
+            font-size: 36px;
+        }
+
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: center;
+        }
+
+        .admin-box {
+            flex: 1 1 300px;
+            min-height: 480px;
+            background: linear-gradient(to bottom right, #fdfdfd, #eaeaea);
+            padding: 40px 30px;
+            border-radius: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            transition: all 0.4s ease;
+            position: relative;
+        }
+
+            .admin-box:hover {
+                transform: translateY(-8px);
+                box-shadow: 0 6px 25px rgba(255, 0, 0, 0.4);
+            }
+
+            .admin-box h3 {
+                margin-top: 0;
+                color: #222;
+                font-size: 24px;
+                font-weight: bold;
+                border-left: 5px solid #ff3333;
+                padding-left: 10px;
+                margin-bottom: 30px;
+            }
+
+            .admin-box select {
+                width: 100%;
+                padding: 14px;
+                margin-bottom: 25px;
+                border: 2px solid #cc0000;
+                border-radius: 8px;
+                background-color: #fff;
+                font-weight: bold;
+                color: #111;
+                font-size: 17px;
+                transition: all 0.3s ease;
+                appearance: none;
+            }
+
+                .admin-box select:focus {
+                    border-color: #ff1a1a;
+                    outline: none;
+                    box-shadow: 0 0 10px #ff1a1a;
+                }
+
+            .admin-box input[type="text"] {
+                width: 100%;
+                padding: 14px;
+                margin-bottom: 25px;
+                border: 2px solid #cc0000;
+                border-radius: 8px;
+                background-color: #fff;
+                font-weight: bold;
+                color: #111;
+                font-size: 17px;
+                transition: all 0.3s ease;
+            }
+
+                .admin-box input[type="text"]:focus {
+                    border-color: #ff1a1a;
+                    outline: none;
+                    box-shadow: 0 0 10px #ff1a1a;
+                }
+
+        .button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 16px 20px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 8px;
+            width: 100%;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+        }
+
+            .button:hover {
+                background-color: #45a049;
+                box-shadow: 0 0 15px #45a049;
+            }
+
+            .button.delete {
+                background-color: #f44336;
+            }
+
+                .button.delete:hover {
+                    background-color: #e53935;
+                    box-shadow: 0 0 15px #e53935;
+                }
+
+        .admin-box.glow-effect {
+            animation: glow 0.7s ease-out;
+        }
+
+   
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Admin Dashboard</h1>
+        <div class="form-row">
+
+            <!-- Accept Users -->
+            <div class="admin-box" id="box-accept-user">
+                <h3>Accept Users</h3>
+                <form id="acceptUserForm">
+                    <input type="text" name="userSearch" placeholder="Search or type user name" />
+                    <select name="userSelect" required>
+                        <option value="">-- Select User --</option>
+                        <option value="user1">User: Ahmed Ali</option>
+                        <option value="user2">User: Fatma Zaki</option>
+                    </select>
+                    <button type="submit" class="button">Accept User</button>
+                </form>
+            </div>
+
+            <!-- Accept Events -->
+            <div class="admin-box" id="box-accept-event">
+                <h3>Accept Events</h3>
+                <form id="acceptEventForm">
+                    <input type="text" name="eventSearch" placeholder="Search or type event name" />
+                    <select name="eventSelect" required>
+                        <option value="">-- Select Event --</option>
+                        <option value="event1">Event: Music Fest</option>
+                        <option value="event2">Event: Tech Conference</option>
+                    </select>
+                    <button type="submit" class="button">Accept Event</button>
+                </form>
+            </div>
+
+            <!-- Delete Users -->
+            <div class="admin-box" id="box-delete-user">
+                <h3>Delete Users</h3>
+                <form id="deleteUserForm">
+                    <input type="text" name="userDeleteSearch" placeholder="Search or type user name" />
+                    <select name="userDelete" required>
+                        <option value="">-- Select User --</option>
+                        <option value="user3">User: Omar Sami</option>
+                        <option value="user4">User: Huda Nabil</option>
+                    </select>
+                    <button type="submit" class="button delete">Delete User</button>
+                </form>
+            </div>
+
+            <!-- Delete Events -->
+            <div class="admin-box" id="box-delete-event">
+                <h3>Delete Events</h3>
+                <form id="deleteEventForm">
+                    <input type="text" name="eventDeleteSearch" placeholder="Search or type event name" />
+                    <select name="eventDelete" required>
+                        <option value="">-- Select Event --</option>
+                        <option value="event3">Event: Summer Run</option>
+                        <option value="event4">Event: Startup Expo</option>
+                    </select>
+                    <button type="submit" class="button delete">Delete Event</button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        function highlightBox(formElement) {
+          const box = formElement.closest(".admin-box");
+          box.classList.add("glow-effect");
+
+          setTimeout(() => {
+            box.classList.remove("glow-effect");
+          }, 800);
+        }
+
+        document.querySelectorAll("form").forEach(form => {
+          form.addEventListener("submit", function(e) {
+            e.preventDefault();
+            highlightBox(form);
+            const action = form.querySelector("button").innerText;
+            alert(${action} done successfully!);
+          });
+        });
+    </script>
+</body>
+</html>
