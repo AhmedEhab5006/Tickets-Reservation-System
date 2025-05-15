@@ -91,7 +91,7 @@ namespace TicketsReservationSystem.BLL.Managers
         {
             var foundModel = _clientRepository.GetSportEvent();
 
-            if (foundModel != null)
+            if (foundModel != null && foundModel.Any(a => a.category != "Entertainment"))
             {
                 return foundModel.Select(a => new FullDetailSportEventReadDto
                 {
@@ -121,9 +121,9 @@ namespace TicketsReservationSystem.BLL.Managers
         // Get entertainment events with full details
         public IEnumerable<FullDetailEntertainmentEventReadDto> GetEntertainmentEvents()
         {
-            var foundModel = _clientRepository.GetEntertainmentEvents();
+            var foundModel = _clientRepository.GetEntertainmentEvents().ToList();
 
-            if (foundModel != null)
+            if (foundModel != null && foundModel.Any(a=>a.category != "Sport"))
             {
                 return foundModel.Select(a => new FullDetailEntertainmentEventReadDto
                 {

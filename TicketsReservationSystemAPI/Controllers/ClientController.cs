@@ -65,7 +65,7 @@ namespace TicketsReservationSystem.API.Controllers
                 return Ok(found);
             }
 
-            return Ok("No Events to show");
+            return NotFound("No Events to show");
         }
 
         [HttpGet("EntertainmentEvents")]
@@ -79,7 +79,7 @@ namespace TicketsReservationSystem.API.Controllers
                 return Ok(found);
             }
 
-            return Ok("No Events to show");
+            return NotFound("No Events to show");
         }
 
         [HttpPut("Edit-address")]
