@@ -257,7 +257,8 @@ namespace TicketsReservationSystem.BLL.Managers
                     year = a.date.Year.ToString(),
                     location = a.location,
                     eventImage = a.entertainment.eventImage,
-                    Id = a.id
+                    Id = a.id,
+                    date = a.date
 
                 }).ToList();
                 return found;
@@ -288,7 +289,8 @@ namespace TicketsReservationSystem.BLL.Managers
                     location = a.location,
                     team1Image = a.sportEvent.team1Image,
                     team2Image = a.sportEvent.team2Image,
-                    Id = a.id
+                    Id = a.id,
+                    date = a.date
 
                 }).ToList();
                 return found;

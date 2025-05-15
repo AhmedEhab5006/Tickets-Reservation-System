@@ -20,6 +20,6 @@ namespace TicketsReservationSystem.BLL.Dto_s
         public string location { get; set; }
         public int aviilableSeats { get; set; }
         public string eventImage { get; set; }
-
+        public DateTime date { get; set; }
     }
 }
