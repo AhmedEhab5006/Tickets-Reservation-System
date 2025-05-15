@@ -1,0 +1,19 @@
+@model List<WebApplication2.ViewModels.FullDetailSportEventReadDto>
+<h2>Pending Sport Events</h2>
+@if (ViewBag.Error != null) {
+    <div class="alert alert-danger">@ViewBag.Error</div>
+}
+<table class="table table-dark">
+    <tr><th>Team 1</th><th>Team 2</th><th>Tournament</th><th>Sport</th><th>Date</th><th>Location</th><th>Seats</th></tr>
+    @foreach (var e in Model) {
+        <tr>
+            <td>@e.team1</td>
+            <td>@e.team2</td>
+            <td>@e.tournament</td>
+            <td>@e.sport</td>
+            <td>@e.day/@e.mounth/@e.year</td>
+            <td>@e.location</td>
+            <td>@e.aviilableSeats</td>
+        </tr>
+    }
+</table> 

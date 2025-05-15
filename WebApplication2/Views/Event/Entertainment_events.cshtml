@@ -1,0 +1,227 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Entertainment Events</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(to right, #1e1e2f, #2a2a3e);
+            color: white;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav {
+            width: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 50px;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+            .logo span {
+                color: #ff6b6b;
+            }
+
+        .navwords {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+            .navwords a {
+                color: white;
+                text-decoration: none;
+                font-weight: 500;
+                transition: color 0.3s ease;
+                position: relative;
+            }
+
+                .navwords a:hover {
+                    color: #ff6b6b;
+                }
+
+                .navwords a::after {
+                    content: '';
+                    position: absolute;
+                    width: 0;
+                    height: 2px;
+                    bottom: -5px;
+                    left: 0;
+                    background-color: #ff6b6b;
+                    transition: width 0.3s ease;
+                }
+
+                .navwords a:hover::after {
+                    width: 100%;
+                }
+
+        .main-content {
+            padding: 100px 30px 40px;
+            max-width: 1000px;
+            margin: auto;
+        }
+
+        .event-container {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .event-card {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(12px);
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+
+            .event-card:hover {
+                transform: translateY(-5px);
+            }
+
+        .details {
+            text-align: center;
+        }
+
+            .details p {
+                margin: 8px 0;
+                font-size: 17px;
+            }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            padding: 30px;
+            width: 500px;
+            max-width: 90%;
+            color: white;
+            text-align: center;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 24px;
+            color: white;
+            cursor: pointer;
+        }
+
+        .modal-content button {
+            background-color: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 8px;
+            margin-top: 20px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+            .modal-content button:hover {
+                background-color: #e55b5b;
+            }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">Event<span>Zone</span></div>
+        <div class="navwords">
+            <a href="#">Home</a>
+            <a href="#">Entertainment</a>
+            <a href="#">Sports</a>
+        </div>
+    </nav>
+
+    <div class="main-content">
+        <div class="event-container">
+
+            <!-- Example of an Event Card -->
+            <div class="event-card" onclick="openModal('John Doe', 'Concert', 18, 2.5, 'Pop', '15', 'August', '2025', 'Cairo Stadium', 150)">
+                <div class="details">
+                    <p><strong>Performer:</strong> John Doe</p>
+                    <p><strong>Category:</strong> Concert</p>
+                    <p><strong>Age Restriction:</strong> 18+</p>
+                    <p><strong>Genre:</strong> Pop</p>
+                    <p><strong>Date:</strong> 15 August 2025</p>
+                    <p><strong>Location:</strong> Cairo Stadium</p>
+                    <p><strong>Available Seats:</strong> 150</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="modal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeModal()">×</span>
+            <div class="details">
+                <p><strong>Performer:</strong> <span id="modalPerformer"></span></p>
+                <p><strong>Category:</strong> <span id="modalCategory"></span></p>
+                <p><strong>Age Restriction:</strong> <span id="modalAge"></span>+</p>
+                <p><strong>Duration:</strong> <span id="modalDuration"></span> hrs</p>
+                <p><strong>Genre:</strong> <span id="modalGenre"></span></p>
+                <p><strong>Date:</strong> <span id="modalDate"></span></p>
+                <p><strong>Location:</strong> <span id="modalLocation"></span></p>
+                <p><strong>Available Seats:</strong> <span id="modalSeats"></span></p>
+                <button>Book Ticket</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openModal(performer, category, age, duration, genre, day, month, year, location, seats) {
+            document.getElementById('modalPerformer').innerText = performer;
+            document.getElementById('modalCategory').innerText = category;
+            document.getElementById('modalAge').innerText = age;
+            document.getElementById('modalDuration').innerText = duration;
+            document.getElementById('modalGenre').innerText = genre;
+            document.getElementById('modalDate').innerText = `${day} ${month} ${year}`;
+            document.getElementById('modalLocation').innerText = location;
+            document.getElementById('modalSeats').innerText = seats;
+            document.getElementById('modal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+        }
+    </script>
+
+</body>
+</html>

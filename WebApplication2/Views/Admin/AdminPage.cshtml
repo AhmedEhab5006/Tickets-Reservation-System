@@ -1,0 +1,96 @@
+@{
+    ViewData["Title"] = "Admin API Actions";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin API Actions</title>
+    <style>
+        body {
+            background: #181818;
+            color: #fff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 60px auto;
+            background: #23232b;
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+            padding: 40px 30px;
+        }
+        h1 {
+            text-align: center;
+            color: #ff6b6b;
+            margin-bottom: 32px;
+        }
+        .admin-btn {
+            display: block;
+            width: 100%;
+            margin: 16px 0;
+            padding: 16px;
+            font-size: 1.1em;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            background: #ff6b6b;
+            color: #fff;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .admin-btn:hover {
+            background: #e05454;
+        }
+        .admin-btn.secondary {
+            background: #2196F3;
+        }
+        .admin-btn.secondary:hover {
+            background: #1769aa;
+        }
+        .admin-btn.warning {
+            background: #ffb300;
+            color: #23232b;
+        }
+        .admin-btn.warning:hover {
+            background: #ff8f00;
+        }
+        .admin-btn.danger {
+            background: #dc3545;
+        }
+        .admin-btn.danger:hover {
+            background: #a71d2a;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Admin API Actions</h1>
+        <form method="get" action="/Admin/VendorRequests">
+            <button class="admin-btn" type="submit">View Vendor Requests</button>
+        </form>
+        <form method="get" action="/Admin/PendingSport">
+            <button class="admin-btn secondary" type="submit">View Pending Sport Events</button>
+        </form>
+        <form method="get" action="/Admin/PendingEntertainment">
+            <button class="admin-btn secondary" type="submit">View Pending Entertainment Events</button>
+        </form>
+        <form method="get" action="/Admin/AcceptVendor">
+            <button class="admin-btn warning" type="submit">Accept Vendor (by ID)</button>
+        </form>
+        <form method="get" action="/Admin/RejectVendor">
+            <button class="admin-btn danger" type="submit">Reject Vendor (by ID)</button>
+        </form>
+        <form method="get" action="/Admin/AcceptEvent">
+            <button class="admin-btn warning" type="submit">Accept Event (by ID)</button>
+        </form>
+        <form method="get" action="/Admin/RejectEvent">
+            <button class="admin-btn danger" type="submit">Reject Event (by ID)</button>
+        </form>
+    </div>
+</body>
+</html> 

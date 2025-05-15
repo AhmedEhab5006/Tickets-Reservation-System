@@ -1,0 +1,12 @@
+@{
+    ViewData["Title"] = "Reject Vendor";
+}
+<h2>Reject Vendor</h2>
+<form method="post">
+    <label for="vendorId">Vendor ID:</label>
+    <input type="text" name="vendorId" id="vendorId" required />
+    <button type="submit">Reject Vendor</button>
+</form>
+@if (ViewBag.Result != null) {
+    <div class="alert alert-info">@ViewBag.Result</div>
+} 

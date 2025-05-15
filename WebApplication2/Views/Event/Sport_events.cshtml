@@ -1,0 +1,353 @@
+﻿@model List<WebApplication2.ViewModels.SportEventVM>
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sports Events</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(to right, #1e1e2f, #2a2a3e);
+            color: white;
+            margin: 0;
+            padding: 0;
+        }
+
+
+        .main-content {
+            padding: 40px 30px;
+            margin-top: 100px;
+        }
+
+        .event-container {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            max-width: 1000px;
+            margin: auto;
+        }
+
+        .event-card {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(12px);
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+
+            .event-card:hover {
+                transform: translateY(-5px);
+            }
+
+        .teams {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            width: 100%;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .team {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+            .team img {
+                width: 80px;
+                height: 80px;
+                border-radius: 50%;
+                object-fit: cover;
+                margin-bottom: 10px;
+                border: 3px solid #ff6b6b;
+            }
+
+        .team-name {
+            font-weight: bold;
+            font-size: 1.1em;
+            text-align: center;
+        }
+
+        .details {
+            text-align: center;
+        }
+
+            .details p {
+                margin: 6px 0;
+                font-size: 16px;
+            }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            padding: 30px;
+            width: 500px;
+            max-width: 90%;
+            color: white;
+            text-align: center;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 20px;
+            color: white;
+            cursor: pointer;
+        }
+
+        .modal-teams {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+
+            .modal-teams .team img {
+                width: 70px;
+                height: 70px;
+            }
+
+        .modal-content button {
+            background-color: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 8px;
+            margin-top: 20px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+            .modal-content button:hover {
+                background-color: #e55b5b;
+            }
+
+        nav {
+            width: 100vw;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 50px;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+            .logo span {
+                color: #ff6b6b;
+            }
+
+        .navwords {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+            .navwords a {
+                color: white;
+                text-decoration: none;
+                font-weight: 500;
+                transition: color 0.3s ease;
+                position: relative;
+            }
+
+                .navwords a:hover {
+                    color: #ff6b6b;
+                }
+
+                .navwords a::after {
+                    content: '';
+                    position: absolute;
+                    width: 0;
+                    height: 2px;
+                    bottom: -5px;
+                    left: 0;
+                    background-color: #ff6b6b;
+                    transition: width 0.3s ease;
+                }
+
+                .navwords a:hover::after {
+                    width: 100%;
+                }
+
+        .main-content {
+            padding: 40px 30px;
+            margin-top: 100px;
+        }
+
+        .event-container {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            max-width: 1000px;
+            margin: auto;
+        }
+
+        .event-card {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(12px);
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+
+        .event-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .details p {
+            margin: 6px 0;
+            font-size: 16px;
+            text-align: center;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            padding: 30px;
+            width: 500px;
+            max-width: 90%;
+            color: white;
+            text-align: center;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 20px;
+            color: white;
+            cursor: pointer;
+        }
+
+        .modal-content button {
+            background-color: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 8px;
+            margin-top: 20px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .modal-content button:hover {
+            background-color: #e55b5b;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="main-content">
+        <div class="event-container">
+            @foreach (var eventItem in Model)
+            {
+                <div class="event-card" onclick="openModal('@eventItem.team1', '@eventItem.team2', '@eventItem.sport', '@eventItem.tournament',
+                '@eventItem.tournamentStage')">
+                    <div class="details">
+                        <p><strong>@eventItem.team1</strong> VS <strong>@eventItem.team2</strong></p>
+                        <p><strong>Sport:</strong> @eventItem.sport</p>
+                        <p><strong>Tournament:</strong> @eventItem.tournament</p>
+                        <p><strong>Stage:</strong> @eventItem.tournamentStage</p>
+                     
+                        <p><strong>Location:</strong> @eventItem.location</p>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="modal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeModal()">×</span>
+            <div class="details">
+                <p><strong>Teams:</strong> <span id="teams"></span></p>
+                <p><strong>Sport:</strong> <span id="sportType"></span></p>
+                <p><strong>Tournament:</strong> <span id="tournament"></span></p>
+                <p><strong>Stage:</strong> <span id="stage"></span></p>
+                <p><strong>Date:</strong> <span id="date"></span></p>
+                <p><strong>Location:</strong> <span id="location"></span></p>
+                <p><strong>Available Seats:</strong> <span id="seats"></span></p>
+                <button>Buy Ticket</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openModal(team1, team2, sport, tournament, stage, day, mounth, year, location, seats) {
+            document.getElementById('teams').innerText = `${team1} VS ${team2}`;
+            document.getElementById('sportType').innerText = sport;
+            document.getElementById('tournament').innerText = tournament;
+            document.getElementById('stage').innerText = stage;
+            document.getElementById('date').innerText = `${day}/${mounth}/${year}`;
+            document.getElementById('location').innerText = location;
+            document.getElementById('seats').innerText = seats;
+            document.getElementById('modal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+        }
+    </script>
+
+</body>
+</html>

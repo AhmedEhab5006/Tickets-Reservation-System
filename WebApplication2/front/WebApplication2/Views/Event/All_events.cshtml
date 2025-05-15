@@ -1,0 +1,267 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>All Events</title>
+    <style>
+        /* Navigation bar with glass effect */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 50px;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo {
+            color: white;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+            .logo span {
+                color: #ff6b6b;
+            }
+
+        .navwords {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+            .navwords a {
+                color: white;
+                text-decoration: none;
+                font-weight: 500;
+                transition: color 0.3s ease;
+                position: relative;
+            }
+
+                .navwords a:hover {
+                    color: #ff6b6b;
+                }
+
+                .navwords a::after {
+                    content: '';
+                    position: absolute;
+                    width: 0;
+                    height: 2px;
+                    bottom: -5px;
+                    left: 0;
+                    background-color: #ff6b6b;
+                    transition: width 0.3s ease;
+                }
+
+                .navwords a:hover::after {
+                    width: 100%;
+                }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(to right, #1e1e2f, #2a2a3e);
+            color: white;
+            padding: 20px;
+        }
+
+        h2 {
+            margin-top: 60px;
+            text-align: center;
+            color: #ff6b6b;
+        }
+
+        .section {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .event-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            width: 300px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            cursor: pointer;
+        }
+
+            .event-card img {
+                width: 100%;
+                height: 180px;
+                object-fit: cover;
+                border-radius: 10px;
+                margin-bottom: 15px;
+            }
+
+        .team-logos {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 15px;
+        }
+
+            .team-logos img {
+                width: 60px;
+                height: 60px;
+                border-radius: 50%;
+                border: 2px solid #ff6b6b;
+                object-fit: cover;
+            }
+
+        .team-names {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .detail-line {
+            margin: 5px 0;
+        }
+
+        /* Modal Styles */
+        #eventModal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal-backdrop {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            position: relative;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 20px;
+            max-width: 500px;
+            width: 90%;
+            color: white;
+            z-index: 1001;
+            text-align: center;
+            backdrop-filter: blur(12px);
+        }
+
+            .modal-content img {
+                width: 100%;
+                border-radius: 10px;
+                margin-bottom: 15px;
+            }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 24px;
+            cursor: pointer;
+            color: #ff6b6b;
+            z-index: 1002;
+        }
+
+        .buy-btn {
+            margin-top: 20px;
+            padding: 10px 25px;
+            border: none;
+            border-radius: 8px;
+            background-color: #ff6b6b;
+            color: white;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Sports Events</h2>
+    <div class="section" id="sports-section">
+        <div class="event-card">
+            <div class="team-logos">
+                <img src="/team1-logo.jpg" alt="Team 1">
+                <img src="/team2-logo.jpg" alt="Team 2">
+            </div>
+            <div class="team-names">Team A vs Team B</div>
+            <div class="detail-line"><strong>Sport:</strong> Football</div>
+            <div class="detail-line"><strong>Tournament:</strong> Premier League</div>
+            <div class="detail-line"><strong>Stage:</strong> Final</div>
+        </div>
+    </div>
+
+    <h2>Entertainment Events</h2>
+    <div class="section" id="entertainment-section">
+        <div class="event-card">
+            <img src="/concert.jpg" alt="Event Image">
+            <div class="detail-line"><strong>Event:</strong> Music Concert</div>
+            <div class="detail-line"><strong>Location:</strong> Cairo Stadium</div>
+            <div class="detail-line"><strong>Date:</strong> 2025-06-10</div>
+            <div class="detail-line"><strong>Price:</strong> 250 EGP</div>
+        </div>
+    </div>
+
+    <!-- Modal Box -->
+    <div id="eventModal">
+        <div class="modal-backdrop" onclick="closeModal()"></div>
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">×</span>
+            <div id="modal-details"></div>
+            <button class="buy-btn">Buy Ticket</button>
+        </div>
+    </div>
+
+    <script>
+        function openModal(contentHTML) {
+            document.getElementById('modal-details').innerHTML = contentHTML;
+            document.getElementById('eventModal').style.display = 'flex';
+            document.body.style.overflow = 'hidden'; // Lock scroll
+        }
+
+        function closeModal() {
+            document.getElementById('eventModal').style.display = 'none';
+            document.body.style.overflow = ''; // Restore scroll
+        }
+
+        document.querySelectorAll('#sports-section .event-card').forEach(card => {
+            card.onclick = () => {
+                openModal(`
+                  <h2>Team A vs Team B</h2>
+                  <img src="/team1-logo.jpg" alt="Match">
+                  <p><strong>Sport:</strong> Football</p>
+                  <p><strong>Tournament:</strong> Premier League</p>
+                  <p><strong>Stage:</strong> Final</p>
+                `);
+            };
+        });
+
+        document.querySelectorAll('#entertainment-section .event-card').forEach(card => {
+            card.onclick = () => {
+                openModal(`
+                  <h2>Music Concert</h2>
+                  <img src="/concert.jpg" alt="Concert">
+                  <p><strong>Location:</strong> Cairo Stadium</p>
+                  <p><strong>Date:</strong> 2025-06-10</p>
+                  <p><strong>Price:</strong> 250 EGP</p>
+                `);
+            };
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,32 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - TicketNow</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/home.css" asp-append-version="true" />
+</head>
+<body style="margin: 0; padding: 0; height: 100%;">
+    <div class="hero">
+        <nav>
+            <h2 class="logo">Ticket<span>Now</span></h2>
+            <ul class="navwords">
+               
+                <li><a asp-controller="Home" asp-action="ReserveTicket">Events</a></li>
+                <li><a asp-controller="User" asp-action="Register">Register</a></li>
+                <li><a asp-controller="User" asp-action="sign_in">Login</a></li>
+            </ul>
+        </nav>
+
+        <main role="main" style="padding: 0; margin: 0; height: 100%;">
+            @RenderBody()
+        </main>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
