@@ -3,24 +3,36 @@
   "WorkspaceRootPath": "D:\\new front\\Tickets-Reservation-System\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{5952E919-A007-4BC5-B571-AC1C12FCA856}|new Front\\new Front.csproj|d:\\new front\\tickets-reservation-system\\new front\\controllers\\admincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5952E919-A007-4BC5-B571-AC1C12FCA856}|new Front\\new Front.csproj|solutionrelative:new front\\controllers\\admincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{5952E919-A007-4BC5-B571-AC1C12FCA856}|new Front\\new Front.csproj|d:\\new front\\tickets-reservation-system\\new front\\controllers\\vendorcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{5952E919-A007-4BC5-B571-AC1C12FCA856}|new Front\\new Front.csproj|solutionrelative:new front\\controllers\\vendorcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5952E919-A007-4BC5-B571-AC1C12FCA856}|new Front\\new Front.csproj|d:\\new front\\tickets-reservation-system\\new front\\views\\admin\\adminpage.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{5952E919-A007-4BC5-B571-AC1C12FCA856}|new Front\\new Front.csproj|solutionrelative:new front\\views\\admin\\adminpage.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5952E919-A007-4BC5-B571-AC1C12FCA856}|new Front\\new Front.csproj|d:\\new front\\tickets-reservation-system\\new front\\views\\admin\\pendingsport.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{5952E919-A007-4BC5-B571-AC1C12FCA856}|new Front\\new Front.csproj|solutionrelative:new front\\views\\admin\\pendingsport.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5952E919-A007-4BC5-B571-AC1C12FCA856}|new Front\\new Front.csproj|d:\\new front\\tickets-reservation-system\\new front\\views\\admin\\pendingentertainment.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{5952E919-A007-4BC5-B571-AC1C12FCA856}|new Front\\new Front.csproj|solutionrelative:new front\\views\\admin\\pendingentertainment.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5952E919-A007-4BC5-B571-AC1C12FCA856}|new Front\\new Front.csproj|d:\\new front\\tickets-reservation-system\\new front\\controllers\\eventcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5952E919-A007-4BC5-B571-AC1C12FCA856}|new Front\\new Front.csproj|solutionrelative:new front\\controllers\\eventcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{5952E919-A007-4BC5-B571-AC1C12FCA856}|new Front\\new Front.csproj|d:\\new front\\tickets-reservation-system\\new front\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{5952E919-A007-4BC5-B571-AC1C12FCA856}|new Front\\new Front.csproj|solutionrelative:new front\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{5952E919-A007-4BC5-B571-AC1C12FCA856}|new Front\\new Front.csproj|d:\\new front\\tickets-reservation-system\\new front\\controllers\\admincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{5952E919-A007-4BC5-B571-AC1C12FCA856}|new Front\\new Front.csproj|solutionrelative:new front\\controllers\\admincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{5952E919-A007-4BC5-B571-AC1C12FCA856}|new Front\\new Front.csproj|d:\\new front\\tickets-reservation-system\\new front\\views\\admin\\vendorrequests.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{5952E919-A007-4BC5-B571-AC1C12FCA856}|new Front\\new Front.csproj|solutionrelative:new front\\views\\admin\\vendorrequests.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{5952E919-A007-4BC5-B571-AC1C12FCA856}|new Front\\new Front.csproj|d:\\new front\\tickets-reservation-system\\new front\\controllers\\eventcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{5952E919-A007-4BC5-B571-AC1C12FCA856}|new Front\\new Front.csproj|solutionrelative:new front\\controllers\\eventcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{5952E919-A007-4BC5-B571-AC1C12FCA856}|new Front\\new Front.csproj|d:\\new front\\tickets-reservation-system\\new front\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -66,37 +78,50 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 5,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "_Layout.cshtml",
-              "DocumentMoniker": "D:\\new front\\Tickets-Reservation-System\\new Front\\Views\\Shared\\_Layout.cshtml",
-              "RelativeDocumentMoniker": "new Front\\Views\\Shared\\_Layout.cshtml",
-              "ToolTip": "D:\\new front\\Tickets-Reservation-System\\new Front\\Views\\Shared\\_Layout.cshtml",
-              "RelativeToolTip": "new Front\\Views\\Shared\\_Layout.cshtml",
-              "ViewState": "AgIAAAYAAAAAAAAAAAAiwCIAAAAAAAAAAAAAAA==",
+              "DocumentIndex": 2,
+              "Title": "AdminPage.cshtml",
+              "DocumentMoniker": "D:\\new front\\Tickets-Reservation-System\\new Front\\Views\\Admin\\AdminPage.cshtml",
+              "RelativeDocumentMoniker": "new Front\\Views\\Admin\\AdminPage.cshtml",
+              "ToolTip": "D:\\new front\\Tickets-Reservation-System\\new Front\\Views\\Admin\\AdminPage.cshtml",
+              "RelativeToolTip": "new Front\\Views\\Admin\\AdminPage.cshtml",
+              "ViewState": "AgIAAFsAAAAAAAAAAAAswGgAAAAHAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-05-15T16:30:52.209Z",
+              "WhenOpened": "2025-05-15T16:58:47.28Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 3,
-              "Title": "VendorRequests.cshtml",
-              "DocumentMoniker": "D:\\new front\\Tickets-Reservation-System\\new Front\\Views\\Admin\\VendorRequests.cshtml",
-              "RelativeDocumentMoniker": "new Front\\Views\\Admin\\VendorRequests.cshtml",
-              "ToolTip": "D:\\new front\\Tickets-Reservation-System\\new Front\\Views\\Admin\\VendorRequests.cshtml",
-              "RelativeToolTip": "new Front\\Views\\Admin\\VendorRequests.cshtml",
-              "ViewState": "AgIAAGYAAAAAAAAAAAAiwIIAAAACAAAAAAAAAA==",
+              "Title": "PendingSport.cshtml",
+              "DocumentMoniker": "D:\\new front\\Tickets-Reservation-System\\new Front\\Views\\Admin\\PendingSport.cshtml",
+              "RelativeDocumentMoniker": "new Front\\Views\\Admin\\PendingSport.cshtml",
+              "ToolTip": "D:\\new front\\Tickets-Reservation-System\\new Front\\Views\\Admin\\PendingSport.cshtml",
+              "RelativeToolTip": "new Front\\Views\\Admin\\PendingSport.cshtml",
+              "ViewState": "AgIAADIAAAAAAAAAAAAswD8AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-05-15T16:20:40.104Z",
+              "WhenOpened": "2025-05-15T16:42:52.685Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 4,
+              "Title": "PendingEntertainment.cshtml",
+              "DocumentMoniker": "D:\\new front\\Tickets-Reservation-System\\new Front\\Views\\Admin\\PendingEntertainment.cshtml",
+              "RelativeDocumentMoniker": "new Front\\Views\\Admin\\PendingEntertainment.cshtml",
+              "ToolTip": "D:\\new front\\Tickets-Reservation-System\\new Front\\Views\\Admin\\PendingEntertainment.cshtml",
+              "RelativeToolTip": "new Front\\Views\\Admin\\PendingEntertainment.cshtml",
+              "ViewState": "AgIAAC4AAAAAAAAAAAAswDsAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-05-15T16:42:51.888Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
               "Title": "EntertainmentVM.cs",
               "DocumentMoniker": "D:\\new front\\Tickets-Reservation-System\\new Front\\ViewModels\\EntertainmentVM.cs",
               "RelativeDocumentMoniker": "new Front\\ViewModels\\EntertainmentVM.cs",
@@ -108,7 +133,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "VendorController.cs",
               "DocumentMoniker": "D:\\new front\\Tickets-Reservation-System\\new Front\\Controllers\\VendorController.cs",
               "RelativeDocumentMoniker": "new Front\\Controllers\\VendorController.cs",
@@ -121,7 +146,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 0,
+              "Title": "AdminController.cs",
+              "DocumentMoniker": "D:\\new front\\Tickets-Reservation-System\\new Front\\Controllers\\AdminController.cs",
+              "RelativeDocumentMoniker": "new Front\\Controllers\\AdminController.cs",
+              "ToolTip": "D:\\new front\\Tickets-Reservation-System\\new Front\\Controllers\\AdminController.cs",
+              "RelativeToolTip": "new Front\\Controllers\\AdminController.cs",
+              "ViewState": "AgIAAE0BAAAAAAAAAAAqwGMBAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-11T10:48:32.715Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
               "Title": "EventController.cs",
               "DocumentMoniker": "D:\\new front\\Tickets-Reservation-System\\new Front\\Controllers\\EventController.cs",
               "RelativeDocumentMoniker": "new Front\\Controllers\\EventController.cs",
@@ -134,7 +172,31 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 7,
+              "Title": "VendorRequests.cshtml",
+              "DocumentMoniker": "D:\\new front\\Tickets-Reservation-System\\new Front\\Views\\Admin\\VendorRequests.cshtml",
+              "RelativeDocumentMoniker": "new Front\\Views\\Admin\\VendorRequests.cshtml",
+              "ToolTip": "D:\\new front\\Tickets-Reservation-System\\new Front\\Views\\Admin\\VendorRequests.cshtml",
+              "RelativeToolTip": "new Front\\Views\\Admin\\VendorRequests.cshtml",
+              "ViewState": "AgIAAGYAAAAAAAAAAAAiwIIAAAACAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-05-15T16:20:40.104Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "_Layout.cshtml",
+              "DocumentMoniker": "D:\\new front\\Tickets-Reservation-System\\new Front\\Views\\Shared\\_Layout.cshtml",
+              "RelativeDocumentMoniker": "new Front\\Views\\Shared\\_Layout.cshtml",
+              "ToolTip": "D:\\new front\\Tickets-Reservation-System\\new Front\\Views\\Shared\\_Layout.cshtml",
+              "RelativeToolTip": "new Front\\Views\\Shared\\_Layout.cshtml",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAiwCIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-05-15T16:30:52.209Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
               "Title": "UserController.cs",
               "DocumentMoniker": "D:\\new front\\Tickets-Reservation-System\\new Front\\Controllers\\UserController.cs",
               "RelativeDocumentMoniker": "new Front\\Controllers\\UserController.cs",
@@ -142,25 +204,11 @@
               "RelativeToolTip": "new Front\\Controllers\\UserController.cs",
               "ViewState": "AgIAAEgAAAAAAAAAAAAcwH8AAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-11T10:43:55.545Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-11T10:43:55.545Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "AdminController.cs",
-              "DocumentMoniker": "D:\\new front\\Tickets-Reservation-System\\new Front\\Controllers\\AdminController.cs",
-              "RelativeDocumentMoniker": "new Front\\Controllers\\AdminController.cs",
-              "ToolTip": "D:\\new front\\Tickets-Reservation-System\\new Front\\Controllers\\AdminController.cs",
-              "RelativeToolTip": "new Front\\Controllers\\AdminController.cs",
-              "ViewState": "AgIAANkAAAAAAAAAAAAqwOUAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-11T10:48:32.715Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 13,
               "Title": "ErrorViewModel.cs",
               "DocumentMoniker": "D:\\new front\\Tickets-Reservation-System\\new Front\\ViewModels\\ErrorViewModel.cs",
               "RelativeDocumentMoniker": "new Front\\ViewModels\\ErrorViewModel.cs",
@@ -172,7 +220,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 9,
               "Title": "Program.cs",
               "DocumentMoniker": "D:\\new front\\Tickets-Reservation-System\\new Front\\Program.cs",
               "RelativeDocumentMoniker": "new Front\\Program.cs",
@@ -184,7 +232,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 12,
               "Title": "EventVM.cs",
               "DocumentMoniker": "D:\\new front\\Tickets-Reservation-System\\new Front\\ViewModels\\EventVM.cs",
               "RelativeDocumentMoniker": "new Front\\ViewModels\\EventVM.cs",
@@ -196,7 +244,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 10,
               "Title": "RegisterVM.cs",
               "DocumentMoniker": "D:\\new front\\Tickets-Reservation-System\\new Front\\ViewModels\\RegisterVM.cs",
               "RelativeDocumentMoniker": "new Front\\ViewModels\\RegisterVM.cs",
@@ -208,7 +256,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 11,
               "Title": "VendorDashboardVM.cs",
               "DocumentMoniker": "D:\\new front\\Tickets-Reservation-System\\new Front\\ViewModels\\VendorDashboardVM.cs",
               "RelativeDocumentMoniker": "new Front\\ViewModels\\VendorDashboardVM.cs",
@@ -220,7 +268,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 16,
               "Title": "new Front.csproj",
               "DocumentMoniker": "D:\\new front\\Tickets-Reservation-System\\new Front\\new Front.csproj",
               "RelativeDocumentMoniker": "new Front\\new Front.csproj",
@@ -232,7 +280,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 15,
               "Title": "HomeController.cs",
               "DocumentMoniker": "D:\\new front\\Tickets-Reservation-System\\new Front\\Controllers\\HomeController.cs",
               "RelativeDocumentMoniker": "new Front\\Controllers\\HomeController.cs",

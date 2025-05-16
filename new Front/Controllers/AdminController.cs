@@ -94,26 +94,84 @@ namespace WebApplication2.Controllers
 
         public async Task<IActionResult> PendingSport()
         {
-            var response = await _client.GetAsync("api/Admin/GetPendingSport");
-            if (response.IsSuccessStatusCode)
+            try
             {
-                var events = await response.Content.ReadFromJsonAsync<List<FullDetailSportEventReadDto>>();
-                return View(events);
+                // Check if user is logged in and is an admin
+                var userRole = HttpContext.Session.GetString("UserRole");
+                if (userRole != "Admin")
+                {
+                    return RedirectToAction("sign_in", "User");
+                }
+
+                // Get the token from session
+                var token = HttpContext.Session.GetString("JWTToken");
+                if (string.IsNullOrEmpty(token))
+                {
+                    return RedirectToAction("sign_in", "User");
+                }
+
+                // Set the authorization header with the token from session
+                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+                var response = await _client.GetAsync("api/Admin/GetPendingSport");
+                if (response.IsSuccessStatusCode)
+                {
+                    var events = await response.Content.ReadFromJsonAsync<List<FullDetailSportEventReadDto>>();
+                    return View(events);
+                }
+
+                // Log the error for debugging
+                _logger.LogError($"API Error: Status code: {response.StatusCode}");
+                ViewBag.Error = "No pending sport events found.";
+                return View(new List<FullDetailSportEventReadDto>());
             }
-            ViewBag.Error = "No pending sport events found.";
-            return View(new List<FullDetailSportEventReadDto>());
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error in PendingSport: {ex.Message}");
+                ViewBag.Error = "An error occurred while fetching pending sport events.";
+                return View(new List<FullDetailSportEventReadDto>());
+            }
         }
 
         public async Task<IActionResult> PendingEntertainment()
         {
-            var response = await _client.GetAsync("api/Admin/GetPendingEntertainment");
-            if (response.IsSuccessStatusCode)
+            try
             {
-                var events = await response.Content.ReadFromJsonAsync<List<FullDetailEntertainmentEventReadDto>>();
-                return View(events);
+                // Check if user is logged in and is an admin
+                var userRole = HttpContext.Session.GetString("UserRole");
+                if (userRole != "Admin")
+                {
+                    return RedirectToAction("sign_in", "User");
+                }
+
+                // Get the token from session
+                var token = HttpContext.Session.GetString("JWTToken");
+                if (string.IsNullOrEmpty(token))
+                {
+                    return RedirectToAction("sign_in", "User");
+                }
+
+                // Set the authorization header with the token from session
+                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+                var response = await _client.GetAsync("api/Admin/GetPendingEntertainment");
+                if (response.IsSuccessStatusCode)
+                {
+                    var events = await response.Content.ReadFromJsonAsync<List<FullDetailEntertainmentEventReadDto>>();
+                    return View(events);
+                }
+
+                // Log the error for debugging
+                _logger.LogError($"API Error: Status code: {response.StatusCode}");
+                ViewBag.Error = "No pending entertainment events found.";
+                return View(new List<FullDetailEntertainmentEventReadDto>());
             }
-            ViewBag.Error = "No pending entertainment events found.";
-            return View(new List<FullDetailEntertainmentEventReadDto>());
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error in PendingEntertainment: {ex.Message}");
+                ViewBag.Error = "An error occurred while fetching pending entertainment events.";
+                return View(new List<FullDetailEntertainmentEventReadDto>());
+            }
         }
 
         [HttpGet]
@@ -208,22 +266,92 @@ namespace WebApplication2.Controllers
 
         [HttpGet]
         public IActionResult AcceptEvent() => View();
+
         [HttpPost]
-        public async Task<IActionResult> AcceptEvent(int eventId)
+        public async Task<IActionResult> AcceptEvent(string eventId)
         {
-            var response = await _client.PutAsync($"api/Admin/AcceptEvent/{eventId}", null);
-            ViewBag.Result = response.IsSuccessStatusCode ? "Event accepted." : "Failed to accept event.";
-            return View();
+            try
+            {
+                if (!User.IsInRole("Admin"))
+                {
+                    return RedirectToAction("Login", "User");
+                }
+
+                var token = HttpContext.Session.GetString("Token");
+                if (string.IsNullOrEmpty(token))
+                {
+                    return RedirectToAction("Login", "User");
+                }
+
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri("https://localhost:7001/");
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+                    var response = await client.PostAsync($"api/Admin/AcceptEvent/{eventId}", null);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        TempData["Result"] = "Event accepted successfully";
+                    }
+                    else
+                    {
+                        var error = await response.Content.ReadAsStringAsync();
+                        TempData["Error"] = $"Failed to accept event: {error}";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error accepting event");
+                TempData["Error"] = "An error occurred while accepting the event";
+            }
+
+            return RedirectToAction("PendingSport");
         }
 
         [HttpGet]
         public IActionResult RejectEvent() => View();
+
         [HttpPost]
-        public async Task<IActionResult> RejectEvent(int eventId)
+        public async Task<IActionResult> RejectEvent(string eventId)
         {
-            var response = await _client.PutAsync($"api/Admin/RejectEvent/{eventId}", null);
-            ViewBag.Result = response.IsSuccessStatusCode ? "Event rejected." : "Failed to reject event.";
-            return View();
+            try
+            {
+                if (!User.IsInRole("Admin"))
+                {
+                    return RedirectToAction("Login", "User");
+                }
+
+                var token = HttpContext.Session.GetString("Token");
+                if (string.IsNullOrEmpty(token))
+                {
+                    return RedirectToAction("Login", "User");
+                }
+
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri("https://localhost:7001/");
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+                    var response = await client.PostAsync($"api/Admin/RejectEvent/{eventId}", null);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        TempData["Result"] = "Event rejected successfully";
+                    }
+                    else
+                    {
+                        var error = await response.Content.ReadAsStringAsync();
+                        TempData["Error"] = $"Failed to reject event: {error}";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error rejecting event");
+                TempData["Error"] = "An error occurred while rejecting the event";
+            }
+
+            return RedirectToAction("PendingSport");
         }
     }
 }

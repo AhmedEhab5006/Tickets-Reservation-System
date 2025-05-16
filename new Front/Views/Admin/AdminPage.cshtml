@@ -1,96 +1,124 @@
 @{
-    ViewData["Title"] = "Admin API Actions";
+    ViewData["Title"] = "Admin Dashboard";
 }
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Admin API Actions</title>
-    <style>
-        body {
-            background: #181818;
-            color: #fff;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-        .container {
-            max-width: 600px;
-            margin: 60px auto;
-            background: #23232b;
-            border-radius: 16px;
-            box-shadow: 0 4px 24px rgba(0,0,0,0.4);
-            padding: 40px 30px;
-        }
-        h1 {
-            text-align: center;
-            color: #ff6b6b;
-            margin-bottom: 32px;
-        }
-        .admin-btn {
-            display: block;
-            width: 100%;
-            margin: 16px 0;
-            padding: 16px;
-            font-size: 1.1em;
-            font-weight: bold;
-            border: none;
-            border-radius: 8px;
-            background: #ff6b6b;
-            color: #fff;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-        .admin-btn:hover {
-            background: #e05454;
-        }
-        .admin-btn.secondary {
-            background: #2196F3;
-        }
-        .admin-btn.secondary:hover {
-            background: #1769aa;
-        }
-        .admin-btn.warning {
-            background: #ffb300;
-            color: #23232b;
-        }
-        .admin-btn.warning:hover {
-            background: #ff8f00;
-        }
-        .admin-btn.danger {
-            background: #dc3545;
-        }
-        .admin-btn.danger:hover {
-            background: #a71d2a;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>Admin API Actions</h1>
-        <form method="get" action="/Admin/VendorRequests">
-            <button class="admin-btn" type="submit">View Vendor Requests</button>
-        </form>
-        <form method="get" action="/Admin/PendingSport">
-            <button class="admin-btn secondary" type="submit">View Pending Sport Events</button>
-        </form>
-        <form method="get" action="/Admin/PendingEntertainment">
-            <button class="admin-btn secondary" type="submit">View Pending Entertainment Events</button>
-        </form>
-        <form method="get" action="/Admin/AcceptVendor">
-            <button class="admin-btn warning" type="submit">Accept Vendor (by ID)</button>
-        </form>
-        <form method="get" action="/Admin/RejectVendor">
-            <button class="admin-btn danger" type="submit">Reject Vendor (by ID)</button>
-        </form>
-        <form method="get" action="/Admin/AcceptEvent">
-            <button class="admin-btn warning" type="submit">Accept Event (by ID)</button>
-        </form>
-        <form method="get" action="/Admin/RejectEvent">
-            <button class="admin-btn danger" type="submit">Reject Event (by ID)</button>
-        </form>
+<div class="container mt-4">
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+            <h2 class="mb-0"><i class="fas fa-user-shield me-2"></i>Admin Dashboard</h2>
+        </div>
+        <div class="card-body">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="d-grid gap-4">
+                        <a href="@Url.Action("VendorRequests", "Admin")" class="btn btn-primary btn-lg">
+                            <i class="fas fa-users-cog me-2"></i>View Vendor Requests
+                        </a>
+                        <a href="@Url.Action("PendingSport", "Admin")" class="btn btn-success btn-lg">
+                            <i class="fas fa-futbol me-2"></i>View Pending Sport Events
+                        </a>
+                        <a href="@Url.Action("PendingEntertainment", "Admin")" class="btn btn-info btn-lg">
+                            <i class="fas fa-theater-masks me-2"></i>View Pending Entertainment Events
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-</body>
-</html> 
+</div>
+
+@section Styles {
+    <style>
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        
+        .card-header {
+            border-radius: 15px 15px 0 0 !important;
+            padding: 1.5rem;
+        }
+        
+        .card-header h2 {
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+        
+        .card-body {
+            padding: 2rem;
+        }
+        
+        .btn {
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            font-weight: 500;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(45deg, #2196F3, #1976D2);
+            border: none;
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(45deg, #1976D2, #1565C0);
+        }
+        
+        .btn-success {
+            background: linear-gradient(45deg, #4CAF50, #388E3C);
+            border: none;
+        }
+        
+        .btn-success:hover {
+            background: linear-gradient(45deg, #388E3C, #2E7D32);
+        }
+        
+        .btn-info {
+            background: linear-gradient(45deg, #00BCD4, #0097A7);
+            border: none;
+            color: white;
+        }
+        
+        .btn-info:hover {
+            background: linear-gradient(45deg, #0097A7, #00838F);
+            color: white;
+        }
+        
+        .gap-4 {
+            gap: 1.5rem !important;
+        }
+        
+        .fas {
+            font-size: 1.2rem;
+        }
+        
+        /* Animation for buttons */
+        fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .btn {
+            animation: fadeInUp 0.5s ease-out forwards;
+        }
+        
+        .btn:nth-child(1) { animation-delay: 0.1s; }
+        .btn:nth-child(2) { animation-delay: 0.2s; }
+        .btn:nth-child(3) { animation-delay: 0.3s; }
+    </style>
+}

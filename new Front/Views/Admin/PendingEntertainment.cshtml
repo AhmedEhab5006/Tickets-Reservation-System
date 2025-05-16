@@ -1,18 +1,124 @@
 @model List<WebApplication2.ViewModels.FullDetailEntertainmentEventReadDto>
-<h2>Pending Entertainment Events</h2>
-@if (ViewBag.Error != null) {
-    <div class="alert alert-danger">@ViewBag.Error</div>
+
+<div class="container mt-4">
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+            <h2 class="mb-0"><i class="fas fa-theater-masks me-2"></i>Pending Entertainment Events</h2>
+        </div>
+        <div class="card-body">
+            @if (ViewBag.Error != null)
+            {
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="fas fa-exclamation-circle me-2"></i>@ViewBag.Error
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
+            @if (ViewBag.Result != null)
+            {
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="fas fa-check-circle me-2"></i>@ViewBag.Result
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
+
+            @if (!Model.Any())
+            {
+                <div class="text-center py-5">
+                    <i class="fas fa-music fa-3x text-muted mb-3"></i>
+                    <h4 class="text-muted">No Pending Entertainment Events</h4>
+                    <p class="text-muted">There are currently no entertainment events waiting for approval.</p>
+                </div>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="table-light">
+                            <tr>
+                                <th><i class="fas fa-user me-2"></i>Performer</th>
+                                <th><i class="fas fa-tags me-2"></i>Show Category</th>
+                                <th><i class="fas fa-music me-2"></i>Genre</th>
+                                <th><i class="fas fa-calendar me-2"></i>Date</th>
+                                <th><i class="fas fa-map-marker-alt me-2"></i>Location</th>
+                                <th><i class="fas fa-chair me-2"></i>Seats</th>
+                                <th class="text-center"><i class="fas fa-cogs me-2"></i>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var e in Model)
+                            {
+                                <tr>
+                                    <td>@e.performerName</td>
+                                    <td>@e.showCategory</td>
+                                    <td>@e.genre</td>
+                                    <td>@e.day/@e.mounth/@e.year</td>
+                                    <td>@e.location</td>
+                                    <td>@e.aviilableSeats</td>
+                                    <td class="text-center">
+                                        <div class="btn-group" role="group">
+                                            <form method="post" action="@Url.Action("AcceptEvent", "Admin")" style="display: inline;">
+                                                <button type="submit" class="btn btn-success btn-sm me-2">
+                                                    <i class="fas fa-check me-1"></i>Accept
+                                                </button>
+                                            </form>
+                                            <form method="post" action="@Url.Action("RejectEvent", "Admin")" style="display: inline;">
+                                                <button type="submit" class="btn btn-danger btn-sm">
+                                                    <i class="fas fa-times me-1"></i>Reject
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .card {
+            border: none;
+            border-radius: 10px;
+        }
+
+        .card-header {
+            border-radius: 10px 10px 0 0 !important;
+        }
+
+        .table {
+            margin-bottom: 0;
+        }
+
+        .table th {
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+        }
+
+        .btn-group {
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .btn {
+            border-radius: 5px;
+            padding: 0.375rem 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .alert {
+            border-radius: 8px;
+            border: none;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+    </style>
 }
-<table class="table table-dark">
-    <tr><th>Performer</th><th>Show Category</th><th>Genre</th><th>Date</th><th>Location</th><th>Seats</th></tr>
-    @foreach (var e in Model) {
-        <tr>
-            <td>@e.performerName</td>
-            <td>@e.showCategory</td>
-            <td>@e.genre</td>
-            <td>@e.day/@e.mounth/@e.year</td>
-            <td>@e.location</td>
-            <td>@e.aviilableSeats</td>
-        </tr>
-    }
-</table> 

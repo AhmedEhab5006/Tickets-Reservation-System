@@ -65,6 +65,10 @@
       "PackagePath": "staticwebassets\\images\\login2.png"
     },
     {
+      "Id": "D:\\new front\\Tickets-Reservation-System\\new Front\\wwwroot\\images\\teams\\0d7c8dab-dd0c-4fac-b704-b8a7155870ac_al_ahly.png",
+      "PackagePath": "staticwebassets\\images\\teams\\0d7c8dab-dd0c-4fac-b704-b8a7155870ac_al_ahly.png"
+    },
+    {
       "Id": "D:\\new front\\Tickets-Reservation-System\\new Front\\wwwroot\\images\\teams\\270b2d54-da13-49c2-aff0-6880529faf54_zamalek.png",
       "PackagePath": "staticwebassets\\images\\teams\\270b2d54-da13-49c2-aff0-6880529faf54_zamalek.png"
     },
@@ -85,12 +89,24 @@
       "PackagePath": "staticwebassets\\images\\teams\\9c431c98-dc33-41af-8870-0494bf6ba5f1_al_ahly.png"
     },
     {
+      "Id": "D:\\new front\\Tickets-Reservation-System\\new Front\\wwwroot\\images\\teams\\bffe70e8-60b2-4d80-b757-5edcadb01a0c_zamalek.png",
+      "PackagePath": "staticwebassets\\images\\teams\\bffe70e8-60b2-4d80-b757-5edcadb01a0c_zamalek.png"
+    },
+    {
       "Id": "D:\\new front\\Tickets-Reservation-System\\new Front\\wwwroot\\images\\teams\\c1696186-4640-4208-afb9-fbe7c1f0dd66_al_ahly.png",
       "PackagePath": "staticwebassets\\images\\teams\\c1696186-4640-4208-afb9-fbe7c1f0dd66_al_ahly.png"
     },
     {
+      "Id": "D:\\new front\\Tickets-Reservation-System\\new Front\\wwwroot\\images\\teams\\ed449251-5bab-41ae-b953-c7c3c701674b_al_ahly.png",
+      "PackagePath": "staticwebassets\\images\\teams\\ed449251-5bab-41ae-b953-c7c3c701674b_al_ahly.png"
+    },
+    {
       "Id": "D:\\new front\\Tickets-Reservation-System\\new Front\\wwwroot\\images\\teams\\ef3f8897-28d3-492a-ab63-180b14dbe023_al_ahly.png",
       "PackagePath": "staticwebassets\\images\\teams\\ef3f8897-28d3-492a-ab63-180b14dbe023_al_ahly.png"
+    },
+    {
+      "Id": "D:\\new front\\Tickets-Reservation-System\\new Front\\wwwroot\\images\\teams\\f351d8c8-04a6-4922-b862-84ec0dd6182b_zamalek.png",
+      "PackagePath": "staticwebassets\\images\\teams\\f351d8c8-04a6-4922-b862-84ec0dd6182b_zamalek.png"
     },
     {
       "Id": "D:\\new front\\Tickets-Reservation-System\\new Front\\wwwroot\\images\\teams\\fb1c1eb9-3c7f-46d0-bc80-623c50ea2e35_zamalek.png",
