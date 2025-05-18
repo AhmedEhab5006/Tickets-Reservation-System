@@ -119,26 +119,26 @@ namespace WebApplication2.Controllers
         {
             try
             {
-                // 1. Get JWT token from session
+                // Get the JWT token from session
                 var token = HttpContext.Session.GetString("JWTToken");
                 if (string.IsNullOrEmpty(token))
                 {
-                    ModelState.AddModelError("", "You're not logged in. Please sign in first.");
+                    ModelState.AddModelError("", "Not authenticated. Please log in again.");
                     return View(model);
                 }
 
-                // 2. Set default values
+                // Set default values
                 model.category = "Sport";
                 model.status = "Pending";
 
-                // 3. Validate event date
-                if (model.date <= DateTime.Now)
+                // Validate and use the event date
+                if (model.date < DateTime.Now)
                 {
-                    ModelState.AddModelError("", "Event date must be in the future.");
+                    ModelState.AddModelError("", "Event date must be in the future");
                     return View(model);
                 }
 
-                // 4. Upload Team 1 image
+                // Handle team1 image upload
                 if (team1Image_upload != null)
                 {
                     var fileName = $"{Guid.NewGuid()}_{Path.GetFileName(team1Image_upload.FileName)}";
@@ -152,11 +152,11 @@ namespace WebApplication2.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError("team1Image_upload", "Team 1 image is required.");
+                    ModelState.AddModelError("team1Image_upload", "Team 1 image is required");
                     return View(model);
                 }
 
-                // 5. Upload Team 2 image
+                // Handle team2 image upload
                 if (team2Image_upload != null)
                 {
                     var fileName = $"{Guid.NewGuid()}_{Path.GetFileName(team2Image_upload.FileName)}";
@@ -170,23 +170,24 @@ namespace WebApplication2.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError("team2Image_upload", "Team 2 image is required.");
+                    ModelState.AddModelError("team2Image_upload", "Team 2 image is required");
                     return View(model);
                 }
 
-                // 6. Validate model
-                if (!ModelState.IsValid)
-                {
-                    var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage);
-                    _vendorLogger.LogError("Model validation errors: " + string.Join(", ", errors));
-                    return View(model);
-                }
-
-                // 7. Add Authorization header with token
-                _httpClient.DefaultRequestHeaders.Authorization = null; // Clear old headers
+                // Add the token to the request headers
                 _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-                // 8. Send the request to the API
+                // Validate model after setting all required values
+                if (!ModelState.IsValid)
+                {
+                    var errors = ModelState.Values
+                        .SelectMany(v => v.Errors)
+                        .Select(e => e.ErrorMessage);
+                    _vendorLogger.LogError($"Model validation errors: {string.Join(", ", errors)}");
+                    return View(model);
+                }
+
+                // Send the request to the API
                 var response = await _httpClient.PostAsJsonAsync("api/Vendor/AddSportEvent", model);
 
                 if (response.IsSuccessStatusCode)
@@ -194,21 +195,21 @@ namespace WebApplication2.Controllers
                     TempData["SuccessMessage"] = "Sports event added successfully!";
                     return RedirectToAction("DashBoard");
                 }
-
-                // 9. Handle failure
-                var errorContent = await response.Content.ReadAsStringAsync();
-                _vendorLogger.LogError($"API Error: {response.StatusCode}, Content: {errorContent}");
-                ModelState.AddModelError("", $"Failed to add event. Error: {errorContent}");
-                return View(model);
+                else
+                {
+                    var errorContent = await response.Content.ReadAsStringAsync();
+                    _vendorLogger.LogError($"API Error: Status code: {response.StatusCode}, Content: {errorContent}");
+                    ModelState.AddModelError("", $"Failed to add sports event. Status: {response.StatusCode}, Error: {errorContent}");
+                    return View(model);
+                }
             }
             catch (Exception ex)
             {
-                _vendorLogger.LogError("Exception during AddSportEvent: " + ex.Message);
-                ModelState.AddModelError("", "Something went wrong while adding the event.");
+                _vendorLogger.LogError($"Error adding sports event: {ex.Message}");
+                ModelState.AddModelError("", $"An error occurred while adding the sports event: {ex.Message}");
                 return View(model);
             }
         }
-
 
         [HttpGet]
         public IActionResult AddEntertainmentEvent()
@@ -219,16 +220,24 @@ namespace WebApplication2.Controllers
         [HttpPost]
         public async Task<IActionResult> AddEntertainmentEvent(EntertainmentVM model, IFormFile eventImage_upload)
         {
-            try
-            {
-                // Set default values before validation
                 model.category = "Entertainment";
                 model.status = "Pending";
 
+            try
+            {
+                // Get the JWT token from session
+                var token = HttpContext.Session.GetString("JWTToken");
+                if (string.IsNullOrEmpty(token))
+                {
+                    ModelState.AddModelError("", "Not authenticated. Please log in again.");
+                    return View(model);
+                }
+
+                // Set default values
                 // Construct the DateTime from components
                 try
                 {
-                    model.Date = new DateTime(model.Year, model.Month, model.Day, model.Hour, model.Minute, 0);
+                    model.date = new DateTime(model.Year, model.Month, model.Day, model.Hour, model.Minute, 0);
                 }
                 catch (ArgumentOutOfRangeException)
                 {
@@ -237,7 +246,7 @@ namespace WebApplication2.Controllers
                 }
 
                 // Validate date
-                if (model.Date < DateTime.Now)
+                if (model.date < DateTime.Now)
                 {
                     ModelState.AddModelError("Date", "Event date must be in the future");
                     return View(model);
@@ -248,25 +257,32 @@ namespace WebApplication2.Controllers
                 {
                     var fileName = $"{Guid.NewGuid()}_{Path.GetFileName(eventImage_upload.FileName)}";
                     var filePath = Path.Combine(_vendorUploadPath, "events", fileName);
-                    
+
                     // Ensure directory exists
                     Directory.CreateDirectory(Path.GetDirectoryName(filePath));
-                    
+
                     using (var stream = new FileStream(filePath, FileMode.Create))
                     {
                         await eventImage_upload.CopyToAsync(stream);
                     }
-                    model.eventImage = "/images/events/" + fileName;
+                    model.EventImage = "/images/events/" + fileName;
                 }
                 else
                 {
-                    ModelState.AddModelError("eventImage", "Event image is required");
+                    ModelState.AddModelError("eventImage_upload", "Event image is required");
                     return View(model);
                 }
+
+                // Add the token to the request headers
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
                 // Validate model after setting all required values
                 if (!ModelState.IsValid)
                 {
+                    var errors = ModelState.Values
+                        .SelectMany(v => v.Errors)
+                        .Select(e => e.ErrorMessage);
+                    _vendorLogger.LogError($"Model validation errors: {string.Join(", ", errors)}");
                     return View(model);
                 }
 
@@ -556,12 +572,12 @@ namespace WebApplication2.Controllers
                 {
                     // Generate a simple token for admin (you might want to generate a proper JWT token)
                     var adminToken = GenerateAdminToken();
-                    
+
                     // Store admin session data
                     HttpContext.Session.SetString("UserRole", "Admin");
                     HttpContext.Session.SetString("UserEmail", loginVM.email);
                     HttpContext.Session.SetString("JWTToken", adminToken);
-                    
+
                     return RedirectToAction("AdminPage", "Admin");
                 }
 
@@ -571,7 +587,7 @@ namespace WebApplication2.Controllers
                 if (response.IsSuccessStatusCode)
                 {
                     var token = await response.Content.ReadAsStringAsync();
-                    
+
                     if (string.IsNullOrEmpty(token))
                     {
                         ModelState.AddModelError("", "Empty response from server");

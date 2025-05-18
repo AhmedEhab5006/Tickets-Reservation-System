@@ -223,7 +223,7 @@ namespace WebApplication2.Controllers
         public IActionResult RejectVendor() => View();
 
         [HttpPost]
-        public async Task<IActionResult> RejectVendor(string vendorId)
+        public async Task<IActionResult> RejectVendor(int vendorId)
         {
             try
             {
@@ -268,42 +268,42 @@ namespace WebApplication2.Controllers
         public IActionResult AcceptEvent() => View();
 
         [HttpPost]
-        public async Task<IActionResult> AcceptEvent(string eventId)
+        public async Task<IActionResult> AcceptEvent(int eventId)
         {
             try
             {
-                if (!User.IsInRole("Admin"))
+                // Check if user is logged in and is an admin
+                var userRole = HttpContext.Session.GetString("UserRole");
+                if (userRole != "Admin")
                 {
-                    return RedirectToAction("Login", "User");
+                    return RedirectToAction("sign_in", "User");
                 }
 
-                var token = HttpContext.Session.GetString("Token");
+                // Get the token from session
+                var token = HttpContext.Session.GetString("JWTToken");
                 if (string.IsNullOrEmpty(token))
                 {
-                    return RedirectToAction("Login", "User");
+                    return RedirectToAction("sign_in", "User");
                 }
 
-                using (var client = new HttpClient())
-                {
-                    client.BaseAddress = new Uri("https://localhost:7001/");
-                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                // Set the authorization header with the token from session
+                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-                    var response = await client.PostAsync($"api/Admin/AcceptEvent/{eventId}", null);
-                    if (response.IsSuccessStatusCode)
-                    {
-                        TempData["Result"] = "Event accepted successfully";
-                    }
-                    else
-                    {
-                        var error = await response.Content.ReadAsStringAsync();
-                        TempData["Error"] = $"Failed to accept event: {error}";
-                    }
+                var response = await _client.PutAsync($"api/Admin/AcceptEvent/{eventId}", null);
+                if (response.IsSuccessStatusCode)
+                {
+                    TempData["Result"] = "Event accepted successfully.";
+                }
+                else
+                {
+                    var errorContent = await response.Content.ReadAsStringAsync();
+                    TempData["Error"] = errorContent ?? "Failed to accept event.";
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error accepting event");
-                TempData["Error"] = "An error occurred while accepting the event";
+                _logger.LogError($"Error accepting event: {ex.Message}");
+                TempData["Error"] = "An error occurred while accepting the event.";
             }
 
             return RedirectToAction("PendingSport");
@@ -313,42 +313,42 @@ namespace WebApplication2.Controllers
         public IActionResult RejectEvent() => View();
 
         [HttpPost]
-        public async Task<IActionResult> RejectEvent(string eventId)
+        public async Task<IActionResult> RejectEvent(int eventId)
         {
             try
             {
-                if (!User.IsInRole("Admin"))
+                // Check if user is logged in and is an admin
+                var userRole = HttpContext.Session.GetString("UserRole");
+                if (userRole != "Admin")
                 {
-                    return RedirectToAction("Login", "User");
+                    return RedirectToAction("sign_in", "User");
                 }
 
-                var token = HttpContext.Session.GetString("Token");
+                // Get the token from session
+                var token = HttpContext.Session.GetString("JWTToken");
                 if (string.IsNullOrEmpty(token))
                 {
-                    return RedirectToAction("Login", "User");
+                    return RedirectToAction("sign_in", "User");
                 }
 
-                using (var client = new HttpClient())
-                {
-                    client.BaseAddress = new Uri("https://localhost:7001/");
-                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                // Set the authorization header with the token from session
+                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-                    var response = await client.PostAsync($"api/Admin/RejectEvent/{eventId}", null);
-                    if (response.IsSuccessStatusCode)
-                    {
-                        TempData["Result"] = "Event rejected successfully";
-                    }
-                    else
-                    {
-                        var error = await response.Content.ReadAsStringAsync();
-                        TempData["Error"] = $"Failed to reject event: {error}";
-                    }
+                var response = await _client.PutAsync($"api/Admin/RejectEvent/{eventId}", null);
+                if (response.IsSuccessStatusCode)
+                {
+                    TempData["Result"] = "Event rejected successfully.";
+                }
+                else
+                {
+                    var errorContent = await response.Content.ReadAsStringAsync();
+                    TempData["Error"] = errorContent ?? "Failed to reject event.";
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error rejecting event");
-                TempData["Error"] = "An error occurred while rejecting the event";
+                _logger.LogError($"Error rejecting event: {ex.Message}");
+                TempData["Error"] = "An error occurred while rejecting the event.";
             }
 
             return RedirectToAction("PendingSport");

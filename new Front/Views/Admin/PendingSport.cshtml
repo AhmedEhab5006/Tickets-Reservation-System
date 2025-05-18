@@ -6,15 +6,24 @@
             <h2 class="mb-0"><i class="fas fa-futbol me-2"></i>Pending Sport Events</h2>
         </div>
         <div class="card-body">
-            @if (ViewBag.Error != null) {
+            @if (ViewBag.Error != null)
+            {
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
                     <i class="fas fa-exclamation-circle me-2"></i>@ViewBag.Error
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             }
-            @if (ViewBag.Result != null) {
+            @if (TempData["Result"] != null)
+            {
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    <i class="fas fa-check-circle me-2"></i>@ViewBag.Result
+                    <i class="fas fa-check-circle me-2"></i>@TempData["Result"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
+            @if (TempData["Error"] != null)
+            {
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="fas fa-exclamation-circle me-2"></i>@TempData["Error"]
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             }
@@ -44,7 +53,8 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var e in Model) {
+                            @foreach (var e in Model)
+                            {
                                 <tr>
                                     <td>@e.team1</td>
                                     <td>@e.team2</td>
@@ -55,12 +65,17 @@
                                     <td>@e.aviilableSeats</td>
                                     <td class="text-center">
                                         <div class="btn-group" role="group">
+                                            <!-- Accept Form -->
                                             <form method="post" action="@Url.Action("AcceptEvent", "Admin")" style="display: inline;">
+                                                <input type="hidden" name="eventId" value="@e.Id" />
                                                 <button type="submit" class="btn btn-success btn-sm me-2">
                                                     <i class="fas fa-check me-1"></i>Accept
                                                 </button>
                                             </form>
+
+                                            <!-- Reject Form -->
                                             <form method="post" action="@Url.Action("RejectEvent", "Admin")" style="display: inline;">
+                                                <input type="hidden" name="eventId" value="@e.Id" />
                                                 <button type="submit" class="btn btn-danger btn-sm">
                                                     <i class="fas fa-times me-1"></i>Reject
                                                 </button>
@@ -83,41 +98,41 @@
             border: none;
             border-radius: 10px;
         }
-        
+
         .card-header {
             border-radius: 10px 10px 0 0 !important;
         }
-        
+
         .table {
             margin-bottom: 0;
         }
-        
-        .table th {
-            font-weight: 600;
-            text-transform: uppercase;
-            font-size: 0.85rem;
-        }
-        
+
+            .table th {
+                font-weight: 600;
+                text-transform: uppercase;
+                font-size: 0.85rem;
+            }
+
         .btn-group {
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
-        
+
         .btn {
             border-radius: 5px;
             padding: 0.375rem 1rem;
             font-weight: 500;
             transition: all 0.3s ease;
         }
-        
-        .btn:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-        
+
+            .btn:hover {
+                transform: translateY(-1px);
+                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            }
+
         .alert {
             border-radius: 8px;
             border: none;
             box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
     </style>
-} 
+}

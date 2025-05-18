@@ -5,6 +5,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Add Entertainment Event</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <style>
         html, body {
             height: 100%;
@@ -36,9 +38,9 @@
             color: white;
         }
 
-        .logo span {
-            color: #ff6b6b;
-        }
+            .logo span {
+                color: #ff6b6b;
+            }
 
         .navwords {
             display: flex;
@@ -46,32 +48,32 @@
             list-style: none;
         }
 
-        .navwords a {
-            color: white;
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s ease;
-            position: relative;
-        }
+            .navwords a {
+                color: white;
+                text-decoration: none;
+                font-weight: 500;
+                transition: color 0.3s ease;
+                position: relative;
+            }
 
-        .navwords a:hover {
-            color: #ff6b6b;
-        }
+                .navwords a:hover {
+                    color: #ff6b6b;
+                }
 
-        .navwords a::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px;
-            bottom: -5px;
-            left: 0;
-            background-color: #ff6b6b;
-            transition: width 0.3s ease;
-        }
+                .navwords a::after {
+                    content: '';
+                    position: absolute;
+                    width: 0;
+                    height: 2px;
+                    bottom: -5px;
+                    left: 0;
+                    background-color: #ff6b6b;
+                    transition: width 0.3s ease;
+                }
 
-        .navwords a:hover::after {
-            width: 100%;
-        }
+                .navwords a:hover::after {
+                    width: 100%;
+                }
 
         .container {
             margin: 120px auto 40px;
@@ -102,7 +104,7 @@
         input, select {
             width: 100%;
             padding: 12px;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(64, 64, 64, 0.8);
             border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 8px;
             color: white;
@@ -110,11 +112,22 @@
             transition: all 0.3s ease;
         }
 
-        input:focus, select:focus {
-            outline: none;
-            border-color: #ff6b6b;
-            box-shadow: 0 0 10px rgba(255, 107, 107, 0.2);
-        }
+            input:focus, select:focus {
+                outline: none;
+                border-color: #ff6b6b;
+                box-shadow: 0 0 10px rgba(255, 107, 107, 0.2);
+                background: rgba(80, 80, 80, 0.8);
+            }
+
+            input[type="number"] {
+                -moz-appearance: textfield;
+            }
+
+                input[type="number"]::-webkit-outer-spin-button,
+                input[type="number"]::-webkit-inner-spin-button {
+                    -webkit-appearance: none;
+                    margin: 0;
+                }
 
         .button {
             background-color: #ff6b6b;
@@ -129,10 +142,10 @@
             margin-top: 20px;
         }
 
-        .button:hover {
-            background-color: #e55b5b;
-            transform: translateY(-2px);
-        }
+            .button:hover {
+                background-color: #e55b5b;
+                transform: translateY(-2px);
+            }
 
         .brand {
             text-align: center;
@@ -155,11 +168,11 @@
             margin-bottom: 20px;
         }
 
-        .event-image-preview img {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-        }
+            .event-image-preview img {
+                max-width: 100%;
+                max-height: 100%;
+                object-fit: contain;
+            }
 
         @@media (max-width: 768px) {
             .container {
@@ -188,14 +201,31 @@
             flex-direction: column;
         }
 
-        .input-group input {
-            width: 80px;
+            .input-group input {
+                width: 80px;
+            }
+
+            .input-group label {
+                font-size: 0.9em;
+                margin-bottom: 5px;
+            }
+
+        .test-data-button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-bottom: 20px;
+            width: 100%;
+            transition: background-color 0.3s ease;
         }
 
-        .input-group label {
-            font-size: 0.9em;
-            margin-bottom: 5px;
-        }
+            .test-data-button:hover {
+                background-color: #45a049;
+            }
     </style>
 </head>
 <body>
@@ -210,11 +240,23 @@
 
     <div class="container">
         <h1>Add Entertainment Event</h1>
+
+        @if (!ViewData.ModelState.IsValid)
+        {
+            <div class="alert alert-danger">
+                <div asp-validation-summary="All" class="text-danger"></div>
+            </div>
+        }
+
+        <button type="button" class="test-data-button" onclick="fillTestData()">Fill Test Data</button>
+
         <form asp-action="AddEntertainmentEvent" asp-controller="Vendor" method="post" enctype="multipart/form-data">
-            <input type="hidden" name="category" value="Entertainment" />
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="category" value="Entertainment" />
+            <input type="hidden" asp-for="status" value="Pending" />
 
             <div class="form-group">
-                <label asp-for="Date">Event Date and Time</label>
+                <label asp-for="date">Event Date and Time</label>
                 <div class="date-time-inputs">
                     <div class="date-inputs">
                         <div class="input-group">
@@ -246,48 +288,56 @@
                         </div>
                     </div>
                 </div>
-                <span asp-validation-for="Date" class="text-danger"></span>
+                <span asp-validation-for="date" class="text-danger"></span>
             </div>
 
             <div class="form-group">
-                <label for="location">Location:</label>
-                <input type="text" id="location" name="location" required>
+                <label asp-for="location">Location:</label>
+                <input asp-for="location" type="text" class="form-control" required>
+                <span asp-validation-for="location" class="text-danger"></span>
             </div>
 
             <div class="form-group">
-                <label for="numberOfSeats">Number of Seats:</label>
-                <input type="number" id="numberOfSeats" name="numberOfSeats" min="1" required>
+                <label asp-for="numberOfSeats">Number of Seats:</label>
+                <input asp-for="numberOfSeats" type="number" min="1" class="form-control" required>
+                <span asp-validation-for="numberOfSeats" class="text-danger"></span>
             </div>
 
             <div class="form-group">
-                <label for="performerName">Performer Name:</label>
-                <input type="text" id="performerName" name="performerName" required>
+                <label asp-for="PerformerName">Performer Name:</label>
+                <input asp-for="PerformerName" type="text" class="form-control" required>
+                <span asp-validation-for="PerformerName" class="text-danger"></span>
             </div>
 
             <div class="form-group">
-                <label for="eventImage_upload">Event Image:</label>
-                <input type="file" id="eventImage_upload" name="eventImage_upload" accept="image/*" onchange="previewImage(this, 'eventImagePreview')">
+                <label asp-for="EventImage_upload">Event Image:</label>
+                <input asp-for="EventImage_upload" type="file" accept="image/*" class="form-control" onchange="previewImage(this, 'eventImagePreview')">
+                <span asp-validation-for="EventImage_upload" class="text-danger"></span>
                 <div class="event-image-preview" id="eventImagePreview"></div>
             </div>
 
             <div class="form-group">
-                <label for="genre">Genre:</label>
-                <input type="text" id="genre" name="genre" required>
+                <label asp-for="genre">Genre:</label>
+                <input asp-for="genre" type="text" class="form-control" required>
+                <span asp-validation-for="genre" class="text-danger"></span>
             </div>
 
             <div class="form-group">
-                <label for="showCategory">Show Category:</label>
-                <input type="text" id="showCategory" name="showCategory" required>
+                <label asp-for="showCategory">Show Category:</label>
+                <input asp-for="showCategory" type="text" class="form-control" required>
+                <span asp-validation-for="showCategory" class="text-danger"></span>
             </div>
 
             <div class="form-group">
-                <label for="ageRestriction">Age Restriction:</label>
-                <input type="number" id="ageRestriction" name="ageRestriction" min="0" required>
+                <label asp-for="ageRestriction">Age Restriction:</label>
+                <input asp-for="ageRestriction" type="number" min="0" class="form-control" required>
+                <span asp-validation-for="ageRestriction" class="text-danger"></span>
             </div>
 
             <div class="form-group">
-                <label for="duration">Duration (hours):</label>
-                <input type="number" id="duration" name="duration" min="0.5" step="0.5" required>
+                <label asp-for="duration">Duration (hours):</label>
+                <input asp-for="duration" type="number" min="0.5" step="0.5" class="form-control" required>
+                <span asp-validation-for="duration" class="text-danger"></span>
             </div>
 
             <button type="submit" class="button">Add Entertainment Event</button>
@@ -299,12 +349,16 @@
         </div>
     </div>
 
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
     <script>
         function previewImage(input, previewId) {
             const preview = document.getElementById(previewId);
             if (input.files && input.files[0]) {
                 const reader = new FileReader();
-                reader.onload = function(e) {
+                reader.onload = function (e) {
                     preview.innerHTML = `<img src="${e.target.result}" alt="Preview">`;
                 }
                 reader.readAsDataURL(input.files[0]);
@@ -312,6 +366,122 @@
                 preview.innerHTML = '';
             }
         }
+
+        function fillTestData() {
+            try {
+                // Set date and time (24 hours from now)
+                const tomorrow = new Date();
+                tomorrow.setDate(tomorrow.getDate() + 1);
+
+                // Set date components
+                const dateInputs = {
+                    Day: tomorrow.getDate(),
+                    Month: tomorrow.getMonth() + 1,
+                    Year: tomorrow.getFullYear(),
+                    Hour: 19,
+                    Minute: 30
+                };
+
+                // Fill date inputs
+                Object.entries(dateInputs).forEach(([field, value]) => {
+                    const input = document.querySelector(`input[name="${field}"]`);
+                    if (input) {
+                        input.value = value;
+                        // Trigger change event for validation
+                        input.dispatchEvent(new Event('change', { bubbles: true }));
+                    }
+                });
+
+                // Fill other fields with test data
+                const testData = {
+                    location: "Cairo Opera House",
+                    aviilableSeats: "1000",
+                    performerName: "Amr Diab",
+                    genre: "Pop Music",
+                    showCategory: "Concert",
+                    ageRestriction: "16",
+                    duration: "2.5"
+                };
+
+                // Fill form fields
+                Object.entries(testData).forEach(([field, value]) => {
+                    const input = document.querySelector(`input[name="${field}"]`);
+                    if (input) {
+                        input.value = value;
+                        // Trigger change event for validation
+                        input.dispatchEvent(new Event('change', { bubbles: true }));
+                    }
+                });
+
+                // Create and set test image
+                createTestImage('eventImage_upload', 'eventImagePreview', 'Concert');
+
+                // Show success message
+                const alertDiv = document.createElement('div');
+                alertDiv.className = 'alert alert-success';
+                alertDiv.innerHTML = 'Test data filled successfully!';
+                document.querySelector('.container').insertBefore(alertDiv, document.querySelector('form'));
+
+                // Remove success message after 3 seconds
+                setTimeout(() => {
+                    alertDiv.remove();
+                }, 3000);
+
+            } catch (error) {
+                console.error('Error filling test data:', error);
+                // Show error message
+                const alertDiv = document.createElement('div');
+                alertDiv.className = 'alert alert-danger';
+                alertDiv.innerHTML = 'Error filling test data. Please try again.';
+                document.querySelector('.container').insertBefore(alertDiv, document.querySelector('form'));
+
+                // Remove error message after 3 seconds
+                setTimeout(() => {
+                    alertDiv.remove();
+                }, 3000);
+            }
+        }
+
+        function createTestImage(inputName, previewId, eventType) {
+            try {
+                const canvas = document.createElement('canvas');
+                canvas.width = 400;
+                canvas.height = 300;
+                const ctx = canvas.getContext('2d');
+
+                // Draw background
+                ctx.fillStyle = '#1a1a1a';
+                ctx.fillRect(0, 0, 400, 300);
+
+                // Draw event type
+                ctx.fillStyle = '#ffffff';
+                ctx.font = 'bold 32px Arial';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(eventType, 200, 150);
+
+                // Convert canvas to blob
+                canvas.toBlob(function (blob) {
+                    const file = new File([blob], `${eventType.toLowerCase().replace(' ', '_')}.png`, { type: 'image/png' });
+
+                    // Create a new FileList-like object
+                    const dataTransfer = new DataTransfer();
+                    dataTransfer.items.add(file);
+
+                    // Set the file input's files
+                    const input = document.querySelector(`input[name="${inputName}"]`);
+                    if (input) {
+                        input.files = dataTransfer.files;
+                        // Trigger change event for validation
+                        input.dispatchEvent(new Event('change', { bubbles: true }));
+                        // Trigger preview
+                        previewImage(input, previewId);
+                    }
+                }, 'image/png');
+            } catch (error) {
+                console.error('Error creating test image:', error);
+            }
+        }
     </script>
 </body>
-</html> 
+</html>

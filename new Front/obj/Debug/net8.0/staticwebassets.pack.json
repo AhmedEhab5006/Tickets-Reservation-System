@@ -41,6 +41,54 @@
       "PackagePath": "staticwebassets\\images\\background3.jpg"
     },
     {
+      "Id": "D:\\new front\\Tickets-Reservation-System\\new Front\\wwwroot\\images\\events\\1ba3fa4a-5212-4bcb-a4e3-19feb24aebe5_concert.png",
+      "PackagePath": "staticwebassets\\images\\events\\1ba3fa4a-5212-4bcb-a4e3-19feb24aebe5_concert.png"
+    },
+    {
+      "Id": "D:\\new front\\Tickets-Reservation-System\\new Front\\wwwroot\\images\\events\\214e6871-27a1-4181-b0fc-3781fac44201_concert.png",
+      "PackagePath": "staticwebassets\\images\\events\\214e6871-27a1-4181-b0fc-3781fac44201_concert.png"
+    },
+    {
+      "Id": "D:\\new front\\Tickets-Reservation-System\\new Front\\wwwroot\\images\\events\\38f1996a-6af4-48ed-a1c9-4dac102f1487_concert.png",
+      "PackagePath": "staticwebassets\\images\\events\\38f1996a-6af4-48ed-a1c9-4dac102f1487_concert.png"
+    },
+    {
+      "Id": "D:\\new front\\Tickets-Reservation-System\\new Front\\wwwroot\\images\\events\\5e7c9c91-70af-4f1d-b5a9-4360356b6b12_concert.png",
+      "PackagePath": "staticwebassets\\images\\events\\5e7c9c91-70af-4f1d-b5a9-4360356b6b12_concert.png"
+    },
+    {
+      "Id": "D:\\new front\\Tickets-Reservation-System\\new Front\\wwwroot\\images\\events\\6164fd05-8039-43bc-b076-b7618623c29c_concert.png",
+      "PackagePath": "staticwebassets\\images\\events\\6164fd05-8039-43bc-b076-b7618623c29c_concert.png"
+    },
+    {
+      "Id": "D:\\new front\\Tickets-Reservation-System\\new Front\\wwwroot\\images\\events\\64530eae-4186-4f2e-90db-352c8c98c0bb_ensemble_classification_accuracy.png",
+      "PackagePath": "staticwebassets\\images\\events\\64530eae-4186-4f2e-90db-352c8c98c0bb_ensemble_classification_accuracy.png"
+    },
+    {
+      "Id": "D:\\new front\\Tickets-Reservation-System\\new Front\\wwwroot\\images\\events\\73fed2c9-7cf3-40aa-b160-382bb087775d_ensemble_classification_accuracy.png",
+      "PackagePath": "staticwebassets\\images\\events\\73fed2c9-7cf3-40aa-b160-382bb087775d_ensemble_classification_accuracy.png"
+    },
+    {
+      "Id": "D:\\new front\\Tickets-Reservation-System\\new Front\\wwwroot\\images\\events\\92a3f8ee-e23d-485c-bdd4-c4e6686ce3b1_ensemble_classification_accuracy.png",
+      "PackagePath": "staticwebassets\\images\\events\\92a3f8ee-e23d-485c-bdd4-c4e6686ce3b1_ensemble_classification_accuracy.png"
+    },
+    {
+      "Id": "D:\\new front\\Tickets-Reservation-System\\new Front\\wwwroot\\images\\events\\a76d3033-bed8-4a2e-ae5a-78ae2bfdb650_ensemble_classification_accuracy.png",
+      "PackagePath": "staticwebassets\\images\\events\\a76d3033-bed8-4a2e-ae5a-78ae2bfdb650_ensemble_classification_accuracy.png"
+    },
+    {
+      "Id": "D:\\new front\\Tickets-Reservation-System\\new Front\\wwwroot\\images\\events\\c2511cf1-f723-47b0-96f9-648976e799f9_ensemble_classification_accuracy.png",
+      "PackagePath": "staticwebassets\\images\\events\\c2511cf1-f723-47b0-96f9-648976e799f9_ensemble_classification_accuracy.png"
+    },
+    {
+      "Id": "D:\\new front\\Tickets-Reservation-System\\new Front\\wwwroot\\images\\events\\d69455ba-745f-4db4-969e-6b0ea499fca9_concert.png",
+      "PackagePath": "staticwebassets\\images\\events\\d69455ba-745f-4db4-969e-6b0ea499fca9_concert.png"
+    },
+    {
+      "Id": "D:\\new front\\Tickets-Reservation-System\\new Front\\wwwroot\\images\\events\\f8993fab-b994-4859-8041-702aa6272e13_concert.png",
+      "PackagePath": "staticwebassets\\images\\events\\f8993fab-b994-4859-8041-702aa6272e13_concert.png"
+    },
+    {
       "Id": "D:\\new front\\Tickets-Reservation-System\\new Front\\wwwroot\\images\\girl on labtob.png",
       "PackagePath": "staticwebassets\\images\\girl on labtob.png"
     },
@@ -65,8 +113,16 @@
       "PackagePath": "staticwebassets\\images\\login2.png"
     },
     {
+      "Id": "D:\\new front\\Tickets-Reservation-System\\new Front\\wwwroot\\images\\teams\\08ae8549-fa20-4681-87b5-dcc318609aee_al_ahly.png",
+      "PackagePath": "staticwebassets\\images\\teams\\08ae8549-fa20-4681-87b5-dcc318609aee_al_ahly.png"
+    },
+    {
       "Id": "D:\\new front\\Tickets-Reservation-System\\new Front\\wwwroot\\images\\teams\\0d7c8dab-dd0c-4fac-b704-b8a7155870ac_al_ahly.png",
       "PackagePath": "staticwebassets\\images\\teams\\0d7c8dab-dd0c-4fac-b704-b8a7155870ac_al_ahly.png"
+    },
+    {
+      "Id": "D:\\new front\\Tickets-Reservation-System\\new Front\\wwwroot\\images\\teams\\20cfb023-a987-4e87-85f9-bc7c0fdc354b_zamalek.png",
+      "PackagePath": "staticwebassets\\images\\teams\\20cfb023-a987-4e87-85f9-bc7c0fdc354b_zamalek.png"
     },
     {
       "Id": "D:\\new front\\Tickets-Reservation-System\\new Front\\wwwroot\\images\\teams\\270b2d54-da13-49c2-aff0-6880529faf54_zamalek.png",
@@ -77,8 +133,32 @@
       "PackagePath": "staticwebassets\\images\\teams\\44dfe63b-d9bc-484a-b6e0-70e238fd8b12_al_ahly.png"
     },
     {
+      "Id": "D:\\new front\\Tickets-Reservation-System\\new Front\\wwwroot\\images\\teams\\64e5c108-44c4-446b-b4c9-433c29284250_zamalek.png",
+      "PackagePath": "staticwebassets\\images\\teams\\64e5c108-44c4-446b-b4c9-433c29284250_zamalek.png"
+    },
+    {
+      "Id": "D:\\new front\\Tickets-Reservation-System\\new Front\\wwwroot\\images\\teams\\64f11459-11eb-4cba-a228-b91b7597cfb6_al_ahly.png",
+      "PackagePath": "staticwebassets\\images\\teams\\64f11459-11eb-4cba-a228-b91b7597cfb6_al_ahly.png"
+    },
+    {
+      "Id": "D:\\new front\\Tickets-Reservation-System\\new Front\\wwwroot\\images\\teams\\65796ea9-45fb-47fe-9880-bdc933d72221_al_ahly.png",
+      "PackagePath": "staticwebassets\\images\\teams\\65796ea9-45fb-47fe-9880-bdc933d72221_al_ahly.png"
+    },
+    {
       "Id": "D:\\new front\\Tickets-Reservation-System\\new Front\\wwwroot\\images\\teams\\78c22225-65f3-4061-a0f9-4d0c9d283fd6_zamalek.png",
       "PackagePath": "staticwebassets\\images\\teams\\78c22225-65f3-4061-a0f9-4d0c9d283fd6_zamalek.png"
+    },
+    {
+      "Id": "D:\\new front\\Tickets-Reservation-System\\new Front\\wwwroot\\images\\teams\\80ca3b32-3778-484c-8f80-5692556a88b2_al_ahly.png",
+      "PackagePath": "staticwebassets\\images\\teams\\80ca3b32-3778-484c-8f80-5692556a88b2_al_ahly.png"
+    },
+    {
+      "Id": "D:\\new front\\Tickets-Reservation-System\\new Front\\wwwroot\\images\\teams\\85043539-1fa2-4401-8a93-a7c2780e942c_zamalek.png",
+      "PackagePath": "staticwebassets\\images\\teams\\85043539-1fa2-4401-8a93-a7c2780e942c_zamalek.png"
+    },
+    {
+      "Id": "D:\\new front\\Tickets-Reservation-System\\new Front\\wwwroot\\images\\teams\\8e204def-a75f-4696-a89e-06f8a8bd7e97_zamalek.png",
+      "PackagePath": "staticwebassets\\images\\teams\\8e204def-a75f-4696-a89e-06f8a8bd7e97_zamalek.png"
     },
     {
       "Id": "D:\\new front\\Tickets-Reservation-System\\new Front\\wwwroot\\images\\teams\\9b92ed4c-146d-4ffc-ae02-6090dd27c0b0_zamalek.png",
@@ -89,12 +169,28 @@
       "PackagePath": "staticwebassets\\images\\teams\\9c431c98-dc33-41af-8870-0494bf6ba5f1_al_ahly.png"
     },
     {
+      "Id": "D:\\new front\\Tickets-Reservation-System\\new Front\\wwwroot\\images\\teams\\a6f3fac8-55a1-4f4f-8902-d5be2ef3d566_zamalek.png",
+      "PackagePath": "staticwebassets\\images\\teams\\a6f3fac8-55a1-4f4f-8902-d5be2ef3d566_zamalek.png"
+    },
+    {
+      "Id": "D:\\new front\\Tickets-Reservation-System\\new Front\\wwwroot\\images\\teams\\aa75eed3-30db-4bf9-be3f-d7038a33d81f_zamalek.png",
+      "PackagePath": "staticwebassets\\images\\teams\\aa75eed3-30db-4bf9-be3f-d7038a33d81f_zamalek.png"
+    },
+    {
       "Id": "D:\\new front\\Tickets-Reservation-System\\new Front\\wwwroot\\images\\teams\\bffe70e8-60b2-4d80-b757-5edcadb01a0c_zamalek.png",
       "PackagePath": "staticwebassets\\images\\teams\\bffe70e8-60b2-4d80-b757-5edcadb01a0c_zamalek.png"
     },
     {
       "Id": "D:\\new front\\Tickets-Reservation-System\\new Front\\wwwroot\\images\\teams\\c1696186-4640-4208-afb9-fbe7c1f0dd66_al_ahly.png",
       "PackagePath": "staticwebassets\\images\\teams\\c1696186-4640-4208-afb9-fbe7c1f0dd66_al_ahly.png"
+    },
+    {
+      "Id": "D:\\new front\\Tickets-Reservation-System\\new Front\\wwwroot\\images\\teams\\c184b30c-777c-4f20-bd65-5e210e5f6965_al_ahly.png",
+      "PackagePath": "staticwebassets\\images\\teams\\c184b30c-777c-4f20-bd65-5e210e5f6965_al_ahly.png"
+    },
+    {
+      "Id": "D:\\new front\\Tickets-Reservation-System\\new Front\\wwwroot\\images\\teams\\d5e549c7-9a1e-4daa-bb2b-ab500bbe7bd0_al_ahly.png",
+      "PackagePath": "staticwebassets\\images\\teams\\d5e549c7-9a1e-4daa-bb2b-ab500bbe7bd0_al_ahly.png"
     },
     {
       "Id": "D:\\new front\\Tickets-Reservation-System\\new Front\\wwwroot\\images\\teams\\ed449251-5bab-41ae-b953-c7c3c701674b_al_ahly.png",

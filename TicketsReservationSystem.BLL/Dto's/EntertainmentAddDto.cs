@@ -14,10 +14,19 @@ namespace TicketsReservationSystem.BLL.Dto_s
         public string? vendorId { get; set; }
         [Required(ErrorMessage = "Missing Category")]
         [DefaultValue("Entertainment")]
+
+
         public string category { get; set; }
         [Required(ErrorMessage = "Missing Date")]
+
+
+
         public DateTime date { get; set; }
         [Required(ErrorMessage = "Missing Location")]
+
+
+
+
         public string location { get; set; }
         [Required(ErrorMessage = "Missing number of seats")]
         [DefaultValue(5000)]
