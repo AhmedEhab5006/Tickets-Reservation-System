@@ -31,5 +31,6 @@ namespace TicketsReservationSystem.DAL.Repository
         //public IQueryable<Vendor> GetAllPendingVendors();
         public IQueryable<Ticket> GetMyEventTickets(int eventId);
         public string GetAcceptanceStatus (string vendorId);
+        public IQueryable<Ticket> GetMyTickets (string vendorId);
     }
 }

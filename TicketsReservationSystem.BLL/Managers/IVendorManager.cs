@@ -29,5 +29,6 @@ namespace TicketsReservationSystem.BLL.Managers
         public string GetAcceptanceStatus(string vendorId);
         public void AddSportEvent(SportAddDto sportAdd);
         public void AddEntertainmentEvent(EntertainmentAddDto entertainmentAdd);
+        public IEnumerable<TicketReadDto> GetMyTicket(string vendorId);
     }
 }

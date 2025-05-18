@@ -172,5 +172,14 @@ namespace TicketsReservationSystem.DAL.Repository
             var found = _context.vendors.Where(a=>a.Id == vendorId).Select(a=>a.acceptanceStatus).FirstOrDefault();
             return found;
         }
+
+        public IQueryable<Ticket> GetMyTickets(string vendorId)
+        {
+            var found = _context.Tickets
+                                        .Where(a => a.Event.vendorId == vendorId)
+                                        .Include(a => a.Event);
+
+            return found;
+        }
     }
 }

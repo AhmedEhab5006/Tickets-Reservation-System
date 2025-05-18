@@ -381,6 +381,28 @@ namespace TicketsReservationSystem.BLL.Managers
             var found = _vendorRepository.GetAcceptanceStatus(vendorId);
             return found;
         }
+
+        public IEnumerable<TicketReadDto> GetMyTicket(string vendorId)
+        {
+            var foundModel = _vendorRepository.GetMyTickets(vendorId).ToList();
+
+            if (foundModel != null)
+            {
+                var found = foundModel.Select(a=> new TicketReadDto
+                {
+                    status = a.status,
+                    avillableNumber=a.avillableCount,
+                    category=a.category,
+                    EventId = a.EventId,
+                    Id = a.id,
+                    price = a.price,
+                }).ToList();
+
+                return found;
+            }
+
+            return null;
+        }
     }
 }
 

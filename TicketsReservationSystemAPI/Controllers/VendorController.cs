@@ -306,5 +306,17 @@ namespace TicketsReservationSystem.API.Controllers
             return NotFound("Desired Ticket not found");
 
         }
+
+        [HttpGet("GetMyTickets")]
+        public IActionResult GetMyTickets()
+        {
+            var found = _vendorManager.GetMyTicket(_getLoggedData.GetId());
+            if (found.Count() > 0)
+            {
+                return Ok(found);
+            }
+
+            return NotFound("No tickets to show");
+        }
     }
 }
