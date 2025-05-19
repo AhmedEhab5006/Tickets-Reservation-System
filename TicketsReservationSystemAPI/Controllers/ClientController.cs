@@ -22,37 +22,6 @@ namespace TicketsReservationSystem.API.Controllers
             _getLoggedData = getLoggedData;
         }
 
-        [HttpPost("Booking/{ticketId}")]
-        public IActionResult BookTicket(int ticketId)
-        {
-            var clientId = _getLoggedData.GetId(); // from JWT
-
-            // Call the Manager method to book the ticket
-            bool bookingSuccessful = _clientManager.Book(ticketId, clientId);
-
-            if (!bookingSuccessful)
-            {
-                // Return a BadRequest if the ticket is not available or booking fails
-                return BadRequest("Failed to book the ticket. Please ensure the ticket is available.");
-            }
-
-            return Ok("Ticket booked successfully.");
-        }
-
-        [HttpPost("CancelBooking/{ticketId}")]
-        public IActionResult CancelBooking(int ticketId)
-        {
-            var clientId = _getLoggedData.GetId(); // from JWT
-            if (string.IsNullOrEmpty(clientId))
-                return Unauthorized("Client not authenticated.");
-
-            bool result = _clientManager.CancelBooking(ticketId, clientId);
-
-            if (!result)
-                return BadRequest("Cancellation failed. Ticket may not exist or is not booked.");
-
-            return Ok("Ticket booking cancelled successfully.");
-        }
 
         [HttpGet("SportEvents")]
         [AllowAnonymous]
@@ -82,33 +51,73 @@ namespace TicketsReservationSystem.API.Controllers
             return NotFound("No Events to show");
         }
 
-        [HttpPut("Edit-address")]
-        public async Task<IActionResult> EditAddress([FromBody] AddressUpdateDto dto)
+        [HttpGet("GetAddress")]
+        public IActionResult GetAddress()
         {
-            var clientId = _getLoggedData.GetId();
-
-            if (string.IsNullOrEmpty(clientId))
-                return Unauthorized("Client not authenticated.");
-
-            bool result = await _clientManager.EditAddressAsync(clientId, dto);
-
-            if (!result)
-                return NotFound("Client or address not found.");
-
-            return Ok("Address updated successfully.");
-        }
-
-        [HttpGet("{clientId}/ViewBookings")]
-        public async Task<ActionResult<List<ClientBookingDto>>> ViewBookings(string clientId)
-        {
-            var bookings = await _clientManager.ViewBookingsAsync(clientId); 
-
-            if (bookings == null || bookings.Count == 0)
+            var found = _clientManager.GetMyAddress(_getLoggedData.GetId());
+            if (found != null)
             {
-                return NotFound("No bookings found for this client.");
+                return Ok(found);
             }
 
-            return Ok(bookings);
+            return NotFound("No Address Found");
         }
+
+        [HttpPut("UpdateAddress")]
+        public IActionResult EditAddress(AddressUpdateDto addressUpdateDto)
+        {
+            _clientManager.EditAddress(addressUpdateDto , _getLoggedData.GetId());
+            return Ok("Updated");
+
+        }
+        [HttpPost("Book/{ticketId}")]
+        public IActionResult Book(ReservationAddDto reservationAddDto , int ticketId)
+        {
+            reservationAddDto.clientId = _getLoggedData.GetId();
+            reservationAddDto.shippingAddressId = _clientManager.GetMyAddress(_getLoggedData.GetId()).id;
+            reservationAddDto.ticketId = ticketId;
+            
+            var done = _clientManager.Book(reservationAddDto);
+            if (done)
+            {
+                return Ok("Reservation done");
+            }
+
+            return BadRequest("An error occured may be you booked more than 5");
+
+        }
+
+        [HttpDelete("Cancel/{ReservationId}")]
+        public IActionResult Delete(int ReservationId)
+        {
+            _clientManager.CancelBooking(ReservationId);
+            return NoContent();
+
+        }
+
+        [HttpGet("ViewReservations")]
+        public IActionResult GetAll()
+        {
+            var found = _clientManager.GetClientBookings(_getLoggedData.GetId());
+
+            if (found.Count() > 0)
+            {
+                return Ok(found);
+            }
+
+            return NotFound("No Reservations yet");
+        }
+        [HttpGet("GetEventTickets/{eventId}")]
+        public IActionResult GetTickets (int eventId)
+        {
+            var found = _clientManager.GetEventTickets(eventId).ToList();
+            if (found.Count() > 0)
+            {
+                return Ok(found);
+            }
+
+            return NotFound("No tickets");
+        }
+
     }
 }

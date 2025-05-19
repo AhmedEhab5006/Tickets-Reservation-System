@@ -15,78 +15,15 @@ namespace TicketsReservationSystem.BLL.Managers
     public class ClientManager : IClientManager
     {
         private readonly IClientRepository _clientRepository;
-        private readonly IMapper _mapper;
+        private readonly IVendorRepository _vendorRepository;
 
-        public ClientManager(IClientRepository clientRepository, IMapper mapper)
+        public ClientManager(IClientRepository clientRepository , IVendorRepository vendorRepository)
         {
             _clientRepository = clientRepository;
-            _mapper = mapper;
+            _vendorRepository = vendorRepository;
         }
 
-        //book 
-        public bool Book(int ticketId, string clientId)
-        {
-            return  _clientRepository.Book(ticketId, clientId);
-        }
-        //cancelbooking
-        public bool CancelBooking(int ticketId, string clientId)
-        {
-            return _clientRepository.CancelBooking(ticketId, clientId);
-        }
-        //edit address
-        public async Task<bool> EditAddressAsync(string clientId, AddressUpdateDto addressDto)
-        {
-            var client = await _clientRepository.GetClientWithAddressAsync(clientId);
-
-            if (client == null || client.address == null)
-                return false;
-
-            // Update the address with the new details
-            var address = new Address
-            {
-                street = addressDto.Street,
-                city = addressDto.City,
-                state = addressDto.State,
-                postalCode = addressDto.PostalCode
-            };
-
-            return await _clientRepository.EditAddressAsync(clientId, address);
-        }
-
-
-        public async Task<List<ClientBookingDto>> ViewBookingsAsync(string clientId)
-        {
-            var tickets = await _clientRepository.GetClientBookingsAsync(clientId);
-
-            var clientBookings = new List<ClientBookingDto>();
-
-            foreach (var ticket in tickets)
-            {
-                var eventDetails = ticket.Event;
-
-                var bookingDto = new ClientBookingDto
-                {
-                    TicketId = ticket.id,
-                    EventId = eventDetails.id,
-                    EventDate = eventDetails.date,
-                    EventLocation = eventDetails.location,
-                    BookedSeats = eventDetails.bookedSeats,
-                    TicketStatus = ticket.status,
-                    TicketPrice = ticket.price, // comes from ticket
-                    EventStatus = eventDetails.status,
-                    EventCategory = eventDetails.category,
-                };
-
-                clientBookings.Add(bookingDto);
-            }
-
-            return clientBookings;
-        }
-
-
-
-
-        // Get sport events with full details
+        
         public IEnumerable<FullDetailSportEventReadDto> GetSportEvents()
         {
             var foundModel = _clientRepository.GetSportEvent();
@@ -105,20 +42,13 @@ namespace TicketsReservationSystem.BLL.Managers
                     tournament = a.sportEvent.tournament,
                     tournamentStage = a.sportEvent.tournamentStage,
                     sport = a.sportEvent.sport,
+                    Id = a.id,
                 }).ToList();
             }
 
             return null;
         }
 
-        // Get mapped sport events (short info)
-        public async Task<IEnumerable<EventAddDto>> GetSportEventsAsync()
-        {
-            var events = _clientRepository.GetSportEvent();
-            return await Task.FromResult(_mapper.Map<IEnumerable<EventAddDto>>(events));
-        }
-
-        // Get entertainment events with full details
         public IEnumerable<FullDetailEntertainmentEventReadDto> GetEntertainmentEvents()
         {
             var foundModel = _clientRepository.GetEntertainmentEvents().ToList();
@@ -137,19 +67,135 @@ namespace TicketsReservationSystem.BLL.Managers
                     ageRestriction = a.entertainment.ageRestriction,
                     duration = a.entertainment.duration,
                     genre = a.entertainment.genre,
+                    Id = a.id,
                 }).ToList();
             }
 
             return null;
         }
 
-        // Get mapped entertainment events (short info)
-        public async Task<IEnumerable<EventAddDto>> GetEntertainmentEventsAsync()
+        public void EditAddress(AddressUpdateDto address , string clientId)
         {
-            var events = _clientRepository.GetEntertainmentEvents();
-            return await Task.FromResult(_mapper.Map<IEnumerable<EventAddDto>>(events));
+            var foundModel = _clientRepository.GetAddress(clientId);
+
+            if (foundModel != null)
+            {
+                foundModel.address.state = !string.IsNullOrWhiteSpace(address.State) ? address.State : foundModel.address.state;
+                foundModel.address.postalCode = address.PostalCode > 0 ? address.PostalCode : foundModel.address.postalCode;
+                foundModel.address.city = !string.IsNullOrWhiteSpace(address.City) ? address.City : foundModel.address.city;
+                foundModel.address.street = !string.IsNullOrWhiteSpace(address.Street) ? address.Street : foundModel.address.street;
+
+                _clientRepository.EditAddress(foundModel.address);
+            }
         }
 
+        public bool Book(ReservationAddDto reservation)
+        {
+            var foundTicket = _vendorRepository.GetTicketById(reservation.ticketId);
+            
+            if (foundTicket != null && foundTicket.avillableCount > 0)
+            {
+                foundTicket.avillableCount -= reservation.bookedCount;
+                _clientRepository.Book(new Reservation
+                {
+                    shippingAddressId = reservation.shippingAddressId,
+                    bookedCount = reservation.bookedCount,
+                    clientId = reservation.clientId,
+                    ticketId = reservation.ticketId,
+                    totalPrice = foundTicket.price * reservation.bookedCount
+                });
 
+                _vendorRepository.EditTicket(foundTicket);
+
+                return true;
+
+            }
+
+            return false;
+
+        }
+
+        public void CancelBooking(int id)
+        {
+            var found = _clientRepository.GetReservation(id);
+            
+            if (found != null)
+            {
+                var foundTicket = _vendorRepository.GetTicketById(found.ticketId);
+
+                foundTicket.avillableCount += found.bookedCount;
+                _clientRepository.CancelBooking(found);
+                
+            }
+        }
+
+        public IEnumerable<ReservationReadDto> GetClientBookings(string clientId)
+        {
+            var foundModel = _clientRepository.GetClientBookings(clientId).ToList();
+            if (foundModel != null)
+            {
+                var found = foundModel.Select(a => new ReservationReadDto
+                {
+                    addressState = a.shippingAddress.state,
+                    addressCity = a.shippingAddress.city,
+                    addressStreet = a.shippingAddress.street,
+                    bookedCount = a.bookedCount,
+                    clientName = a.client.UserName,
+                    eventCategory = a.ticket.Event.category,
+                    eventDate = a.ticket.Event.date,
+                    eventId = a.ticket.Event.id,
+                    eventLocation = a.ticket.Event.location,
+                    ticketCategory = a.ticket.Event.category,
+                    totalPrice = a.totalPrice,
+                    id = a.id
+
+                }).ToList();
+
+                return found;
+            }
+
+            return null;
+        }
+
+        public AddressReadDto GetMyAddress(string clientId)
+        {
+            var foundModel = _clientRepository.GetAddress(clientId);
+
+            if (foundModel != null)
+            {
+                var found = new AddressReadDto
+                {
+                    State = !string.IsNullOrWhiteSpace(foundModel.address.state) ? foundModel.address.state : "No state Added yet",
+                    Street = !string.IsNullOrWhiteSpace(foundModel.address.street) ? foundModel.address.street : "No street Added yet",
+                    City = !string.IsNullOrWhiteSpace(foundModel.address.city) ? foundModel.address.city : "No city Added yet",
+                    PostalCode = foundModel.address.postalCode,
+                    id = foundModel.address.id,
+                };
+
+                return found;
+            }
+
+            return null;
+        }
+
+        public IEnumerable<TicketReadDto> GetEventTickets(int eventId)
+        {
+            var foundModel = _clientRepository.GetEventTickets(eventId).ToList();
+
+            if (foundModel != null)
+            {
+                var found = foundModel.Select(a => new TicketReadDto
+                {
+                    status = a.status,
+                    category = a.category,
+                    price = a.price,
+                    Id = a.id
+                }).ToList();
+
+                return found;
+            }
+
+            return null;
+        }
     }
 }

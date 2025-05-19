@@ -16,7 +16,7 @@ namespace TicketsReservationSystem.DAL.Models
         public Ticket? ticket { get; set; }  
         public int shippingAddressId { get; set; }
         public Address? shippingAddress { get; set; }
-        [Range(1, 5)]
         public int bookedCount { get; set; }
+        public double totalPrice { get; set; }
     }
 }

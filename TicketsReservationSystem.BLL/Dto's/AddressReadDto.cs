@@ -8,10 +8,10 @@ namespace TicketsReservationSystem.BLL.Dto_s
 {
     public class AddressReadDto
     {
-        public int Id { get; set; }
         public string Street { get; set; }
         public string City { get; set; }
         public string State { get; set; }
         public int PostalCode { get; set; }
+        public int id { get; set; }
     }
 }

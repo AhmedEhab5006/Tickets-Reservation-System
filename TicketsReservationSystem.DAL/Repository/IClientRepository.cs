@@ -2,16 +2,15 @@
 public interface IClientRepository
 {
     public int AddAddress(Address address);
+    public void EditAddress(Address address);
+    public void Book(Reservation reservation);
+    public void CancelBooking(Reservation reservation);
+    public IQueryable<Event> GetSportEvent();
+    public IQueryable<Event> GetEntertainmentEvents();
+    public IQueryable<Reservation> GetClientBookings(string clientId);
+    public Client GetAddress (string clientId);
+    public IQueryable<Ticket> GetEventTickets(int eventId);
+    public Reservation GetReservation(int reservationId);
 
-    Task<bool> EditAddressAsync(string clientId, Address address);
-
-    public bool Book(int ticketId, string clientId);
-    public bool CancelBooking(int ticketId, string clientId);
-    IQueryable<Event> GetSportEvent();
-    IQueryable<Event> GetEntertainmentEvents();
-
-   public Task<Client> GetClientWithAddressAsync(string clientId);
-
-    public Task<List<Ticket>> GetClientBookingsAsync(string clientId);
 }
 

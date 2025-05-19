@@ -10,12 +10,14 @@ namespace TicketsReservationSystem.BLL.Managers
 {
     public interface IClientManager
     {
-        public Task<bool> EditAddressAsync(string clientId, AddressUpdateDto addressDto);
-        public bool Book(int ticketId, string clientId);
-        public bool CancelBooking(int ticketId, string clientId);
+        public AddressReadDto GetMyAddress(string clientId);
+        public void EditAddress(AddressUpdateDto address , string clientId);
+        public bool Book(ReservationAddDto reservation);
+        public void CancelBooking(int id);
+        public IEnumerable<ReservationReadDto> GetClientBookings(string clientId);
         public IEnumerable<FullDetailSportEventReadDto> GetSportEvents();
         public IEnumerable<FullDetailEntertainmentEventReadDto> GetEntertainmentEvents();
+        public IEnumerable<TicketReadDto> GetEventTickets(int eventId);
 
-        public Task<List<ClientBookingDto>> ViewBookingsAsync(string clientId);
     }
 }
