@@ -11,7 +11,6 @@ namespace TicketsReservationSystem.BLL.Managers
     public interface IVendorManager
     {
         public void Add(VendorAddDto vendor);
-        public void EditEvent(EventUpdateDto Event);
         public void EditEntertainmentEvent(EntertainmentEventUpdateDto entertainmentEventUpdateDto);
         public void EditSportsEvent(SportEventUpdateDto SportsEvent);
         public EventReadDto GetEventById(int id);

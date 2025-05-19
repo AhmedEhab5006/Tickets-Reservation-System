@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System.Numerics;
 using System.Security.Claims;
 using TicketsReservationSystem.API.Helpers;
@@ -84,36 +85,6 @@ namespace TicketsReservationSystem.API.Controllers
             return Unauthorized("You don't have the permission to add an event");
         }
 
-        [HttpPut("Event/{id}")]
-        public IActionResult EditEvent(int id, EventUpdateDto Event)
-        {
-
-            Event.id = id;
-            var found = _vendorManager.GetEventById(Event.id);
-            vendorId = _getLoggedData.GetId();
-            string acceptance = _vendorManager.GetAcceptanceStatus(_getLoggedData.GetId());
-
-            if (acceptance == "Pending")
-            {
-                return Unauthorized("You Don't have the permission to edit an event");
-            }
-
-
-            if (found == null)
-            {
-                return NotFound("Desired Event isn't found");
-            }
-
-
-            if (found.vendorId != vendorId)
-            {
-                return Unauthorized("You cannot update this event");
-            }
-
-            _vendorManager.EditEvent(Event);
-            return Ok("Updated");
-        }
-
         [HttpPut("Entertainment/{id}")]
         public IActionResult EditEntertainmentEvent(int id, EntertainmentEventUpdateDto entertainmentEventUpdateDto)
         {
@@ -147,8 +118,8 @@ namespace TicketsReservationSystem.API.Controllers
         {
 
 
-            SportsEvent.id = id;
-            var found = _vendorManager.GetSportEventById(SportsEvent.id);
+            SportsEvent.Id = id;
+            var found = _vendorManager.GetSportEventById(SportsEvent.Id);
 
 
             vendorId = _getLoggedData.GetId();
@@ -231,9 +202,10 @@ namespace TicketsReservationSystem.API.Controllers
 
             return NotFound("You Haven't posted any events yet");
         }
-        [HttpPost("AddTicket")]
-        public IActionResult AddTicket(TicketAddDto ticketAddDto)
+        [HttpPost("AddTicket/{eventId}")]
+        public IActionResult AddTicket(TicketAddDto ticketAddDto , int eventId)
         {
+            ticketAddDto.EventId = eventId;
             var sucssed = _vendorManager.AddTicket(ticketAddDto);
 
             vendorId = _getLoggedData.GetId();

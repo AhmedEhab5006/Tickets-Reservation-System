@@ -12,6 +12,6 @@ namespace TicketsReservationSystem.BLL.Dto_s
         public int Id { get; set; } 
         public double price { get; set; }
         public int avillableNumber { get; set; }
-        public string category { get; set; }
+        public string? category { get; set; }
     }
 }

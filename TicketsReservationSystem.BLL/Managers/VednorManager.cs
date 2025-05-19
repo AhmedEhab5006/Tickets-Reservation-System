@@ -93,6 +93,8 @@ namespace TicketsReservationSystem.BLL.Managers
         public void EditEntertainmentEvent(EntertainmentEventUpdateDto entertainmentEventUpdateDto)
         {
             var found = _vendorRepository.GetEntertainmentEventById(entertainmentEventUpdateDto.id);
+            var foundEvent = _vendorRepository.GetEventById(entertainmentEventUpdateDto.id);
+
             if (found != null)
             {
 
@@ -102,30 +104,21 @@ namespace TicketsReservationSystem.BLL.Managers
                 found.performerName = !string.IsNullOrWhiteSpace(entertainmentEventUpdateDto.performerName) ? entertainmentEventUpdateDto.performerName : found.performerName;
                 found.showCategory = !string.IsNullOrWhiteSpace(entertainmentEventUpdateDto.showCategory) ? entertainmentEventUpdateDto.showCategory : found.showCategory;
                 found.eventImage = !string.IsNullOrEmpty(entertainmentEventUpdateDto.eventImage) ? entertainmentEventUpdateDto.eventImage : found.eventImage;
+                foundEvent.date = entertainmentEventUpdateDto.date != default ? entertainmentEventUpdateDto.date : foundEvent.date;
+                foundEvent.location = !string.IsNullOrWhiteSpace(entertainmentEventUpdateDto.location) ? entertainmentEventUpdateDto.location : foundEvent.location;
+                foundEvent.numberOfSeats = entertainmentEventUpdateDto.aviilableSeats > 0 ? entertainmentEventUpdateDto.aviilableSeats : foundEvent.numberOfSeats;
+                foundEvent.avillableSeats = entertainmentEventUpdateDto.aviilableSeats - foundEvent.bookedSeats;
 
                 _vendorRepository.EditEntertainmentEvent(found);
+                _vendorRepository.EditEvent(foundEvent);
             }
-        }
-
-        public void EditEvent(EventUpdateDto Event)
-        {
-            var found = _vendorRepository.GetEventById(Event.id);
-            if (found != null)
-            {
-
-                found.date = Event.date != default ? Event.date : found.date;
-                found.location = !string.IsNullOrWhiteSpace(Event.location) ? Event.location : found.location;
-                found.numberOfSeats = Event.numberOfSeats > 0 ? Event.numberOfSeats : found.numberOfSeats;
-                found.avillableSeats = found.numberOfSeats - found.bookedSeats;
-
-                _vendorRepository.EditEvent(found);
-            }
-
         }
 
         public void EditSportsEvent(SportEventUpdateDto SportsEvent)
         {
-            var found = _vendorRepository.GetSportEventById(SportsEvent.id);
+            var found = _vendorRepository.GetSportEventById(SportsEvent.Id);
+            var foundEvent = _vendorRepository.GetEventById(SportsEvent.Id);
+
             if (found != null)
             {
 
@@ -136,8 +129,13 @@ namespace TicketsReservationSystem.BLL.Managers
                 found.sport = !string.IsNullOrWhiteSpace(SportsEvent.sport) ? SportsEvent.sport : found.sport;
                 found.team1Image = !string.IsNullOrWhiteSpace(SportsEvent.team1Image) ? SportsEvent.team1Image : found.team1Image;
                 found.team2Image = !string.IsNullOrWhiteSpace(SportsEvent.team2Image) ? SportsEvent.team2Image : found.team2Image;
+                foundEvent.date = SportsEvent.date != default ? SportsEvent.date : foundEvent.date;
+                foundEvent.location = !string.IsNullOrWhiteSpace(SportsEvent.location) ? SportsEvent.location : foundEvent.location;
+                foundEvent.numberOfSeats = SportsEvent.aviilableSeats > 0 ? SportsEvent.aviilableSeats : foundEvent.numberOfSeats;
+                foundEvent.avillableSeats = SportsEvent.aviilableSeats - foundEvent.bookedSeats;
 
                 _vendorRepository.EditSportsEvent(found);
+                _vendorRepository.EditEvent(foundEvent);
             }
 
         }
@@ -338,7 +336,9 @@ namespace TicketsReservationSystem.BLL.Managers
                     foundModel.price = ticketUpdateDto.price > 0 ? ticketUpdateDto.price : foundModel.price;
                     foundModel.avillableCount = ticketUpdateDto.avillableNumber > 0 ? ticketUpdateDto.avillableNumber : foundModel.avillableCount;
                     foundModel.category = !string.IsNullOrWhiteSpace(ticketUpdateDto.category) ? ticketUpdateDto.category : foundModel.category;
-
+                    
+                    _vendorRepository.EditTicket(foundModel);
+                    
                     return true;
                 }
 
