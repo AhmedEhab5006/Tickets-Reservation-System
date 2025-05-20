@@ -10,6 +10,7 @@ namespace WebApplication2.ViewModels
 
         [DefaultValue("Sport")]
         public string category { get; set; } = "Sport";
+        [Required(ErrorMessage = "Team 2 name is required")]
 
         [DefaultValue("Pending")]
         public string status { get; set; } = "Pending";

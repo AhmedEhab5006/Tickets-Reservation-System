@@ -104,6 +104,14 @@ namespace WebApplication2.Controllers
                 viewModel.EntertainmentEvents = new List<EntertainmentVM>();
                 TempData["ErrorMessage"] = "An error occurred while loading the dashboard. Please try again.";
             }
+            foreach (var evt in viewModel.SportsEvents)
+            {
+                if (string.IsNullOrEmpty(evt.status))
+                {
+                    evt.status = "Pending";
+                }
+            }
+
 
             return View(viewModel);
         }
@@ -220,9 +228,6 @@ namespace WebApplication2.Controllers
         [HttpPost]
         public async Task<IActionResult> AddEntertainmentEvent(EntertainmentVM model, IFormFile eventImage_upload)
         {
-                model.category = "Entertainment";
-                model.status = "Pending";
-
             try
             {
                 // Get the JWT token from session
@@ -234,14 +239,21 @@ namespace WebApplication2.Controllers
                 }
 
                 // Set default values
-                // Construct the DateTime from components
-                try
+                model.category = "Entertainment";
+                model.status = "Pending";
+
+                // Extract date components from the Date property
+                if (model.date != default(DateTime))
                 {
-                    model.date = new DateTime(model.Year, model.Month, model.Day, model.Hour, model.Minute, 0);
+                    model.Day = model.date.Day;
+                    model.Month = model.date.Month;
+                    model.Year = model.date.Year;
+                    model.Hour = model.date.Hour;
+                    model.Minute = model.date.Minute;
                 }
-                catch (ArgumentOutOfRangeException)
+                else
                 {
-                    ModelState.AddModelError("Date", "Invalid date or time values");
+                    ModelState.AddModelError("Date", "Please select a valid date and time");
                     return View(model);
                 }
 
@@ -337,7 +349,7 @@ namespace WebApplication2.Controllers
                 _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
                 // Send delete request to API
-                var response = await _httpClient.DeleteAsync($"api/Vendor/Event/{id}");
+                var response = await _httpClient.DeleteAsync($"api/Vendor/Delete/{id}");
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -376,7 +388,7 @@ namespace WebApplication2.Controllers
                 _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
                 // Send delete request to API
-                var response = await _httpClient.DeleteAsync($"api/Vendor/Event/{id}");
+                var response = await _httpClient.DeleteAsync($"api/Vendor/Delete/{id}");
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -414,13 +426,19 @@ namespace WebApplication2.Controllers
                 // Add the token to the request headers
                 _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-                // Get the event details
+                // Get the event details from the API
                 var response = await _httpClient.GetAsync($"api/Vendor/Sport/{id}");
                 if (response.IsSuccessStatusCode)
                 {
                     var json = await response.Content.ReadAsStringAsync();
-                    _vendorLogger.LogInformation($"API Response for Sport Event {id}: {json}");
                     var sportEvent = JsonConvert.DeserializeObject<SportEventVM>(json);
+
+                    if (sportEvent == null)
+                    {
+                        TempData["ErrorMessage"] = "Event not found.";
+                        return RedirectToAction("DashBoard");
+                    }
+
                     return View(sportEvent);
                 }
                 else
@@ -440,7 +458,7 @@ namespace WebApplication2.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> EditSportEvent(int id, SportEventVM model)
+        public async Task<IActionResult> EditSportEvent(int id, [FromBody] SportEventVM model)
         {
             try
             {
@@ -448,34 +466,33 @@ namespace WebApplication2.Controllers
                 var token = HttpContext.Session.GetString("JWTToken");
                 if (string.IsNullOrEmpty(token))
                 {
-                    TempData["ErrorMessage"] = "Not authenticated. Please log in again.";
-                    return RedirectToAction("Login", "Account");
+                    return Json(new { success = false, message = "Not authenticated. Please log in again." });
                 }
 
                 // Add the token to the request headers
                 _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+                // Ensure the ID matches
+                model.id = id;
 
                 // Send update request to API
                 var response = await _httpClient.PutAsJsonAsync($"api/Vendor/Sport/{id}", model);
 
                 if (response.IsSuccessStatusCode)
                 {
-                    TempData["SuccessMessage"] = "Sports event updated successfully!";
-                    return RedirectToAction("DashBoard");
+                    return Json(new { success = true, message = "Sports event updated successfully!" });
                 }
                 else
                 {
                     var errorContent = await response.Content.ReadAsStringAsync();
                     _vendorLogger.LogError($"API Error: Status code: {response.StatusCode}, Content: {errorContent}");
-                    ModelState.AddModelError("", $"Failed to update sports event. Status: {response.StatusCode}");
-                    return View(model);
+                    return Json(new { success = false, message = $"Failed to update sports event. Status: {response.StatusCode}" });
                 }
             }
             catch (Exception ex)
             {
                 _vendorLogger.LogError($"Error updating sports event: {ex.Message}");
-                ModelState.AddModelError("", $"An error occurred while updating the sports event: {ex.Message}");
-                return View(model);
+                return Json(new { success = false, message = $"An error occurred while updating the sports event: {ex.Message}" });
             }
         }
 
@@ -518,7 +535,7 @@ namespace WebApplication2.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> EditEntertainmentEvent(int id, EntertainmentVM model)
+        public async Task<IActionResult> EditEntertainmentEvent(int id, [FromBody] EntertainmentVM model)
         {
             try
             {
@@ -526,143 +543,36 @@ namespace WebApplication2.Controllers
                 var token = HttpContext.Session.GetString("JWTToken");
                 if (string.IsNullOrEmpty(token))
                 {
-                    TempData["ErrorMessage"] = "Not authenticated. Please log in again.";
-                    return RedirectToAction("Login", "Account");
+                    return Json(new { success = false, message = "Not authenticated. Please log in again." });
                 }
 
                 // Add the token to the request headers
                 _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+                // Ensure the ID matches
+                model.EventId = id;
 
                 // Send update request to API
                 var response = await _httpClient.PutAsJsonAsync($"api/Vendor/Entertainment/{id}", model);
 
                 if (response.IsSuccessStatusCode)
                 {
-                    TempData["SuccessMessage"] = "Entertainment event updated successfully!";
-                    return RedirectToAction("DashBoard");
+                    return Json(new { success = true, message = "Entertainment event updated successfully!" });
                 }
                 else
                 {
                     var errorContent = await response.Content.ReadAsStringAsync();
                     _vendorLogger.LogError($"API Error: Status code: {response.StatusCode}, Content: {errorContent}");
-                    ModelState.AddModelError("", $"Failed to update entertainment event. Status: {response.StatusCode}");
-                    return View(model);
+                    return Json(new { success = false, message = $"Failed to update entertainment event. Status: {response.StatusCode}" });
                 }
             }
             catch (Exception ex)
             {
                 _vendorLogger.LogError($"Error updating entertainment event: {ex.Message}");
-                ModelState.AddModelError("", $"An error occurred while updating the entertainment event: {ex.Message}");
-                return View(model);
+                return Json(new { success = false, message = $"An error occurred while updating the entertainment event: {ex.Message}" });
             }
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> sign_in(LoginVM loginVM)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(loginVM);
-            }
-
-            try
-            {
-                // Admin login handling
-                if (loginVM.email == "admin@example.com" && loginVM.password == "Admin@123")
-                {
-                    // Generate a simple token for admin (you might want to generate a proper JWT token)
-                    var adminToken = GenerateAdminToken();
-
-                    // Store admin session data
-                    HttpContext.Session.SetString("UserRole", "Admin");
-                    HttpContext.Session.SetString("UserEmail", loginVM.email);
-                    HttpContext.Session.SetString("JWTToken", adminToken);
-
-                    return RedirectToAction("AdminPage", "Admin");
-                }
-
-                // Regular user login handling
-                var response = await _httpClient.PostAsJsonAsync($"api/Auth/Login", loginVM);
-
-                if (response.IsSuccessStatusCode)
-                {
-                    var token = await response.Content.ReadAsStringAsync();
-
-                    if (string.IsNullOrEmpty(token))
-                    {
-                        ModelState.AddModelError("", "Empty response from server");
-                        return View(loginVM);
-                    }
-
-                    try
-                    {
-                        var handler = new JwtSecurityTokenHandler();
-                        var jwtToken = handler.ReadJwtToken(token);
-                        var roleClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
-                        var emailClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
-
-                        if (string.IsNullOrEmpty(roleClaim))
-                        {
-                            ModelState.AddModelError("", "Invalid token: Missing role claim");
-                            return View(loginVM);
-                        }
-
-                        // Store session data
-                        HttpContext.Session.SetString("UserRole", roleClaim);
-                        HttpContext.Session.SetString("UserEmail", emailClaim ?? loginVM.email);
-                        HttpContext.Session.SetString("JWTToken", token);
-
-                        // Redirect based on role
-                        return roleClaim.ToLower() switch
-                        {
-                            "vendor" => RedirectToAction("DashBoard", "Vendor"),
-                            "client" => RedirectToAction("Sport_events", "Event"),
-                            "admin" => RedirectToAction("AdminPage", "Admin"),
-                            _ => RedirectToAction("Index", "Home")
-                        };
-                    }
-                    catch (Exception ex)
-                    {
-                        _vendorLogger.LogError($"Token parsing error: {ex.Message}");
-                        ModelState.AddModelError("", "Invalid token format");
-                        return View(loginVM);
-                    }
-                }
-                else
-                {
-                    var errorContent = await response.Content.ReadAsStringAsync();
-                    ModelState.AddModelError("", errorContent ?? "Login failed. Please check your credentials.");
-                    return View(loginVM);
-                }
-            }
-            catch (Exception ex)
-            {
-                _vendorLogger.LogError($"Login error: {ex.Message}");
-                ModelState.AddModelError("", "An error occurred during login. Please try again.");
-                return View(loginVM);
-            }
-        }
-
-        // Helper method to generate a simple token for admin
-        private string GenerateAdminToken()
-        {
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_vendorConfiguration["JWT:Secret"]);
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(new[]
-                {
-                    new Claim(ClaimTypes.Role, "Admin"),
-                    new Claim(ClaimTypes.Email, "admin@example.com")
-                }),
-                Expires = DateTime.UtcNow.AddDays(7),
-                SigningCredentials = new SigningCredentials(
-                    new SymmetricSecurityKey(key),
-                    SecurityAlgorithms.HmacSha256Signature)
-            };
-
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            return tokenHandler.WriteToken(token);
         }
     }
 }
+
+   

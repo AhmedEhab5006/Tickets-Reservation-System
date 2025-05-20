@@ -14,63 +14,20 @@
             height: 100%;
             margin: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: black;
-            color: white;
-        }
-
-        nav {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            z-index: 100;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 50px;
-            background: rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .logo {
-            font-size: 28px;
-            font-weight: bold;
-            color: white;
-        }
-
-        .logo span {
-            color: #ff6b6b;
-        }
-
-        .navwords {
-            display: flex;
-            gap: 30px;
-            list-style: none;
-        }
-
-        .navwords a {
-            color: white;
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s ease;
-        }
-
-        .navwords a:hover {
-            color: #ff6b6b;
+            background: #f5f5f5;
         }
 
         .container {
-            margin: 120px auto 40px;
             max-width: 800px;
-            padding: 30px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 15px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            margin: 40px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
         h1 {
-            color: #ff6b6b;
+            color: #2c3e50;
             text-align: center;
             margin-bottom: 30px;
         }
@@ -82,62 +39,19 @@
         label {
             display: block;
             margin-bottom: 8px;
-            color: #ffffff;
+            color: #2c3e50;
+            font-weight: 500;
         }
 
         input[type="text"],
         input[type="number"],
+        input[type="datetime-local"],
         select {
             width: 100%;
-            padding: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            background: rgba(255, 255, 255, 0.05);
-            color: white;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
             font-size: 16px;
-        }
-
-        .date-time-inputs {
-            display: flex;
-            gap: 20px;
-            margin-bottom: 10px;
-            flex-wrap: wrap;
-        }
-
-        .date-inputs, .time-inputs {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        .input-group {
-            display: flex;
-            flex-direction: column;
-            min-width: 120px;
-        }
-
-        .input-group select {
-            padding: 8px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            background: rgba(255, 255, 255, 0.05);
-            color: white;
-            font-size: 16px;
-        }
-
-        .input-group input {
-            padding: 8px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            background: rgba(255, 255, 255, 0.05);
-            color: white;
-            font-size: 16px;
-        }
-
-        .input-group label {
-            font-size: 0.9em;
-            margin-bottom: 5px;
-            color: #ffffff;
         }
 
         .team-images {
@@ -150,174 +64,198 @@
         .team-image-preview {
             width: 100%;
             height: 200px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
+            background: #f8f9fa;
+            border-radius: 4px;
             display: flex;
             align-items: center;
             justify-content: center;
             overflow: hidden;
         }
 
-        .team-image-preview img {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
+            .team-image-preview img {
+                max-width: 100%;
+                max-height: 100%;
+                object-fit: contain;
+            }
+
+        .buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
         }
 
-        .submit-button {
-            background-color: #ff6b6b;
+        .save-button {
+            background-color: #3498db;
             color: white;
             border: none;
-            padding: 15px 30px;
-            border-radius: 8px;
+            padding: 12px 24px;
+            border-radius: 4px;
             cursor: pointer;
             font-size: 16px;
-            width: 100%;
-            transition: background-color 0.3s ease;
+            flex: 1;
         }
 
-        .submit-button:hover {
-            background-color: #e55b5b;
+        .cancel-button {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            flex: 1;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .save-button:hover {
+            background-color: #2980b9;
+        }
+
+        .cancel-button:hover {
+            background-color: #c0392b;
         }
 
         .text-danger {
-            color: #ff6b6b;
+            color: #e74c3c;
             font-size: 14px;
             margin-top: 5px;
         }
 
+        .alert {
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+
+        .alert-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
         @@media (max-width: 768px) {
             .container {
-                margin: 100px 20px 40px;
-                padding: 20px;
-            }
-
-            nav {
-                padding: 15px 20px;
+                margin: 20px;
             }
 
             .team-images {
                 grid-template-columns: 1fr;
             }
-
-            .date-time-inputs {
-                flex-direction: column;
-            }
-            
-            .date-inputs, .time-inputs {
-                width: 100%;
-            }
-            
-            .input-group {
-                flex: 1;
-            }
         }
     </style>
 </head>
 <body>
-    <nav>
-        <div class="logo">Vendor<span>Hub</span></div>
-        <ul class="navwords">
-            <li><a href="@Url.Action("DashBoard", "Vendor")">Dashboard</a></li>
-            <li><a href="@Url.Action("Profile", "User")">Profile</a></li>
-            <li><a href="@Url.Action("SignOut", "User")">Sign Out</a></li>
-        </ul>
-    </nav>
-
     <div class="container">
         <h1>Edit Sports Event</h1>
 
-        <form asp-action="EditSportEvent" asp-controller="Vendor" method="post" enctype="multipart/form-data">
-            <input type="hidden" asp-for="id" />
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
-            <div class="form-group">
-                <label asp-for="date">Event Date and Time</label>
-                <input asp-for="date" type="datetime-local" class="form-control" required />
-                <span asp-validation-for="date" class="text-danger"></span>
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-error">
+                @TempData["ErrorMessage"]
             </div>
-
-            <div class="form-group">
-                <label asp-for="location">Location</label>
-                <input asp-for="location" />
-                <span asp-validation-for="location" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="numberOfSeats">Number of Seats</label>
-                <input asp-for="numberOfSeats" type="number" min="5000" max="200000" />
-                <span asp-validation-for="numberOfSeats" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="team1">Team 1 Name</label>
-                <input asp-for="team1" />
-                <span asp-validation-for="team1" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="team1Image_upload">Team 1 Image</label>
-                <input asp-for="team1Image_upload" type="file" accept="image/*" onchange="previewImage(this, 'team1Preview')" />
-                <span asp-validation-for="team1Image_upload" class="text-danger"></span>
-                <div id="team1Preview" class="team-image-preview">
-                    @if (!string.IsNullOrEmpty(Model.team1Image))
-                    {
-                        <img src="@Model.team1Image" alt="@Model.team1" />
-                    }
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="team2">Team 2 Name</label>
-                <input asp-for="team2" />
-                <span asp-validation-for="team2" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="team2Image_upload">Team 2 Image</label>
-                <input asp-for="team2Image_upload" type="file" accept="image/*" onchange="previewImage(this, 'team2Preview')" />
-                <span asp-validation-for="team2Image_upload" class="text-danger"></span>
-                <div id="team2Preview" class="team-image-preview">
-                    @if (!string.IsNullOrEmpty(Model.team2Image))
-                    {
-                        <img src="@Model.team2Image" alt="@Model.team2" />
-                    }
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="tournament">Tournament Name</label>
-                <input asp-for="tournament" />
-                <span asp-validation-for="tournament" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="sport">Sport Type</label>
-                <input asp-for="sport" />
-                <span asp-validation-for="sport" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="tournamentStage">Tournament Stage</label>
-                <input asp-for="tournamentStage" />
-                <span asp-validation-for="tournamentStage" class="text-danger"></span>
-            </div>
-
-            <button type="submit" class="submit-button">Update Event</button>
-        </form>
-    </div>
-
-    <script>
-        function previewImage(input, previewId) {
-            const preview = document.getElementById(previewId);
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    preview.innerHTML = `<img src="${e.target.result}" alt="Preview">`;
-                }
-                reader.readAsDataURL(input.files[0]);
-            }
         }
-    </script>
+
+        @if (Model != null)
+        {
+            <form asp-action="EditSportEvent" asp-controller="Vendor" method="post">
+                <input type="hidden" asp-for="id" />
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="form-group">
+                    <label asp-for="team1">Team 1</label>
+                    <input asp-for="team1" />
+                    <span asp-validation-for="team1" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="team2">Team 2</label>
+                    <input asp-for="team2" />
+                    <span asp-validation-for="team2" class="text-danger"></span>
+                </div>
+
+                <div class="team-images">
+                    <div class="team-image-preview">
+                        @if (!string.IsNullOrEmpty(Model.team1Image))
+                        {
+                            <img src="@Model.team1Image" alt="Team 1" />
+                        }
+                        else
+                        {
+                            <span>No image available</span>
+                        }
+                    </div>
+                    <div class="team-image-preview">
+                        @if (!string.IsNullOrEmpty(Model.team2Image))
+                        {
+                            <img src="@Model.team2Image" alt="Team 2" />
+                        }
+                        else
+                        {
+                            <span>No image available</span>
+                        }
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="sport">Sport</label>
+                    <input asp-for="sport" />
+                    <span asp-validation-for="sport" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="tournament">Tournament</label>
+                    <input asp-for="tournament" />
+                    <span asp-validation-for="tournament" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="tournamentStage">Tournament Stage</label>
+                    <input asp-for="tournamentStage" />
+                    <span asp-validation-for="tournamentStage" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="date">Event Date and Time</label>
+                    <input asp-for="date" type="datetime-local" />
+                    <span asp-validation-for="date" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="location">Location</label>
+                    <input asp-for="location" />
+                    <span asp-validation-for="location" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="numberOfSeats">Number of Seats</label>
+                    <input asp-for="numberOfSeats" type="number" min="5000" max="200000" />
+                    <span asp-validation-for="numberOfSeats" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="status">Status</label>
+                    <select asp-for="status">
+                        <option value="Pending">Pending</option>
+                        <option value="Approved">Approved</option>
+                        <option value="Rejected">Rejected</option>
+                    </select>
+                    <span asp-validation-for="status" class="text-danger"></span>
+                </div>
+
+                <div class="buttons">
+                    <button type="submit" class="save-button">Save Changes</button>
+                    <a href="@Url.Action("DashBoard", "Vendor")" class="cancel-button">Cancel</a>
+                </div>
+            </form>
+        }
+        else
+        {
+            <div class="alert alert-error">
+                <p>No event data available to edit.</p>
+                <a href="@Url.Action("DashBoard", "Vendor")" class="cancel-button">Return to Dashboard</a>
+            </div>
+        }
+    </div>
 </body>
 </html> 

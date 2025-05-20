@@ -74,101 +74,92 @@ namespace WebApplication2.Controllers
 
 
         [HttpPost]
-        [HttpPost]
         public async Task<IActionResult> sign_in(LoginVM loginVM)
         {
             if (!ModelState.IsValid)
-                return View(loginVM);
-
-            // Send login credentials to the API
-            var response = await _httpClient.PostAsJsonAsync("api/Auth/Login", loginVM);
-
-            if (!response.IsSuccessStatusCode)
             {
-                var errorContent = await response.Content.ReadAsStringAsync();
-                ModelState.AddModelError("", errorContent ?? "Login failed. Please check your credentials.");
-                return View(loginVM);
-            }
-
-            var tokenString = await response.Content.ReadAsStringAsync();
-
-            if (string.IsNullOrWhiteSpace(tokenString))
-            {
-                ModelState.AddModelError("", "Empty response from server");
                 return View(loginVM);
             }
 
             try
             {
-                var jwtHandler = new JwtSecurityTokenHandler();
-                var jwtToken = jwtHandler.ReadJwtToken(tokenString);
+                var response = await _httpClient.PostAsJsonAsync($"api/Auth/Login", loginVM);
 
-                var role = jwtToken.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
-                var email = jwtToken.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value ?? loginVM.email;
-
-                if (string.IsNullOrEmpty(role))
+                if (response.IsSuccessStatusCode)
                 {
-                    ModelState.AddModelError("", "Invalid token: Missing role claim");
+                    var token = await response.Content.ReadAsStringAsync();
+
+                    if (string.IsNullOrEmpty(token))
+                    {
+                        ModelState.AddModelError("", "Empty response from server");
+                        return View(loginVM);
+                    }
+
+                    try
+                    {
+                        var handler = new JwtSecurityTokenHandler();
+                        var jwtToken = handler.ReadJwtToken(token);
+                        var roleClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+                        var emailClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+                        var userIdClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+                        if (string.IsNullOrEmpty(roleClaim))
+                        {
+                            ModelState.AddModelError("", "Invalid token: Missing role claim");
+                            return View(loginVM);
+                        }
+
+                        // Store session data
+                        HttpContext.Session.SetString("UserRole", roleClaim);
+                        HttpContext.Session.SetString("UserEmail", emailClaim ?? loginVM.email);
+                        HttpContext.Session.SetString("UserId", userIdClaim ?? "");
+                        HttpContext.Session.SetString("JWTToken", token);
+
+                        // Redirect based on role
+                        return roleClaim.ToLower() switch
+                        {
+                            "vendor" => RedirectToAction("DashBoard", "Vendor"),
+                            "client" => RedirectToAction("Sport_events", "Event"),
+                            "admin" => RedirectToAction("AdminPage", "Admin"),
+                            _ => RedirectToAction("Index", "Home")
+                        };
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError($"Token parsing error: {ex.Message}");
+                        ModelState.AddModelError("", "Invalid token format");
+                        return View(loginVM);
+                    }
+                }
+                else
+                {
+                    var errorContent = await response.Content.ReadAsStringAsync();
+                    ModelState.AddModelError("", errorContent ?? "Login failed. Please check your credentials.");
                     return View(loginVM);
                 }
-
-                // Store session data
-                HttpContext.Session.SetString("UserRole", role);
-                HttpContext.Session.SetString("UserEmail", email);
-                HttpContext.Session.SetString("JWTToken", tokenString);
-
-                // Redirect based on role
-                return role.ToLower() switch
-                {
-                    "admin" => RedirectToAction("AdminPage", "Admin"),
-                    "vendor" => RedirectToAction("DashBoard", "Vendor"),
-                    "client" => RedirectToAction("Sport_events", "Event"),
-                    _ => RedirectToAction("Index", "Home")
-                };
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Token parsing error: {ex.Message}");
-                ModelState.AddModelError("", "Invalid token format");
+                _logger.LogError($"Login error: {ex.Message}");
+                ModelState.AddModelError("", "An error occurred during login. Please try again.");
                 return View(loginVM);
             }
         }
 
-        //   }
-
-        //catch (Exception ex)
-        //{
-        //    _logger.LogError($"Login error: {ex.Message}");
-        //    ModelState.AddModelError("", "An error occurred during login. Please try again.");
-        //    return View(loginVM);
-        //}
-
-        private string GenerateAdminToken()
+        [HttpGet]
+        public IActionResult Logout()
         {
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_configuration["JWT:Secret"] ?? "ksfjskfjwiejwiefjwoinewimxiwncowinwinecwc");
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(new[]
-                {
-                    new Claim(ClaimTypes.Role, "Admin"),
-                    new Claim(ClaimTypes.Email, "admin@example.com"),
-                    new Claim(ClaimTypes.NameIdentifier, "admin-id")
-                }),
-                Expires = DateTime.UtcNow.AddDays(7),
-                SigningCredentials = new SigningCredentials(
-                    new SymmetricSecurityKey(key),
-                    SecurityAlgorithms.HmacSha256Signature)
-            };
+            // Clear all session data
+            HttpContext.Session.Clear();
 
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            return tokenHandler.WriteToken(token);
+            // Redirect to home page
+            return RedirectToAction("Index", "Home");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public IActionResult Error()
-    {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        public IActionResult Error()
+        {
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
     }
-}
 }

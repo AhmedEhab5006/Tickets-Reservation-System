@@ -1,22 +1,232 @@
-html {
-  font-size: 14px;
+/* Base Styles */
+html, body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: url('/images/background3.jpg') no-repeat center center fixed;
+    background-size: cover;
+    min-height: 100vh;
+    color: white;
 }
 
-@media (min-width: 768px) {
-  html {
+/* Glass overlay for the entire hero section */
+.hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    z-index: -1;
+}
+
+.hero {
+    position: relative;
+    height: 100vh;
+    width: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* Navigation bar with glass effect */
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 50px;
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.logo {
+    font-size: 28px;
+    font-weight: bold;
+}
+
+    .logo span {
+        color: #ff6b6b;
+    }
+
+/* Navigation links with hover effect */
+.navwords {
+    display: flex;
+    gap: 30px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+    .navwords a {
+        color: white;
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.3s ease;
+        position: relative;
+    }
+
+        .navwords a:hover {
+            color: #ff6b6b;
+        }
+
+        .navwords a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: #ff6b6b;
+            transition: width 0.3s ease;
+        }
+
+        .navwords a:hover::after {
+            width: 100%;
+        }
+
+/* Glass button */
+.btn {
+    display: inline-block;
+    padding: 12px 30px;
+    background: #ff6b6b;
+    backdrop-filter: blur(5px);
+    color: white;
+    text-decoration: none;
+    border-radius: 50px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+    .btn:hover {
+        color: #ff6b6b;
+        background: white;
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+
+/* Container styles */
+.container {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+/* Card styles */
+.card {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(12px);
+    border-radius: 16px;
+    padding: 25px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+    transition: transform 0.3s;
+}
+
+    .card:hover {
+        transform: translateY(-5px);
+    }
+
+/* Form styles */
+.form-group {
+    margin-bottom: 20px;
+}
+
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        color: white;
+        font-weight: 500;
+    }
+
+.form-control {
+    width: 100%;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    color: white;
     font-size: 16px;
-  }
+    transition: all 0.3s ease;
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+    .form-control:focus {
+        outline: none;
+        border-color: #ff6b6b;
+        box-shadow: 0 0 0 2px rgba(255, 107, 107, 0.2);
+    }
+
+/* Table styles */
+.table {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(12px);
+    border-radius: 16px;
+    overflow: hidden;
 }
 
-html {
-  position: relative;
-  min-height: 100%;
+    .table th {
+        background: rgba(0, 0, 0, 0.2);
+        color: white;
+        font-weight: 600;
+        padding: 15px;
+        text-align: left;
+    }
+
+    .table td {
+        padding: 15px;
+        color: white;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+/* Alert styles */
+.alert {
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-body {
-  margin-bottom: 60px;
+.alert-success {
+    border-color: #2ecc71;
+}
+
+.alert-error {
+    border-color: #e74c3c;
+}
+
+/* Modal styles */
+.modal {
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(5px);
+}
+
+.modal-content {
+    background: rgba(30, 30, 47, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    color: white;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    nav {
+        padding: 15px 20px;
+    }
+
+    .navwords {
+        gap: 15px;
+    }
+
+    .container {
+        margin: 20px 10px;
+    }
 }
